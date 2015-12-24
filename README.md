@@ -15,6 +15,14 @@ or packaged using
     
 On Windows use the `mvnw.bat` instead or on any platform bring your own copy of Maven 3.x.
 
+## Building with Docker
+
+If using a TLS authenticated Swarm/Daemon, copy the certificates directory into this project's space as a directory called `certs`. If using an insecure connection, just create an empty `certs` directory.
+
+With that run
+
+    docker build -t mccy .
+
 ## Accessing
 
 By default, the application serves up at port 8080, such as
@@ -35,3 +43,11 @@ where you provide a `http:` for insecure Docker access or `https:` for secure/au
 In the case of authenticated Docker connections, you will need to point to a directory with the appropriate 
 certificates using `mccy.docker-cert-path`. For example, the directory you download from your [Carina Cluster](https://getcarina.com/)
 is exactly what you'll need.
+
+## Running with Docker
+
+After following the steps above in **Building with Docker**, start a MCCY container using
+
+    docker run -d --name mccy -p 8080:8080 mccy --mccy.docker-host-uri=...
+    
+where the last part is the same command-line options described above.
