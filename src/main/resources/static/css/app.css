@@ -1,0 +1,65 @@
+body {
+}
+
+.current-containers {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.current-containers .panel-body label,span {
+    display: block;
+}
+
+.current-containers .panel-body .entry+.entry {
+    margin-top: 10px;
+}
+
+.action {
+    height: 100%;
+}
+
+.actions > button {
+    width: 100%;
+    display: block;
+}
+
+div.space-before {
+    margin-top: 10px;
+}
+
+img.icon-preview {
+    width: 64px;
+    height: 64px;
+}
+
+.actions > button + button {
+    margin-top: 5px;
+}
+
+span.underline {
+    text-decoration: underline;
+}
+
+.container-actions {
+    text-align: right;
+}
+
+.upload {
+    width: 8em;
+}
+
+.upload.dragover {
+    border-style: dashed;
+    border-color: #32cd32;
+}
+
+.upload .target {
+    display: none;
+}
+.upload.dragover .target {
+    display: inline;
+}
+
+.upload.dragover .select {
+    display: none;
+}
