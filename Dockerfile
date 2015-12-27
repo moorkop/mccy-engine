@@ -13,4 +13,6 @@ RUN cp /build/target/mccy-swarm-*.jar /usr/local/bin/mccy-swarm.jar && rm -rf /b
 RUN ls -l /usr/local/bin/mccy-swarm.jar /certs
 WORKDIR /data
 
+ENV SPRING_PROFILES_ACTIVE docker
+
 ENTRYPOINT ["/usr/bin/java", "-jar", "/usr/local/bin/mccy-swarm.jar"]
