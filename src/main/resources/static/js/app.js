@@ -1,17 +1,17 @@
 angular.module('MccyApp', [
     'Mccy.NewContainerCtrl',
-    'ngResource',
+    'Mccy.ViewContainersCtrl',
+    'Mccy.routes',
+    'Mccy.services',
     'ngAnimate',
     'ui.bootstrap',
     'template/modal/backdrop.html',
     'template/modal/window.html',
-    'ngTagsInput',
-    'toaster'
+    'ngTagsInput'
 ])
 
-    .controller('MainCtrl', function ($scope, $timeout, $uibModal, toaster, Containers, AppInfo) {
-        $scope.showNewContainerArea = false;
-
+    .controller('MainCtrl', function ($scope, $timeout, $location, $log,
+                                      $uibModal, Containers, AppInfo, Alerts) {
         $scope.types = [
             {
                 value: 'VANILLA',
@@ -42,89 +42,38 @@ angular.module('MccyApp', [
             'close-button': true
         };
 
+        // NOTE: first view is assumed to be the default
+        $scope.views = [
+            {
+                view: '/view',
+                label: 'View Current Servers'
+            },
+            {
+                view: '/new-server',
+                label: 'Create New Server'
+            }
+        ];
+
+        $scope.$on('$routeChangeSuccess', function(evt, current, previous){
+            $scope.currentView = current.originalPath;
+            $log.debug('route change', current);
+        });
+
+        $scope.isCurrentView = function(v) {
+            return $scope.currentView == v.view;
+        };
+
+        $scope.goto = function(newView) {
+            $location.url(newView.view);
+        };
+
         $scope.appInfo = AppInfo.get();
 
-        load();
-
-        $scope.createNewContainer = function() {
-            $scope.showNewContainerArea = true;
-        };
-
         $scope.$on('closeNewContainerArea', function () {
-            $scope.showNewContainerArea = false;
+            $scope.goto($scope.views[0]);
         });
 
-        $scope.$on('reloadContainers', function() {
-            delayedReload();
-        });
-
-        $scope.refresh = function() {
-            load();
-        };
-
-        $scope.isRunning = function(container) {
-            if (container.status && container.status.indexOf('Exited') == 0) {
-                return false;
-            }
-            if (container.running === true) {
-                return true;
-            }
-            // TODO use container details to find out for sure
-            return true;
-        };
-
-        $scope.stop = function(container) {
-            Containers.stop({id: container.id}, {}, handleSuccess, handleRequestError);
-        };
-
-        $scope.start = function(container) {
-            Containers.start({id: container.id}, {}, handleSuccess, handleRequestError);
-        };
-
-        $scope.remove = function(container) {
-            $uibModal.open({
-                templateUrl: 'bits/confirm-container-remove.html'
-            }).result.then(function(answer){
-                if (answer === true) {
-                    Containers.remove({id: container.id}, {}, handleSuccess, handleRequestError);
-                }
-            });
-        };
-
-        function handleSuccess(value) {
-            toaster.pop('success', 'Success', 'The request was submitted succesfully');
-            delayedReload();
-        }
-
-        function handleRequestError(httpResponse) {
-            toaster.pop('error', 'Request Failed', httpResponse.data.message);
-            delayedReload();
-        }
-
-        function delayedReload() {
-            $timeout(load, 500);
-        }
-
-        function load() {
-            $scope.containers = Containers.query(function(){}, handleRequestError);
-        }
     })
 
 
-    .service('Containers', function($resource){
-        return $resource('/api/containers/:id', {}, {
-            stop: {
-                url: '/api/containers/:id/_stop',
-                method: 'POST'
-            },
-            start: {
-                url: '/api/containers/:id/_start',
-                method: 'POST'
-            }
-        });
-    })
-
-    .service('AppInfo', function($resource){
-        return $resource('/api/info');
-    })
 ;

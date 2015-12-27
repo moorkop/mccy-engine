@@ -1,13 +1,13 @@
-angular.module('Mccy.NewContainerCtrl',[
-        'ngFileUpload',
-        'toaster'
+angular.module('Mccy.NewContainerCtrl', [
+        'Mccy.services',
+        'ngFileUpload'
     ])
-    .controller('NewContainerCtrl', function($scope, $log, Upload, toaster, Containers){
+    .controller('NewContainerCtrl', function ($scope, $log, Upload, Containers, Alerts) {
 
         reset();
 
         $scope.submitNewContainer = function () {
-            console.log('submitting', this);
+            $log.debug('submitting', this);
 
             var request = {
                 ackEula: this.ackEula,
@@ -34,8 +34,8 @@ angular.module('Mccy.NewContainerCtrl',[
                 Upload.upload({
                     url: '/api/uploads/worlds',
                     data: {file: $scope.worldFile}
-                }).then(function(response){
-                    toaster.pop('info', 'World Uploaded', 'World file was uploaded successfully', 2000);
+                }).then(function (response) {
+                    Alerts.info('World Uploaded', 'World file was uploaded successfully');
 
                     request.world = response.data.value;
                     $log.debug("Upload available at", request.world);
@@ -49,7 +49,7 @@ angular.module('Mccy.NewContainerCtrl',[
             close();
         };
 
-        $scope.cancelNewContainer = function() {
+        $scope.cancelNewContainer = function () {
             close();
         };
 
@@ -58,13 +58,11 @@ angular.module('Mccy.NewContainerCtrl',[
         }
 
         function handleSuccess(value) {
-            toaster.pop('success', 'Success', 'The request was submitted succesfully');
-            $scope.$emit('reloadContainers');
+            Alerts.success('The request was submitted succesfully', true);
         }
 
         function handleRequestError(httpResponse) {
-            toaster.pop('error', 'Request Failed', httpResponse.data.message);
-            $scope.$emit('reloadContainers');
+            Alerts.error(httpResponse.data.message, true);
         }
 
         function close() {

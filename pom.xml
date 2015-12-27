@@ -87,6 +87,11 @@
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
+            <artifactId>angular-route</artifactId>
+            <version>${angularjs.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
             <artifactId>angular-ui-bootstrap-bower</artifactId>
             <version>0.14.3</version>
         </dependency>

@@ -30,26 +30,14 @@
     <div class="row">
         <div class="col-md-2 actions">
             <h2>Actions</h2>
-            <button class="btn btn-primary" ng-click="createNewContainer()" ng-disabled="showNewContainerArea">
-                Create New Container
-            </button>
-            <button class="btn btn-default" ng-click="refresh()">Refresh</button>
+
+            <button class="btn btn-default" ng-class="{'active':isCurrentView(v)}" ng-repeat="v in views"
+                    ng-click="goto(v)">{{v.label}}</button>
         </div>
 
         <div class="col-md-10">
-            <div class="row">
-                <div class="col-md-6" ng-show="showNewContainerArea"
-                     ng-include="'bits/create-container.html'">
-                </div>
+            <div class="row" ng-view>
 
-                <div class="col-md-12">
-                    <h2>Current Containers</h2>
-                    <div class="current-containers">
-
-                        <div ng-repeat="c in containers" class="panel panel-default" ng-include="'bits/current-container.html'">
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -64,6 +52,7 @@
 <script src="webjars/angularjs/1.4.8/angular.min.js"></script>
 <script src="webjars/angular-resource/1.4.8/angular-resource.min.js"></script>
 <script src="webjars/angular-animate/1.4.8/angular-animate.min.js"></script>
+<script src="webjars/angular-route/1.4.8/angular-route.min.js"></script>
 <script src="webjars/angular-ui-bootstrap-bower/0.14.3/ui-bootstrap-tpls.min.js"></script>
 <script src="webjars/angular-ui-bootstrap-bower/0.14.3/ui-bootstrap.min.js"></script>
 <script src="webjars/ng-tags-input/2.3.0/ng-tags-input.min.js"></script>
@@ -72,6 +61,9 @@
 <script src="webjars/ng-file-upload/10.1.14/ng-file-upload-shim.min.js"></script>
 <!-- Include local javascript from js/... -->
 <script src="js/app.js"></script>
-<script src="js/NewContainerCtrl.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/services.js"></script>
+<script src="js/new-container-ctrl.js"></script>
+<script src="js/view-containers-ctrl.js"></script>
 </body>
 </html>
