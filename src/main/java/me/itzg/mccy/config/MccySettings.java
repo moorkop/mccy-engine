@@ -35,6 +35,11 @@ public class MccySettings {
      */
     private URI externalUri;
 
+    /**
+     * This refers to the official versions.json Minecraft catalog.
+     */
+    private URI officialVersionsUri = URI.create("https://s3.amazonaws.com/Minecraft.Download/versions/versions.json");
+
     public String getDockerCertPath() {
         return dockerCertPath;
     }
@@ -73,5 +78,13 @@ public class MccySettings {
 
     public void setExternalUri(URI externalUri) {
         this.externalUri = externalUri;
+    }
+
+    public URI getOfficialVersionsUri() {
+        return officialVersionsUri;
+    }
+
+    public void setOfficialVersionsUri(URI officialVersionsUri) {
+        this.officialVersionsUri = officialVersionsUri;
     }
 }

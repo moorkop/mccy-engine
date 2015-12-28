@@ -11,7 +11,7 @@ angular.module('MccyApp', [
 ])
 
     .controller('MainCtrl', function ($scope, $timeout, $location, $log,
-                                      $uibModal, Containers, AppInfo, Alerts) {
+                                      $uibModal, Containers, AppInfo, Versions, Alerts) {
         $scope.types = [
             {
                 value: 'VANILLA',
@@ -33,6 +33,15 @@ angular.module('MccyApp', [
                 label: 'Snapshot'
             }
         ];
+
+        Versions.query({type:'release'}, function(response){
+            $scope.versions = $scope.versions.concat(response.map(function(v){
+                return {
+                    value: v,
+                    label: v
+                }
+            }))
+        });
 
         $scope.toasterOptions = {
             'time-out': {

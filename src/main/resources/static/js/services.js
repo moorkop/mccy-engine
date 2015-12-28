@@ -20,6 +20,10 @@ angular.module('Mccy.services',[
         return $resource('/api/info');
     })
 
+    .service('Versions', function($resource){
+        return $resource('/api/versions/:type');
+    })
+
     .service('Alerts', function($rootScope, toaster){
         function popAndReload(level, title, msg, reload, timeout) {
             toaster.pop(level, title, msg, timeout);
