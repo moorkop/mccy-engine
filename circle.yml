@@ -8,6 +8,7 @@ dependencies:
 
 test:
   override:
+    - echo Skipping inferred test
 
 deployment:
   staging:
