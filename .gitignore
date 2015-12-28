@@ -4,3 +4,5 @@ certs/
 *.iml
 .idea/
 target/
+bin/
+tmp/

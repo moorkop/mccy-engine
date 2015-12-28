@@ -4,4 +4,10 @@ machine:
     
 dependencies:
   override:
-    - docker build -t mccy .
+    - docker info
+
+deployment:
+  staging:
+    branch: master
+    commands:
+      - ./buid-and-deploy-carina.sh $TEST_CLUSTER
