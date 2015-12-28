@@ -14,4 +14,4 @@ deployment:
   staging:
     branch: master
     commands:
-      - ./buid-and-deploy-carina.sh $TEST_CLUSTER
+      - ./build-and-deploy-carina.sh $TEST_CLUSTER
