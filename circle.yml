@@ -6,6 +6,9 @@ dependencies:
   override:
     - docker info
 
+test:
+  override:
+
 deployment:
   staging:
     branch: master
