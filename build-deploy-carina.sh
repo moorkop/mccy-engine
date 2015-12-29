@@ -77,6 +77,16 @@ id=$(docker run $opts mccy \
   --mccy.docker-cert-path=/certs \
   --spring.active-profiles=docker)
 
+appPort=$(docker port $id 8080)
 echo "
-READY for use on $DEPLOY_CLUSTER at http://$(docker port $id 8080)
+READY for use on $DEPLOY_CLUSTER at http://$appPort
 "
+
+if [[ -v CIRCLE_ARTIFACTS ]]; then
+  echo <<EOF > $CIRCLE_ARTIFACTS/results.html
+<html><body>
+Ready for use on $DEPLOY_CLUSTER <a href="https://$appPort">here</a>
+</body></html>
+EOF
+
+fi
