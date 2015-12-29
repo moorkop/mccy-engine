@@ -15,3 +15,7 @@ deployment:
     branch: master
     commands:
       - ./build-deploy-carina.sh $TEST_CLUSTER
+
+notify:
+  webhooks:
+    - url: https://webhooks.gitter.im/e/035e6a1140f00a630984
