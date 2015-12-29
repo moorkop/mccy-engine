@@ -27,8 +27,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        2015-12-23 12:07:48.6848.6811  INFO 10796 --- [ost-startStop-1] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/error'], []
 
         http
-                .authorizeRequests().antMatchers("/**").hasRole("USER")
+                .authorizeRequests()
+                    .antMatchers("/css/**").permitAll()
+                    .antMatchers("/js/**").permitAll()
+                    .antMatchers("/webjars/**").permitAll()
+                    .antMatchers("/images/**").permitAll()
+                    .antMatchers("/**/favicon.ico").permitAll()
+                    .antMatchers("/api/downloads/**").permitAll()
+                .antMatchers("/**").hasRole("USER")
                 .and().formLogin()
+                    .loginPage("/login")
+                    .permitAll()
                 .and().addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
                 .csrf().csrfTokenRepository(csrfTokenRepository());
     }

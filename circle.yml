@@ -1,7 +1,14 @@
 machine:
   services:
     - docker
-    
+
+general:
+  branches:
+    only:
+      - master
+      - dev
+      - production
+
 dependencies:
   override:
     - docker info

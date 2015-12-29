@@ -43,7 +43,7 @@ angular.module('Mccy.ViewContainersCtrl', [
 
         $scope.remove = function (container) {
             $uibModal.open({
-                templateUrl: 'bits/confirm-container-remove.html'
+                templateUrl: 'ng-bits/confirm-container-remove.html'
             }).result.then(function (answer) {
                 if (answer === true) {
                     Containers.remove({id: container.id}, {}, function() {
