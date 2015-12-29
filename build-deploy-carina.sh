@@ -83,7 +83,7 @@ READY for use on $DEPLOY_CLUSTER at http://$appPort
 "
 
 if [[ -v CIRCLE_ARTIFACTS ]]; then
-  echo <<EOF > $CIRCLE_ARTIFACTS/results.html
+  cat <<EOF > $CIRCLE_ARTIFACTS/results.html
 <html><body>
 Ready for use on $DEPLOY_CLUSTER <a href="https://$appPort">here</a>
 </body></html>
