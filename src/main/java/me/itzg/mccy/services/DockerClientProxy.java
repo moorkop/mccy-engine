@@ -18,8 +18,8 @@ import java.nio.file.Paths;
  */
 @Service
 public class DockerClientProxy {
-    @Autowired
     private MccySettings mccySettings;
+    private DockerClient dockerClient;
 
     public interface Consumer<T> {
         T use(DockerClient dockerClient) throws DockerException, InterruptedException;
@@ -27,21 +27,18 @@ public class DockerClientProxy {
 
     public <T> T access(Consumer<T> consumer) throws DockerException, InterruptedException {
 
-        DefaultDockerClient dockerClient = null;
-
-        try {
-            dockerClient = createClient(dockerClient);
-
-            return consumer.use(dockerClient);
-        }
-        finally {
-            if (dockerClient != null) {
-                dockerClient.close();
-            }
-        }
+        return consumer.use(dockerClient);
     }
 
-    private DefaultDockerClient createClient(DefaultDockerClient dockerClient) {
+    @Autowired
+    public void setMccySettings(MccySettings mccySettings) {
+        this.mccySettings = mccySettings;
+
+        this.dockerClient = createClient();
+    }
+
+    private DefaultDockerClient createClient() {
+        DefaultDockerClient dockerClient;
         Optional<DockerCertificates> certs = Optional.absent();
         if (mccySettings.getDockerCertPath() != null) {
             try {
