@@ -26,8 +26,7 @@ public class ViewController {
                 .getName());
 
         final ModelAndView modelAndView = new ModelAndView()
-                .addObject("csrfParameterName", csrf.getParameterName())
-                .addObject("csrfToken", csrf.getToken());
+                .addObject("csrf", csrf);
         modelAndView.setViewName("login");
 
         return modelAndView;

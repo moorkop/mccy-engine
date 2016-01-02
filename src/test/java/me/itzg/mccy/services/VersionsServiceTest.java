@@ -15,6 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 import static org.hamcrest.Matchers.emptyIterable;
@@ -55,10 +56,10 @@ public class VersionsServiceTest {
 
     @Test
     public void testGetVanillaVersions() throws Exception {
-        final List<String> versions = versionsService.getVersions(MinecraftVersions.Type.release);
+        final Collection<String> versions = versionsService.getVersions(MinecraftVersions.Type.release);
 
         assertNotNull(versions);
         assertThat(versions, not(emptyIterable()));
-        assertEquals("1.8.9", versions.get(0));
+        assertEquals("1.8.9", versions.iterator().next());
     }
 }

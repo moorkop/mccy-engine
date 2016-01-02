@@ -1,0 +1,10 @@
+{
+  "properties": [
+    {
+      "name": "mccy.max-upload-size",
+      "type": "java.lang.String",
+      "description": "Used to configure the embedded web container's upload limits. Accepts unit suffixes like KB and MB.",
+      "defaultValue": "50MB"
+    }
+  ]
+}

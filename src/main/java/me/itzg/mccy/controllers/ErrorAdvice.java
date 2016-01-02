@@ -4,6 +4,8 @@ import com.spotify.docker.client.DockerException;
 import com.spotify.docker.client.DockerRequestException;
 import me.itzg.mccy.model.FailedRequest;
 import me.itzg.mccy.model.SingleValue;
+import me.itzg.mccy.types.MccyClientException;
+import me.itzg.mccy.types.MccyNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,6 +28,12 @@ public class ErrorAdvice {
 
     @ExceptionHandler
     public ResponseEntity<?> handleDockerClientException(IllegalArgumentException e) {
+        return ResponseEntity.badRequest()
+                .body(new FailedRequest(e.getClass(), e.getMessage()));
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handleDockerClientException(MccyClientException e) {
         return ResponseEntity.badRequest()
                 .body(new FailedRequest(e.getClass(), e.getMessage()));
     }

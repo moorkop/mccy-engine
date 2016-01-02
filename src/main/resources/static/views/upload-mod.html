@@ -1,0 +1,30 @@
+<div class="col-md-10">
+
+    <div ng-hide="hideUploadArea">
+        <div class="btn btn-default upload-mod jumbotron"
+             ngf-select ngf-drop ngf-multiple="true"
+             ngf-change="uploadModFile($files)"
+             name="modFile"
+             ngf-pattern="'.jar'" ngf-accept="'application/jar'">
+            <div class="title">
+                Drop mod file(s) here or click to select
+                </div>
+            <div><i class="fa fa-sticky-note"></i> Forge mods should be .jar files.</div>
+
+            <div ng-show="showProgress">
+                <uib-progressbar value="progress">
+                    {{progress}}%
+                </uib-progressbar>
+            </div>
+        </div>
+
+    </div>
+
+    <div ng-show="registeredMods" class="registered-mods">
+
+        <div mccy-mod-panel="mod" ng-repeat="mod in registeredMods"></div>
+
+    </div>
+
+
+</div>

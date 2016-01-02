@@ -20,10 +20,9 @@ import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.spotify.docker.client.DockerClient.ListContainersParam.allContainers;
@@ -99,7 +98,8 @@ public class ContainersService {
             if (isOurs(containerInfo)) {
                 final ContainerDetails containerDetails = new ContainerDetails(containerInfo);
 
-                fillContainerResponseSummary(containerDetails);
+                containerDetails.setSummary(ContainerSummary.from(containerInfo,
+                        URI.create(mccySettings.getDockerHostUri()).getHost()));
 
                 return containerDetails;
             } else {
@@ -161,7 +161,14 @@ public class ContainersService {
     }
 
     protected Map<String, String> buildLabels(ContainerRequest request) {
-        return Collections.singletonMap(MccyConstants.MCCY_LABEL, String.valueOf(true));
+        Map<String, String> labels = new HashMap<>();
+        labels.put(MccyConstants.MCCY_LABEL, String.valueOf(true));
+
+        if (!Strings.isNullOrEmpty(request.getModpack())) {
+            labels.put(MccyConstants.MCCY_LABEL_MODPACK_URL, request.getModpack());
+        }
+
+        return labels;
     }
 
     protected List<String> fillEnv(ContainerRequest request) {
@@ -174,6 +181,7 @@ public class ContainersService {
         fillStringInEnv(env, request.getVersion(), "VERSION");
         fillStringInEnv(env, request.getIcon(), "ICON");
         fillStringInEnv(env, request.getWorld(), "WORLD");
+        fillStringInEnv(env, request.getModpack(), "MODPACK");
 
         if (request.getType() != null) {
             addToEnv(env, "TYPE", request.getType().name());
@@ -188,51 +196,6 @@ public class ContainersService {
     protected void addToEnv(ArrayList<String> env, String key, Object value) {
         if (value != null) {
             env.add(String.format("%s=%s", key, value.toString()));
-        }
-    }
-
-    private void fillContainerResponseSummary(ContainerDetails containerDetails) {
-        final ContainerInfo info = containerDetails.getInfo();
-
-        final ContainerSummary summary = containerDetails.getSummary();
-
-        final List<PortBinding> portBindings =
-                info.hostConfig().portBindings().get(MccyConstants.SERVER_CONTAINER_PORT);
-
-        if (portBindings != null && !portBindings.isEmpty()) {
-            final String reportedHostIp = portBindings.get(0).hostIp();
-            if (reportedHostIp.equals("0.0.0.0")) {
-                summary.setHostIp(URI.create(mccySettings.getDockerHostUri()).getHost());
-            }
-            else {
-                summary.setHostIp(reportedHostIp);
-            }
-            summary.setHostPort(Integer.parseInt(portBindings.get(0).hostPort()));
-        }
-
-        summary.setRunning(info.state().running());
-
-        final List<String> env = info.config().env();
-        fillResponseFromEnv(env, "ICON", v -> {
-            summary.setIcon(URI.create(v));
-        });
-
-        String name = info.name();
-        if (name.startsWith("/")) {
-            name = name.substring(1);
-        }
-        summary.setName(name);
-
-        summary.setId(info.id());
-    }
-
-    private static void fillResponseFromEnv(List<String> env, String envKey, Consumer<String> consumer) {
-        final String prefix = envKey + "=";
-
-        for (String e : env) {
-            if (e.startsWith(prefix)) {
-                consumer.accept(e.substring(prefix.length()));
-            }
         }
     }
 

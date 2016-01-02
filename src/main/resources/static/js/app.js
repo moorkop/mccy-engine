@@ -1,27 +1,20 @@
 angular.module('MccyApp', [
-    'Mccy.NewContainerCtrl',
-    'Mccy.ViewContainersCtrl',
+    'Mccy.controllers',
     'Mccy.routes',
     'Mccy.services',
+    'Mccy.mods',
     'ngAnimate',
     'ui.bootstrap',
     'template/modal/backdrop.html',
     'template/modal/window.html',
+    'template/progressbar/progressbar.html',
     'ngTagsInput'
 ])
 
     .controller('MainCtrl', function ($scope, $timeout, $location, $log,
-                                      $uibModal, Containers, AppInfo, Versions, Alerts) {
-        $scope.types = [
-            {
-                value: 'VANILLA',
-                label: 'Regular'
-            },
-            {
-                value: 'FORGE',
-                label: 'Forge'
-            }
-        ];
+                                      $uibModal,
+                                      Containers, MccyApi, Versions, Alerts, MccyViews) {
+        $scope.settings = {};
 
         $scope.versions = [
             {
@@ -52,16 +45,7 @@ angular.module('MccyApp', [
         };
 
         // NOTE: first view is assumed to be the default
-        $scope.views = [
-            {
-                view: '/view',
-                label: 'View Current Servers'
-            },
-            {
-                view: '/new-server',
-                label: 'Create New Server'
-            }
-        ];
+        $scope.views = MccyViews;
 
         $scope.$on('$routeChangeSuccess', function(evt, current, previous){
             $scope.currentView = current.originalPath;
@@ -76,7 +60,22 @@ angular.module('MccyApp', [
             $location.url(newView.view);
         };
 
-        $scope.appInfo = AppInfo.get();
+        MccyApi.settings(function(response){
+            // Convert the dot-delimited keys of the response into native
+            // object paths of $scope.settings
+            _.forEach(response, function(value, key){
+                // ...not Angular's fields
+                if (!_.startsWith(key, '$')) {
+                    // ...and normalize the object keys to camel case so we don't have to
+                    // quote the dash-separated identifiers from the backend
+
+                    var path = key.split('.');
+                    _.set($scope.settings, _.map(path, _.camelCase), value);
+                }
+            });
+
+            $log.debug('Loaded UI settings', $scope.settings);
+        });
 
         $scope.$on('closeNewContainerArea', function () {
             $scope.goto($scope.views[0]);

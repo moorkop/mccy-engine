@@ -17,7 +17,7 @@
             <img src="images/mccy_logo_120.png"/>
         </div>
         <div class="col-md-10">
-                <h1> Minecraft Container Yard <small ng-show="appInfo.dockerHostUri">via {{appInfo.dockerHostUri}}</small></h1>
+                <h1> Minecraft Container Yard <small ng-show="settings">via {{settings.mccy.dockerHostUri}}</small></h1>
         </div>
     </div>
 
@@ -25,8 +25,13 @@
         <div class="col-md-2 actions">
             <h2>Actions</h2>
 
-            <button class="btn btn-default" ng-class="{'active':isCurrentView(v)}" ng-repeat="v in views"
-                    ng-click="goto(v)">{{v.label}}</button>
+            <div class="row">
+                <div class="col-md-12 col-sm-6" ng-repeat="v in views">
+                    <button class="btn btn-default" ng-class="{'active':isCurrentView(v)}"
+                            ng-click="goto(v)">{{v.label}}</button>
+
+                </div>
+            </div>
         </div>
 
         <div class="col-md-10">

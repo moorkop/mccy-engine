@@ -16,12 +16,27 @@ angular.module('Mccy.services',[
         });
     })
 
-    .service('AppInfo', function($resource){
-        return $resource('/api/info');
+    .service('MccyApi', function($resource){
+        return $resource('/api/:category', {}, {
+            appInfo: {
+                params: { category: 'info' }
+            },
+            settings: {
+                params: { category: 'settings' }
+            }
+        });
     })
 
     .service('Versions', function($resource){
         return $resource('/api/versions/:type');
+    })
+
+    .service('Mods', function($resource){
+        return $resource('/api/mods/:id');
+    })
+
+    .service('ModPacks', function($resource){
+        return $resource('/api/modpacks');
     })
 
     .service('Alerts', function($rootScope, toaster){

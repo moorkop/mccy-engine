@@ -2,23 +2,45 @@ body {
 }
 
 .current-containers {
-    max-height: 500px;
-    overflow-y: auto;
+    /*max-height: 500px;*/
+    /*overflow-y: auto;*/
 }
 
-.current-containers .panel-body label,span {
+.current-containers .panel-body label,
+.current-containers .panel-body span {
     display: block;
+}
+
+.container-actions > button {
+    width: 100%;
+    margin-top: 2px;
 }
 
 .current-containers .panel-body .entry+.entry {
     margin-top: 10px;
 }
 
+.panel-body .field {
+    margin-bottom: 10px;
+}
+
+.panel-body .field > * {
+    display: block;
+}
+
+.panel-body .field.compressed > * {
+    display: inline-block;
+}
+
+.panel-body .field > label {
+    margin-bottom: 0px;
+}
+
 .action {
     height: 100%;
 }
 
-.actions > button {
+.actions button {
     width: 100%;
     display: block;
 }
@@ -32,8 +54,8 @@ img.icon-preview {
     height: 64px;
 }
 
-.actions > button + button {
-    margin-top: 5px;
+.actions > .row > div {
+    margin-bottom: 5px;
 }
 
 span.underline {
@@ -53,6 +75,25 @@ span.underline {
     border-color: #32cd32;
 }
 
+.upload-mod {
+    width: 100%;
+    /*height: 200px;*/
+}
+
+.upload-mod .title {
+    font-size: 32px;
+}
+
+.upload-mod.dragover {
+    border-style: dashed;
+    border-color: #32cd32;
+    background-color: #669966;
+}
+
+.registered-mods {
+    margin-top: 20px;
+}
+
 .upload .target {
     display: none;
 }
@@ -62,4 +103,8 @@ span.underline {
 
 .upload.dragover .select {
     display: none;
+}
+
+.registered-mod .actions > div {
+    width: 100%;
 }

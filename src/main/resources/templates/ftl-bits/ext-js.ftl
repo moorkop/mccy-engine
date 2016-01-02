@@ -9,7 +9,9 @@
 <script src="webjars/angular-route/1.4.8/angular-route.min.js"></script>
 <script src="webjars/angular-ui-bootstrap-bower/0.14.3/ui-bootstrap-tpls.min.js"></script>
 <script src="webjars/angular-ui-bootstrap-bower/0.14.3/ui-bootstrap.min.js"></script>
-<script src="webjars/ng-tags-input/2.3.0/ng-tags-input.min.js"></script>
+<script src="webjars/ng-tags-input/3.0.0/build/ng-tags-input.min.js"></script>
 <script src="webjars/angularjs-toaster/0.4.15/toaster.min.js"></script>
 <script src="webjars/ng-file-upload/10.1.14/ng-file-upload.min.js"></script>
 <script src="webjars/ng-file-upload/10.1.14/ng-file-upload-shim.min.js"></script>
+<script src="webjars/lodash/3.10.1/lodash.min.js"></script>
+<script src="webjars/angular-xeditable/0.1.9/dist/js/xeditable.min.js"></script>

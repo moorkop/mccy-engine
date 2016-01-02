@@ -31,6 +31,11 @@ public class MccySettings {
     private int secondsToWaitOnStop = 30;
 
     /**
+     * Declares what specific settings will be exposed by the /api/settings endpoint
+     */
+    private String[] uiVisibleSettings;
+
+    /**
      * This can be set to override the default derivation of the file-access URL
      */
     private URI externalUri;
@@ -39,6 +44,11 @@ public class MccySettings {
      * This refers to the official versions.json Minecraft catalog.
      */
     private URI officialVersionsUri = URI.create("https://s3.amazonaws.com/Minecraft.Download/versions/versions.json");
+
+    /**
+     * The amount of time (in minutes) to cache the official versions REST API lookup.
+     */
+    private long officialVersionsCacheTime = 5;
 
     public String getDockerCertPath() {
         return dockerCertPath;
@@ -86,5 +96,21 @@ public class MccySettings {
 
     public void setOfficialVersionsUri(URI officialVersionsUri) {
         this.officialVersionsUri = officialVersionsUri;
+    }
+
+    public String[] getUiVisibleSettings() {
+        return uiVisibleSettings;
+    }
+
+    public void setUiVisibleSettings(String[] uiVisibleSettings) {
+        this.uiVisibleSettings = uiVisibleSettings;
+    }
+
+    public long getOfficialVersionsCacheTime() {
+        return officialVersionsCacheTime;
+    }
+
+    public void setOfficialVersionsCacheTime(long officialVersionsCacheTime) {
+        this.officialVersionsCacheTime = officialVersionsCacheTime;
     }
 }

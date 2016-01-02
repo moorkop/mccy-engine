@@ -32,6 +32,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/js/**").permitAll()
                     .antMatchers("/webjars/**").permitAll()
                     .antMatchers("/images/**").permitAll()
+                    .antMatchers("/ng-bits/**").permitAll()
+                    .antMatchers("/views/**").permitAll()
                     .antMatchers("/**/favicon.ico").permitAll()
                     .antMatchers("/api/downloads/**").permitAll()
                 .antMatchers("/**").hasRole("USER")

@@ -12,6 +12,33 @@ angular.module('Mccy.routes', [
                 templateUrl: 'views/create-container.html',
                 controller: 'NewContainerCtrl'
             })
+            .when('/upload-mod', {
+                templateUrl: 'views/upload-mod.html',
+                controller: 'UploadModCtrl'
+            })
+            .when('/manage-mods', {
+                templateUrl: 'views/manage-mods.html',
+                controller: 'ManageModsCtrl'
+            })
             .otherwise('/view')
     })
+
+    .constant('MccyViews', [
+        {
+            view: '/view',
+            label: 'Current Containers'
+        },
+        {
+            view: '/new-server',
+            label: 'New Container'
+        },
+        {
+            view: '/upload-mod',
+            label: 'Upload Mods'
+        },
+        {
+            view: '/manage-mods',
+            label: 'Manage Mods'
+        }
+    ])
 ;

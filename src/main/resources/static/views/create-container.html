@@ -10,13 +10,6 @@
             </div>
 
             <div class="form-group">
-                <label>Port</label>
-                <input type="number" min="25565" required="true" class="form-control" ng-model="port">
-                <p class="help-block">This is the port exposed to the outside world. Minecraft's default is 25565, so
-                    use that if possible.</p>
-            </div>
-
-            <div class="form-group">
                 <label>Type</label>
                 <select class="form-control" ng-model="type" ng-options="t.value as t.label for t in types"></select>
             </div>
@@ -24,7 +17,31 @@
             <div class="form-group">
                 <label>Version</label>
                 <select class="form-control" ng-model="version"
-                        ng-options="v.value as v.label for v in versions"></select>
+                        ng-options="v.value as v.label for v in applicableVersions"></select>
+            </div>
+
+            <div ng-show="chooseMods">
+                <label>Mods to include</label>
+                <tags-input ng-model="selectedMods"
+                            display-property="name" key-property="id"
+                            add-from-autocomplete-only="true"
+                            placeholder="Click here to pick mods">
+                    <auto-complete source="suggestMods($query)"
+                                   min-length="0" load-on-focus="true" load-on-empty="true"
+                                   template="ng-bits/mod-suggestion.html"></auto-complete>
+                </tags-input>
+            </div>
+
+            <div class="checkbox" ng-hide="choosePort">
+                <label>
+                    <input type="checkbox" ng-model="choosePort">Choose Specific Port
+                </label>
+            </div>
+            <div class="form-group" ng-show="choosePort">
+                <label>Port</label>
+                <input type="number" min="25565" required="true" class="form-control" ng-model="port">
+                <p class="help-block">This is the port exposed to the outside world. Minecraft's default is 25565, so
+                    use that if possible.</p>
             </div>
 
             <div class="checkbox" ng-hide="enableOperators">
@@ -106,7 +123,7 @@
                 </label>
             </div>
 
-            <button type="submit" class="btn btn-primary" ng-disabled="!ackEula">Create It!</button>
+            <button type="submit" class="btn btn-primary" ng-disabled="!ackEula || creating">Create It!</button>
             <button ng-click="cancelNewContainer()" class="btn btn-default">Cancel</button>
 
         </form>

@@ -27,10 +27,21 @@ public class MinecraftVersions {
     }
 
     public enum Type {
-        release,
-        snapshot,
-        old_beta,
-        old_alpha
+        release(true),
+        snapshot(true),
+        old_beta(true),
+        old_alpha(true),
+        forge(false);
+
+        private final boolean official;
+
+        Type(boolean official) {
+            this.official = official;
+        }
+
+        public boolean isOfficial() {
+            return official;
+        }
     }
 
     private Map<Type, String> latest;

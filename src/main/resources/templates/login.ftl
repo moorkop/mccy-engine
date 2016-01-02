@@ -32,7 +32,7 @@
                     <input name="password" type="password" class="form-control" id="password" placeholder="Password">
                 </div>
 
-                <input type="hidden" name="${csrfParameterName}" value="${csrfToken}" />
+                <input type="hidden" name="${csrf.parameterName}" value="${csrf.token}" />
                 <button type="submit" class="btn btn-default">Login</button>
             </form>
         </div>

@@ -1,0 +1,40 @@
+<div class="panel panel-default registered-mod">
+    <div class="panel-body row">
+        <div class="col-md-10">
+            <div class="field compressed">
+                <label>Name</label>
+                <a href="#" editable-text="mod.name">{{ mod.name }}</a>
+            </div>
+
+            <div class="field compressed">
+                <label>Description</label>
+                <a href="#" editable-text="mod.description">{{ mod.description }}</a>
+            </div>
+
+            <div class="field compressed">
+                <label>Homepage</label>
+                <a href="#" editable-text="mod.url">{{ mod.url }}</a>
+            </div>
+
+            <div class="field compressed">
+                <label>Version</label>
+                <a href="#" editable-text="mod.version">{{ mod.version }}</a>
+            </div>
+
+            <div class="field compressed">
+                <label>Compatible Minecraft Version</label>
+                <a href="#" editable-text="mod.minecraftVersion">{{ mod.minecraftVersion }}</a>
+            </div>
+
+            <div class="field compressed">
+                <label>Original Filename</label>
+                <span>{{ mod.originalFilename }}</span>
+            </div>
+        </div>
+
+        <div class="col-md-2 actions">
+            <button ng-show="showDelete" class="btn btn-warning" ng-click="delete()">Delete</button>
+        </div>
+
+    </div>
+</div>

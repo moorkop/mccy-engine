@@ -2,10 +2,17 @@ package me.itzg.mccy.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.spotify.docker.client.messages.Container;
+import com.spotify.docker.client.messages.ContainerInfo;
+import com.spotify.docker.client.messages.PortBinding;
 import me.itzg.mccy.types.MccyConstants;
 
+import java.net.InetAddress;
 import java.net.URI;
+import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Provides a summary of very useful info that's buried in the usual container info
@@ -25,6 +32,10 @@ public class ContainerSummary {
     private String status;
 
     private URI icon;
+
+    private URI modpack;
+
+    private Map<String,String> labels;
 
     public String getHostIp() {
         return hostIp;
@@ -83,6 +94,81 @@ public class ContainerSummary {
         summary.fromPortMapping(container.ports(), dockerHostIp);
 
         return summary;
+    }
+
+    public static ContainerSummary from(ContainerInfo info, String dockerHostIp) {
+        ContainerSummary summary = new ContainerSummary();
+
+        final Map<String, List<PortBinding>> ports = info.networkSettings().ports();
+        // will be null when the container is stopped
+        if (ports != null) {
+            final List<PortBinding> portBindings = ports.get(MccyConstants.SERVER_CONTAINER_PORT);
+            final PortBinding portBinding = portBindings.get(0);
+
+            final String reportedHostIp = portBinding.hostIp();
+            final String resolvedIp;
+            if (reportedHostIp.equals(MccyConstants.IP_ADDR_ALL_IF)) {
+                resolvedIp = dockerHostIp;
+            }
+            else {
+                resolvedIp = reportedHostIp;
+            }
+            try {
+                summary.setHostIp(InetAddress.getByName(resolvedIp).getCanonicalHostName());
+            } catch (UnknownHostException e) {
+                summary.setHostIp(resolvedIp);
+            }
+            summary.setHostPort(Integer.parseInt(portBinding.hostPort()));
+        }
+
+        summary.setRunning(info.state().running());
+
+        final List<String> env = info.config().env();
+        fillFromEnv(env, "ICON", v -> {
+            summary.setIcon(URI.create(v));
+        });
+
+        summary.setName(normalizeName(info.name()));
+
+        summary.setId(info.id());
+
+        summary.setLabels(info.config().labels().entrySet()
+                .stream()
+                .filter(e -> e.getKey().startsWith(MccyConstants.MCCY_LABEL_PREFIX))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+
+        final String value = summary.getLabels().get(MccyConstants.MCCY_LABEL_MODPACK_URL);
+        if (value != null) {
+            summary.setModpack(URI.create(value));
+        }
+
+        return summary;
+    }
+
+    private static void fillFromEnv(List<String> env, String envKey, Consumer<String> consumer) {
+        final String prefix = envKey + "=";
+
+        for (String e : env) {
+            if (e.startsWith(prefix)) {
+                consumer.accept(e.substring(prefix.length()));
+            }
+        }
+    }
+
+    public Map<String, String> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(Map<String, String> labels) {
+        this.labels = labels;
+    }
+
+    public URI getModpack() {
+        return modpack;
+    }
+
+    public void setModpack(URI modpack) {
+        this.modpack = modpack;
     }
 
     private void fromPortMapping(List<Container.PortMapping> portMapping, String dockerHostIp) {

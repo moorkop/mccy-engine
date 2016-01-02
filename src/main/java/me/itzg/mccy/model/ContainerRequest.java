@@ -18,7 +18,7 @@ public class ContainerRequest {
     @NotNull @Size(min = 1)
     private String name;
 
-    @Min(value = 25565, message = "Minecraft server ports need to be 25565 (the default) or greater")
+    @Min(value = 0, message = "Port needs to be 0 or greater")
     private int port;
 
     private String version;
@@ -34,6 +34,9 @@ public class ContainerRequest {
 
     @Pattern(regexp = "https?://.+", message = "needs to be a valid http or https URL")
     private String world;
+
+    @Pattern(regexp = "https?://.+", message = "needs to be a valid http or https URL")
+    private String modpack;
 
     private boolean startOnCreate = true;
 
@@ -119,5 +122,13 @@ public class ContainerRequest {
 
     public void setWorld(String world) {
         this.world = world;
+    }
+
+    public String getModpack() {
+        return modpack;
+    }
+
+    public void setModpack(String modpack) {
+        this.modpack = modpack;
     }
 }

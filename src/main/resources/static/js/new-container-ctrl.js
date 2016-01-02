@@ -2,17 +2,63 @@ angular.module('Mccy.NewContainerCtrl', [
         'Mccy.services',
         'ngFileUpload'
     ])
-    .controller('NewContainerCtrl', function ($scope, $log, Upload, Containers, Alerts) {
+    .run(function(editableOptions) {
+        editableOptions.theme = 'bs3';
+    })
+    .controller('NewContainerCtrl', function ($scope, $log, Upload, Containers, Alerts, Versions, Mods, ModPacks) {
+
+        // Start with master list...
+        $scope.applicableVersions = $scope.versions;
+
+        $scope.types = [
+            {
+                value: 'VANILLA',
+                label: 'Regular'
+            },
+            {
+                value: 'FORGE',
+                label: 'Forge'
+            }
+        ];
 
         reset();
 
+        $scope.$watch('type', function(newValue){
+            if (newValue == 'FORGE') {
+                Versions.query({type:'forge'}, function(response){
+                    $scope.applicableVersions = _.map(response, function(v) {
+                        return {
+                            value: v,
+                            label: v
+                        }
+                    });
+                    $scope.version = response[0];
+                });
+                $scope.chooseMods = true;
+            }
+            else {
+                $scope.applicableVersions = $scope.versions;
+                $scope.chooseMods = false;
+            }
+        });
+
+        //$scope.$watchGroup(['type', 'version'], function (newValues) {
+        //    if (newValues[0] == 'FORGE') {
+        //        $scope.applicableMods = Mods.query({mcversion:newValues[1]});
+        //    }
+        //    else {
+        //        $scope.applicableMods = null;
+        //    }
+        //});
+
         $scope.submitNewContainer = function () {
             $log.debug('submitting', this);
+            $scope.creating = true;
 
             var request = {
                 ackEula: this.ackEula,
                 name: this.name,
-                port: this.port,
+                port: this.choosePort ? this.port : 0,
                 type: this.type,
                 version: this.version
             };
@@ -29,24 +75,60 @@ angular.module('Mccy.NewContainerCtrl', [
             if (this.enableWorld) {
                 request.world = this.worldUrl;
             }
+            if (this.chooseMods && !_.isEmpty(this.selectedMods)) {
+                ModPacks.save(_.map(this.selectedMods, function(m){
+                    return {
+                        type: m.type,
+                        id: m.id
+                    }
+                }), function(response){
+                    request.modpack = response.value;
+                    proceedAfterMods(request);
+                })
+            }
+            else {
+                proceedAfterMods(request);
+            }
+        };
 
+        function proceedAfterMods(request) {
             if ($scope.worldFile) {
                 Upload.upload({
                     url: '/api/uploads/worlds',
                     data: {file: $scope.worldFile}
                 }).then(function (response) {
+                    // success
                     Alerts.info('World Uploaded', 'World file was uploaded successfully');
 
                     request.world = response.data.value;
                     $log.debug("Upload available at", request.world);
-                    Containers.save(request, handleSuccess, handleRequestError);
+                    proceedAfterWorld(request);
+                }, function (resp) {
+                    var msg = resp.statusText;
+
+                    if (!msg) {
+                        msg = 'Failed to upload world file. Make sure it is smaller than ' +
+                            $scope.settings.mccy.maxUploadSize;
+                    }
+
+                    $log.warn(resp);
+                    Alerts.error(msg);
                 });
             }
             else {
-                Containers.save(request, handleSuccess, handleRequestError);
+                proceedAfterWorld(request);
             }
+        }
 
-            close();
+        function proceedAfterWorld(request) {
+            Containers.save(request, handleSuccess, handleRequestError);
+        }
+
+        $scope.suggestMods = function(input) {
+            return Mods.query({
+                id: '_suggest',
+                mcversion: $scope.version,
+                input: input}).$promise;
         };
 
         $scope.cancelNewContainer = function () {
@@ -58,11 +140,14 @@ angular.module('Mccy.NewContainerCtrl', [
         }
 
         function handleSuccess(value) {
-            Alerts.success('The request was submitted succesfully', true);
+            Alerts.success('The server container was successfully created', true);
+
+            close();
         }
 
         function handleRequestError(httpResponse) {
             Alerts.error(httpResponse.data.message, true);
+            $scope.creating = false;
         }
 
         function close() {
@@ -72,6 +157,7 @@ angular.module('Mccy.NewContainerCtrl', [
 
         function reset() {
             $scope.name = undefined;
+            $scope.choosePort = false;
             $scope.port = 25565;
             $scope.type = 'VANILLA';
             $scope.version = 'LATEST';

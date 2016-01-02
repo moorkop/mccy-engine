@@ -16,11 +16,24 @@ public class MccyFilesSettings {
      */
     private String repoDir = "repo";
 
+    /**
+     * The max expected size of a mcmod.info file.
+     */
+    private int mcInfoReadLimit = 1024;
+
     public String getRepoDir() {
         return repoDir;
     }
 
     public void setRepoDir(String repoDir) {
         this.repoDir = repoDir;
+    }
+
+    public int getMcInfoReadLimit() {
+        return mcInfoReadLimit;
+    }
+
+    public void setMcInfoReadLimit(int mcInfoReadLimit) {
+        this.mcInfoReadLimit = mcInfoReadLimit;
     }
 }
