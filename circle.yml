@@ -22,6 +22,10 @@ deployment:
     branch: master
     commands:
       - ./build-deploy-carina.sh $TEST_CLUSTER
+  production:
+    branch: production
+    commands:
+      - ./build-deploy-carina.sh $TARGET_CLUSTER
 
 notify:
   webhooks:
