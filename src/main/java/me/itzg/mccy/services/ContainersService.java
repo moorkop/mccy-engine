@@ -48,7 +48,9 @@ public class ContainersService {
 
     public String create(ContainerRequest request) throws MccyException, DockerException, InterruptedException {
 
-        PortBinding portBinding = PortBinding.of("0.0.0.0", request.getPort());
+        final int requestedPort = request.getPort();
+        PortBinding portBinding = PortBinding.of("",
+                requestedPort != 0 ? String.valueOf(requestedPort) : "");
         Map<String, List<PortBinding>> portBindings =
                 singletonMap(MccyConstants.SERVER_CONTAINER_PORT, singletonList(portBinding));
 
@@ -58,6 +60,7 @@ public class ContainersService {
         final ContainerConfig config = ContainerConfig.builder()
                 .attachStdin(true)
                 .tty(true)
+                .exposedPorts(MccyConstants.SERVER_CONTAINER_PORT)
                 .env(fillEnv(request))
                 .image(mccySettings.getImage())
                 .hostConfig(hostConfig)
