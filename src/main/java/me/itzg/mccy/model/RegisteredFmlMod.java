@@ -14,6 +14,7 @@ public class RegisteredFmlMod extends RegisteredMod {
     private FmlModInfo modInfo;
 
     public RegisteredFmlMod() {
+        super(new ServerType[]{ServerType.FORGE});
     }
 
     public FmlModInfo getModInfo() {

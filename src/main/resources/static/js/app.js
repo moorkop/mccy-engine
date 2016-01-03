@@ -3,31 +3,22 @@ angular.module('MccyApp', [
     'Mccy.routes',
     'Mccy.services',
     'Mccy.mods',
+    'Mccy.constants',
     'ngAnimate',
     'ui.bootstrap',
-    'template/modal/backdrop.html',
-    'template/modal/window.html',
-    'template/progressbar/progressbar.html',
+    'ui.bootstrap.tpls',
     'ngTagsInput'
 ])
 
     .controller('MainCtrl', function ($scope, $timeout, $location, $log,
                                       $uibModal,
-                                      Containers, MccyApi, Versions, Alerts, MccyViews) {
+                                      Containers, MccyApi, Versions, Alerts, MccyViews,
+                                      cToasterOptions, cBaseVersions) {
         $scope.settings = {};
 
-        $scope.versions = [
-            {
-                value: 'LATEST',
-                label: 'Latest Stable'
-            },
-            {
-                value: 'SNAPSHOT',
-                label: 'Snapshot'
-            }
-        ];
+        $scope.versions = cBaseVersions;
 
-        Versions.query({type:'release'}, function(response){
+        Versions.query({type:'VANILLA'}, function(response){
             $scope.versions = $scope.versions.concat(response.map(function(v){
                 return {
                     value: v,
@@ -36,13 +27,7 @@ angular.module('MccyApp', [
             }))
         });
 
-        $scope.toasterOptions = {
-            'time-out': {
-                'toast-error': 0,
-                'toast-success': 3000
-            },
-            'close-button': true
-        };
+        $scope.toasterOptions = cToasterOptions;
 
         // NOTE: first view is assumed to be the default
         $scope.views = MccyViews;

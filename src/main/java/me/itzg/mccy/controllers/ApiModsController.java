@@ -3,6 +3,7 @@ package me.itzg.mccy.controllers;
 import me.itzg.mccy.config.MccySettings;
 import me.itzg.mccy.model.RegisteredMod;
 import me.itzg.mccy.model.RegisteredModReference;
+import me.itzg.mccy.model.ServerType;
 import me.itzg.mccy.model.SingleValue;
 import me.itzg.mccy.services.ModsService;
 import me.itzg.mccy.types.MccyConstants;
@@ -48,8 +49,9 @@ public class ApiModsController {
 
     @RequestMapping("mods/_suggest")
     public List<? extends RegisteredMod> suggestWithinVersion(@RequestParam("mcversion") String minecraftVersion,
+                                                              @RequestParam("type") ServerType type,
                                                               @RequestParam("input") String autoCompleteInput) {
-        return modsService.querySuggestions(minecraftVersion, autoCompleteInput);
+        return modsService.querySuggestions(minecraftVersion, type, autoCompleteInput);
     }
 
     @RequestMapping(value = "mods/{id}", method = RequestMethod.DELETE)

@@ -37,6 +37,15 @@ public abstract class RegisteredMod {
     @Field(index = FieldIndex.not_analyzed, type = FieldType.String)
     private String url;
 
+    private ServerType[] serverTypes = new ServerType[]{ServerType.FORGE};
+
+    public RegisteredMod() {
+    }
+
+    protected RegisteredMod(ServerType[] serverTypes) {
+        this.serverTypes = serverTypes;
+    }
+
     /**
      * We'll use an MD5 of the jar file to uniquely fingerprint each one and/or
      * check for redundant uploads.
@@ -103,5 +112,13 @@ public abstract class RegisteredMod {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public ServerType[] getServerTypes() {
+        return serverTypes;
+    }
+
+    public void setServerTypes(ServerType[] serverTypes) {
+        this.serverTypes = serverTypes;
     }
 }

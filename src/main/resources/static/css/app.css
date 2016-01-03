@@ -40,11 +40,6 @@ body {
     height: 100%;
 }
 
-.actions button {
-    width: 100%;
-    display: block;
-}
-
 div.space-before {
     margin-top: 10px;
 }
@@ -88,6 +83,21 @@ span.underline {
     border-style: dashed;
     border-color: #32cd32;
     background-color: #669966;
+}
+
+.tooltip.copied .tooltip-inner {
+    color: #ffffff;
+    background-color: #669966;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+
+.tooltip.copied .tooltip-arrow {
+    border-color: #669966;
+}
+
+button.tight {
+    padding: 1px;
+    /*border-radius: 0px;*/
 }
 
 .registered-mods {

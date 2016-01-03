@@ -23,6 +23,10 @@ public class ContainerSummary {
 
     private String name;
 
+    private String type;
+
+    private String version;
+
     private String hostIp;
 
     private int hostPort;
@@ -124,8 +128,14 @@ public class ContainerSummary {
         summary.setRunning(info.state().running());
 
         final List<String> env = info.config().env();
-        fillFromEnv(env, "ICON", v -> {
+        fillFromEnv(env, MccyConstants.ENV_ICON, v -> {
             summary.setIcon(URI.create(v));
+        });
+        fillFromEnv(env, MccyConstants.ENV_TYPE, v -> {
+            summary.setType(v);
+        });
+        fillFromEnv(env, MccyConstants.ENV_VERSION, v -> {
+            summary.setVersion(v);
         });
 
         summary.setName(normalizeName(info.name()));
@@ -143,6 +153,22 @@ public class ContainerSummary {
         }
 
         return summary;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     private static void fillFromEnv(List<String> env, String envKey, Consumer<String> consumer) {

@@ -5,11 +5,12 @@
              ngf-select ngf-drop ngf-multiple="true"
              ngf-change="uploadModFile($files)"
              name="modFile"
-             ngf-pattern="'.jar'" ngf-accept="'application/jar'">
+             ngf-model-invalid="invalidFiles"
+             ngf-pattern="allowedPatterns" ngf-accept="'application/jar'">
             <div class="title">
-                Drop mod file(s) here or click to select
+                Drop file(s) here or click to select
                 </div>
-            <div><i class="fa fa-sticky-note"></i> Forge mods should be .jar files.</div>
+            <div><i class="fa fa-sticky-note"></i> Mods and plugins should be .jar files.</div>
 
             <div ng-show="showProgress">
                 <uib-progressbar value="progress">

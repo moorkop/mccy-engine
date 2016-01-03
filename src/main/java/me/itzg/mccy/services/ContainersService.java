@@ -11,6 +11,7 @@ import me.itzg.mccy.config.MccySettings;
 import me.itzg.mccy.model.ContainerDetails;
 import me.itzg.mccy.model.ContainerRequest;
 import me.itzg.mccy.model.ContainerSummary;
+import me.itzg.mccy.model.ServerType;
 import me.itzg.mccy.types.MccyConstants;
 import me.itzg.mccy.types.MccyException;
 import org.slf4j.Logger;
@@ -178,13 +179,14 @@ public class ContainersService {
             addToEnv(env, "EULA", "TRUE");
         }
 
-        fillStringInEnv(env, request.getVersion(), "VERSION");
-        fillStringInEnv(env, request.getIcon(), "ICON");
-        fillStringInEnv(env, request.getWorld(), "WORLD");
-        fillStringInEnv(env, request.getModpack(), "MODPACK");
+        fillStringInEnv(env, request.getVersion(), MccyConstants.ENV_VERSION);
+        fillStringInEnv(env, request.getIcon(), MccyConstants.ENV_ICON);
+        fillStringInEnv(env, request.getWorld(), MccyConstants.ENV_WORLD);
+        fillStringInEnv(env, request.getModpack(), MccyConstants.ENV_MODPACK);
 
-        if (request.getType() != null) {
-            addToEnv(env, "TYPE", request.getType().name());
+        final ServerType type = request.getType();
+        if (type != null) {
+            addToEnv(env, "TYPE", type.name());
         }
 
         fillPlayerList(env, request.getWhitelist(), "WHITELIST");

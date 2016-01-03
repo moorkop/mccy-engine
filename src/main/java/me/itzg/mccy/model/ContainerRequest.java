@@ -35,6 +35,10 @@ public class ContainerRequest {
     @Pattern(regexp = "https?://.+", message = "needs to be a valid http or https URL")
     private String world;
 
+    /**
+     * Refers to either a zip of Forge mods or a zip of Bukkit/Spigot plugins, but generalizes
+     * on the term "mod pack"
+     */
     @Pattern(regexp = "https?://.+", message = "needs to be a valid http or https URL")
     private String modpack;
 

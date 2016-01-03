@@ -63,9 +63,18 @@ angular.module('Mccy.services',[
             },
 
             handleRequestError: function(httpResponse) {
-                popAndReload('error', 'Request Failed', httpResponse.data.message);
+                popAndReload('error', 'Request Failed', httpResponse.message ||
+                    (httpResponse.data && httpResponse.data.message));
             }
         }
     })
 
+    .filter('serverTypeLabel', function(cServerTypes) {
+        return function(input) {
+            if (_.isUndefined(input)) {
+                return input;
+            }
+            return _.get(cServerTypes, input, _.startCase(input.toLowerCase()));
+        };
+    })
 ;

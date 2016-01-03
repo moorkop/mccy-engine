@@ -2,12 +2,10 @@ package me.itzg.mccy.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.itzg.mccy.config.MccySettings;
-import me.itzg.mccy.model.MinecraftVersions;
-import org.hamcrest.Matchers;
+import me.itzg.mccy.model.ServerType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -16,7 +14,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
 
 import static org.hamcrest.Matchers.emptyIterable;
 import static org.hamcrest.Matchers.not;
@@ -56,7 +53,7 @@ public class VersionsServiceTest {
 
     @Test
     public void testGetVanillaVersions() throws Exception {
-        final Collection<String> versions = versionsService.getVersions(MinecraftVersions.Type.release);
+        final Collection<String> versions = versionsService.getVersions(ServerType.VANILLA);
 
         assertNotNull(versions);
         assertThat(versions, not(emptyIterable()));

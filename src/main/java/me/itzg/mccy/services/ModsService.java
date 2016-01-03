@@ -8,16 +8,20 @@ import com.google.common.base.Strings;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.HashingInputStream;
 import me.itzg.mccy.config.MccyFilesSettings;
+import me.itzg.mccy.config.MccySettings;
+import me.itzg.mccy.model.BukkitPluginInfo;
 import me.itzg.mccy.model.FmlModInfo;
 import me.itzg.mccy.model.FmlModListEntry;
 import me.itzg.mccy.model.ModPack;
+import me.itzg.mccy.model.RegisteredBukkitPlugin;
 import me.itzg.mccy.model.RegisteredFmlMod;
 import me.itzg.mccy.model.RegisteredMod;
 import me.itzg.mccy.model.RegisteredModReference;
+import me.itzg.mccy.model.ServerType;
 import me.itzg.mccy.types.MccyConstants;
 import me.itzg.mccy.types.MccyException;
 import me.itzg.mccy.types.MccyNotFoundException;
-import org.elasticsearch.index.query.FilterBuilders;
+import me.itzg.mccy.types.YamlMapper;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.slf4j.Logger;
@@ -39,13 +43,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import static org.elasticsearch.index.query.FilterBuilders.termFilter;
 import static org.elasticsearch.index.query.QueryBuilders.prefixQuery;
 
 /**
@@ -66,6 +69,12 @@ public class ModsService {
     private ObjectMapper objectMapper;
 
     @Autowired
+    private YamlMapper yamlMapper;
+
+    @Autowired
+    private MccySettings mccySettings;
+
+    @Autowired
     private MccyFilesSettings filesSettings;
 
     @Autowired
@@ -73,6 +82,9 @@ public class ModsService {
 
     @Autowired
     private RegisteredFmlModRepo fmlModRepo;
+
+    @Autowired
+    private RegisteredBukkitPluginRepo bukkitPluginRepo;
 
     @Autowired
     private ModPackRepo modPackRepo;
@@ -92,21 +104,7 @@ public class ModsService {
 
         final ZipInputStream zipIn = new ZipInputStream(hashingIn);
 
-        RegisteredMod registeredMod = null;
-
-        try {
-            ZipEntry nextEntry;
-            while ((nextEntry = zipIn.getNextEntry()) != null) {
-                if (nextEntry.getName().endsWith(MccyConstants.FILE_MCMOD_INFO)) {
-                    FmlModInfo info = extractFmlModInfo(zipIn);
-
-                    registeredMod = from(info);
-                }
-            }
-
-        } catch (ZipException e) {
-            throw new MccyException("Given mod file is not a valid zip file", e);
-        }
+        RegisteredMod registeredMod = traverseZip(zipIn);
 
         zipIn.close();
 
@@ -117,15 +115,20 @@ public class ModsService {
             final String id = registeredMod.getId();
 
             if (registeredMod instanceof RegisteredFmlMod) {
-                RegisteredFmlMod registeredFmlMod = (RegisteredFmlMod) registeredMod;
-                if (fmlModRepo.exists(id)) {
-                    return fmlModRepo.findOne(id);
+                final RegisteredFmlMod existing = fmlModRepo.findOne(id);
+                if (existing != null) {
+                    return existing;
                 }
-                else {
-                    fmlModRepo.save(registeredFmlMod);
+                fmlModRepo.save((RegisteredFmlMod) registeredMod);
+
+            } else if (registeredMod instanceof RegisteredBukkitPlugin) {
+                final RegisteredBukkitPlugin existing = bukkitPluginRepo.findOne(id);
+                if (existing != null) {
+                    return existing;
                 }
+                bukkitPluginRepo.save((RegisteredBukkitPlugin) registeredMod);
+
             }
-            // else other types when implemented
 
             fileStorageService.save(MccyConstants.CATEGORY_MODS, id + MccyConstants.EXT_MODS, false, fileIn);
 
@@ -135,6 +138,55 @@ public class ModsService {
             throw new MccyException("Unsupported mod file format. Was looking for items like "+MccyConstants.FILE_MCMOD_INFO);
         }
 
+    }
+
+    private RegisteredMod traverseZip(ZipInputStream zipIn) throws IOException, MccyException {
+        RegisteredMod registeredMod = null;
+
+        try {
+            ZipEntry nextEntry;
+            while ((nextEntry = zipIn.getNextEntry()) != null) {
+                final String entryName = nextEntry.getName();
+
+                if (entryName.endsWith(MccyConstants.FILE_MCMOD_INFO)) {
+                    registeredMod = from(extractFmlModInfo(zipIn));
+                } else if (entryName.endsWith(MccyConstants.FILE_PLUGIN_META)) {
+                    registeredMod = from(extractBukkitPluginInfo(zipIn));
+                }
+            }
+
+        } catch (ZipException e) {
+            throw new MccyException("Given mod file is not a valid zip file", e);
+        }
+        return registeredMod;
+    }
+
+    FmlModInfo extractFmlModInfo(InputStream in) throws IOException {
+
+        // We need to wrap it and mark it since
+        // a) not all input streams (i.e. ZipInputStream) are mark-able
+        // b) we'll need to rewind if the initial JSON parse fails
+        BufferedInputStream bufferedIn = new BufferedInputStream(in);
+        bufferedIn.mark(filesSettings.getMcInfoReadLimit());
+
+        try {
+            return objectMapper.readValue(StreamUtils.nonClosing(bufferedIn), FmlModInfo.class);
+        } catch (JsonParseException | JsonMappingException e) {
+            LOG.debug("Failed to parse as full structure, will try list only", e);
+
+            bufferedIn.reset();
+            CollectionType modListEntriesType =
+                    objectMapper.getTypeFactory()
+                            .constructCollectionType(ArrayList.class, FmlModListEntry.class);
+            ArrayList<FmlModListEntry> entries =
+                    objectMapper.readValue(StreamUtils.nonClosing(bufferedIn), modListEntriesType);
+
+            return new FmlModInfo(entries);
+        }
+    }
+
+    BukkitPluginInfo extractBukkitPluginInfo(InputStream in) throws IOException {
+        return yamlMapper.getMapper().readValue(StreamUtils.nonClosing(in), BukkitPluginInfo.class);
     }
 
     /**
@@ -165,7 +217,7 @@ public class ModsService {
         zipOut.close();
     }
 
-    private RegisteredMod from(FmlModInfo info) {
+    RegisteredMod from(FmlModInfo info) {
         if (info.getModList().isEmpty()) {
             throw new IllegalArgumentException("No modList entries were present");
         } else if (info.getModList().size() > 1) {
@@ -186,18 +238,36 @@ public class ModsService {
         return mod;
     }
 
-    public List<? extends RegisteredMod> queryAll() {
-        Iterable<RegisteredFmlMod> all = fmlModRepo.findAll(new Sort("name"));
+    RegisteredMod from(BukkitPluginInfo info) {
+        final RegisteredBukkitPlugin bukkitPlugin = new RegisteredBukkitPlugin();
 
-        return StreamSupport.stream(all.spliterator(), false)
-                .collect(Collectors.toList());
+        bukkitPlugin.setVersion(info.getVersion());
+        bukkitPlugin.setName(info.getName());
+        bukkitPlugin.setDescription(info.getDescription());
+        bukkitPlugin.setNativeId(info.getMain());
+        bukkitPlugin.setMinecraftVersion(mccySettings.getDefaultBukkitGameVersion());
+
+        return bukkitPlugin;
+    }
+
+    public List<? extends RegisteredMod> queryAll() {
+        final List<RegisteredMod> all = new ArrayList<>();
+
+        for (RegisteredFmlMod mod : fmlModRepo.findAll(new Sort("name"))) {
+            all.add(mod);
+        }
+        for (RegisteredBukkitPlugin plugin : bukkitPluginRepo.findAll(new Sort("name"))) {
+            all.add(plugin);
+        }
+
+        return all;
     }
 
     public List<? extends RegisteredMod> queryByMinecraftVersion(String mcversion) {
         return fmlModRepo.findByMinecraftVersionOrderByName(mcversion);
     }
 
-    public List<? extends RegisteredMod> querySuggestions(String mcversion, String input) {
+    public List<? extends RegisteredMod> querySuggestions(String mcversion, ServerType serverType, String input) {
 
         final NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
 
@@ -214,10 +284,15 @@ public class ModsService {
 
         final NativeSearchQuery searchQuery = queryBuilder
                 .withQuery(query)
-                .withFilter(FilterBuilders.termFilter("minecraftVersion", mcversion))
+                .withFilter(termFilter("minecraftVersion", mcversion))
                 .build();
 
-        return esTemplate.queryForList(searchQuery, RegisteredFmlMod.class);
+        if (serverType.isBukkitCompatible()) {
+            return esTemplate.queryForList(searchQuery, RegisteredBukkitPlugin.class);
+        }
+        else {
+            return esTemplate.queryForList(searchQuery, RegisteredFmlMod.class);
+        }
     }
 
     public void delete(String id) {
@@ -264,35 +339,13 @@ public class ModsService {
 
     private boolean allModsExist(Collection<String> registeredModIds) {
         return registeredModIds.stream()
-                .allMatch(id -> fmlModRepo.exists(id));
+                .allMatch(id -> fmlModRepo.exists(id) || bukkitPluginRepo.exists(id));
     }
 
     private void touchModPack(ModPack modPack) {
         // TODO make this transactional...if it's worth it
         modPack.setLastAccess(new Date());
         modPackRepo.save(modPack);
-    }
-
-    private FmlModInfo extractFmlModInfo(InputStream zipIn) throws IOException {
-
-        BufferedInputStream in = new BufferedInputStream(zipIn);
-
-        in.mark(filesSettings.getMcInfoReadLimit());
-
-        try {
-            return objectMapper.readValue(StreamUtils.nonClosing(in), FmlModInfo.class);
-        } catch (JsonParseException | JsonMappingException e) {
-            LOG.debug("Failed to parse as full structure, will try list only", e);
-
-            in.reset();
-            CollectionType modListEntriesType =
-                    objectMapper.getTypeFactory()
-                            .constructCollectionType(ArrayList.class, FmlModListEntry.class);
-            ArrayList<FmlModListEntry> entries =
-                    objectMapper.readValue(StreamUtils.nonClosing(in), modListEntriesType);
-
-            return new FmlModInfo(entries);
-        }
     }
 
     void setFileIdHash(HashFunction fileIdHash) {
@@ -313,5 +366,13 @@ public class ModsService {
 
     void setFileStorageService(FileStorageService fileStorageService) {
         this.fileStorageService = fileStorageService;
+    }
+
+    void setMccySettings(MccySettings mccySettings) {
+        this.mccySettings = mccySettings;
+    }
+
+    void setYamlMapper(YamlMapper yamlMapper) {
+        this.yamlMapper = yamlMapper;
     }
 }

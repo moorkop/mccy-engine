@@ -27,7 +27,7 @@
 
             <div class="row">
                 <div class="col-md-12 col-sm-6" ng-repeat="v in views">
-                    <button class="btn btn-default" ng-class="{'active':isCurrentView(v)}"
+                    <button class="btn btn-default btn-block" ng-class="{'active':isCurrentView(v)}"
                             ng-click="goto(v)">{{v.label}}</button>
 
                 </div>

@@ -4,6 +4,7 @@
 <script src="js/routes.js"></script>
 <script src="js/services.js"></script>
 <script src="js/mods.js"></script>
+<script src="js/constants.js"></script>
 
 <!-- Controllers -->
 <script src="js/new-container-ctrl.js"></script>

@@ -5,6 +5,33 @@ package me.itzg.mccy.model;
  * @since 12/21/2015
  */
 public enum ServerType {
-    VANILLA,
-    FORGE
+    VANILLA(true),
+    SNAPSHOT(true),
+    FORGE(false),
+    BUKKIT(false, true),
+    SPIGOT(false, true);
+
+    private final boolean official;
+    private final boolean bukkitCompatible;
+
+    ServerType(boolean official) {
+
+        this.official = official;
+        this.bukkitCompatible = false;
+    }
+
+
+    ServerType(boolean official, boolean bukkitCompatible) {
+
+        this.official = official;
+        this.bukkitCompatible = bukkitCompatible;
+    }
+
+    public boolean isOfficial() {
+        return official;
+    }
+
+    public boolean isBukkitCompatible() {
+        return bukkitCompatible;
+    }
 }

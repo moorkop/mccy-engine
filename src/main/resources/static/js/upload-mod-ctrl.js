@@ -3,9 +3,16 @@ angular.module('Mccy.UploadModCtrl', [
         'ngFileUpload'
     ])
 
-    .controller('UploadModCtrl', function ($scope, $log, $timeout, Upload, Alerts) {
+    .controller('UploadModCtrl', function ($scope, $log, $timeout, Upload, Alerts, cTimeouts) {
 
         $scope.registeredMods = [];
+
+        $scope.allowedPatterns = '.jar,.url';
+
+        $scope.validate = function(file) {
+            $log.debug('Request to validate', file);
+            return true;
+        };
 
         $scope.uploadModFile = function (files) {
             Upload.upload({
@@ -32,7 +39,7 @@ angular.module('Mccy.UploadModCtrl', [
                         });
                     }
 
-                    $timeout(resetProgress, 2000);
+                    $timeout(resetProgress, cTimeouts.resetProgress);
 
                     startVersionCheck(newMods);
                 },

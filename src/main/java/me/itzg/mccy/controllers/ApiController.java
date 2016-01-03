@@ -1,7 +1,7 @@
 package me.itzg.mccy.controllers;
 
 import me.itzg.mccy.model.ApplicationInfo;
-import me.itzg.mccy.model.MinecraftVersions;
+import me.itzg.mccy.model.ServerType;
 import me.itzg.mccy.services.SettingsService;
 import me.itzg.mccy.services.VersionsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class ApiController {
     }
 
     @RequestMapping("versions/{type}")
-    public Collection<String> getVersions(@PathVariable("type")MinecraftVersions.Type type) throws IOException {
+    public Collection<String> getVersions(@PathVariable("type")ServerType type) throws IOException {
         return versionsService.getVersions(type);
     }
 

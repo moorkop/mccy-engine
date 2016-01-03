@@ -4,7 +4,7 @@ angular.module('Mccy.mods',[
 
     .directive('mccyModPanel', function(){
 
-        function controller($scope, $rootScope, Alerts, Mods) {
+        function controller($scope, $rootScope, $filter, Alerts, Mods) {
             $scope.delete = function() {
                 Mods.delete({id:$scope.mod.jarChecksum}, {}, function() {
                     $rootScope.$broadcast('reload');
@@ -13,6 +13,10 @@ angular.module('Mccy.mods',[
                     Alerts.error(errResp.statusText, false);
                 });
             }
+
+            $scope.compatibleServerTypes = $scope.mod.serverTypes.map(function(envType){
+                return $filter('serverTypeLabel')(envType);
+            }).join(', ');
         }
 
         return {

@@ -1,0 +1,57 @@
+name: ShowCaseStandalone
+main: com.kellerkindt.scs.ShowCaseStandalone
+authors: [kellerkindt, sorklin, bitfreeze, Ryzko, rtainc]
+version: 730
+
+softdepend:
+  - My Worlds
+  - Multiverse
+  - Multiverse-Core
+  - iConomy
+  - BOSEconomy
+  - Essentials
+  - Vault
+  - XcraftGate
+  - WormholeXTremeWorlds
+  - Towny
+  - iMonies
+  - WorldGuard
+  - Residence
+description: |
+  ShowCaseStandalone allows you to create mini shops on top of blocks.  The item for
+  sale or purchase is displayed on top of the block.
+commands:
+  showcasestandalone:
+    description: Access to all ShowCaseStandalone related commands
+    aliases:
+      - scs
+    usage: |
+      See '/scs help' for more information
+permissions:
+  scs.use:
+    description: Gives players permission to use SCS
+    default: true
+  scs.*:
+    description: Gives all permissions for ShowcaseStandalone
+    default: op
+    children:
+      scs.create:
+        description: Gives players permission to create any kind of scs
+        default: op
+        children:
+          scs.create.buy:
+            description: Gives players permission to create buy showcases
+          scs.create.sell:
+            description: Gives players permission to create sell showcases
+          scs.create.display:
+            description: Gives players permission to create display showcases
+          scs.remove:
+            description: Gives players permission to remove showcases
+          scs.manage:
+            description: Gives player ability to manage showcases
+      scs.admin:
+        description: Gives player ability to administrate showcases
+        default: op
+        children:
+          scs.create.unlimited:
+            description: Gives player ability to create unlimited showcases

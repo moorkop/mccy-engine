@@ -5,16 +5,28 @@
 </div>
 
 <div class="panel-body row">
-    <div class="col-md-10">
-        <div class="field"><label>Connect using</label><span>{{c.hostIp}}:{{c.hostPort}}</span></div>
-        <div class="field" ng-show="c.modpack"><label>Download mods for this server</label>
-            <a ng-href="{{c.modpack}}"><i class="fa fa-download fa-lg"></i></a></div>
-        <div class="field"><label>Status</label><span>{{c.status}}</span></div>
+    <div class="col-md-10 row">
+        <div class="field col-md-6"><label>Type</label><span>{{c.type | serverTypeLabel}}</span></div>
+        <div class="field col-md-6"><label>Version</label><span>{{c.version}}</span></div>
+        <div class="field col-md-6" ng-show="hasConnectInfo(c)">
+            <label>Connect using</label>
+            <span>{{serverAddress(c)}}
+                <button class="btn btn-default btn-sm" clipboard text="serverAddress(c)" on-copied="showCopied(c)"
+                        uib-tooltip="Copied! Now paste in Server Address"
+                        tooltip-trigger="none" tooltip-is-open="c.showCopied"
+                        tooltip-class="copied">
+                    <i class="fa fa-clipboard fa-lg"></i> Copy
+                </button>
+            </span>
+        </div>
+        <div class="field col-md-6" ng-show="c.modpack"><label>Download client-side mods</label>
+            <a ng-href="{{c.modpack}}"><i class="fa fa-download fa-2x"></i></a></div>
+        <div class="field col-md-6"><label>Status</label><span>{{c.status}}</span></div>
     </div>
 
     <div class="col-md-2 container-actions">
-        <button class="btn btn-default btn-sm" ng-click="stop(c)" ng-show="isRunning(c)">Stop</button>
-        <button class="btn btn-default btn-sm" ng-click="start(c)" ng-show="!isRunning(c)">Start</button>
-        <button class="btn btn-warning btn-sm" ng-click="remove(c)">Remove</button>
+        <button class="btn btn-default btn-sm btn-block" ng-click="stop(c)" ng-show="isRunning(c)">Stop</button>
+        <button class="btn btn-default btn-sm btn-block" ng-click="start(c)" ng-show="!isRunning(c)">Start</button>
+        <button class="btn btn-warning btn-sm btn-block" ng-click="remove(c)">Remove</button>
     </div>
 </div>

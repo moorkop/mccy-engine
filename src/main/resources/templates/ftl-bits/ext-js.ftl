@@ -15,3 +15,4 @@
 <script src="webjars/ng-file-upload/10.1.14/ng-file-upload-shim.min.js"></script>
 <script src="webjars/lodash/3.10.1/lodash.min.js"></script>
 <script src="webjars/angular-xeditable/0.1.9/dist/js/xeditable.min.js"></script>
+<script src="webjars/angular-clipboard/1.2.0/angular-clipboard.js"></script>

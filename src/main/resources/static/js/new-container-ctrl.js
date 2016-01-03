@@ -5,27 +5,25 @@ angular.module('Mccy.NewContainerCtrl', [
     .run(function(editableOptions) {
         editableOptions.theme = 'bs3';
     })
-    .controller('NewContainerCtrl', function ($scope, $log, Upload, Containers, Alerts, Versions, Mods, ModPacks) {
+    .controller('NewContainerCtrl', function ($scope, $log, Upload,
+                                              Containers, Alerts, Versions, Mods, ModPacks,
+                                              cServerTypes, cModdedTypes) {
 
         // Start with master list...
         $scope.applicableVersions = $scope.versions;
 
-        $scope.types = [
-            {
-                value: 'VANILLA',
-                label: 'Regular'
-            },
-            {
-                value: 'FORGE',
-                label: 'Forge'
+        $scope.types = _.map(cServerTypes, function(value, key){
+            return {
+                label: value,
+                value: key
             }
-        ];
+        });
 
         reset();
 
         $scope.$watch('type', function(newValue){
-            if (newValue == 'FORGE') {
-                Versions.query({type:'forge'}, function(response){
+            if (_.includes(cModdedTypes, newValue)) {
+                Versions.query({type:newValue}, function(response){
                     $scope.applicableVersions = _.map(response, function(v) {
                         return {
                             value: v,
@@ -128,6 +126,7 @@ angular.module('Mccy.NewContainerCtrl', [
             return Mods.query({
                 id: '_suggest',
                 mcversion: $scope.version,
+                type: $scope.type,
                 input: input}).$promise;
         };
 
@@ -159,7 +158,7 @@ angular.module('Mccy.NewContainerCtrl', [
             $scope.name = undefined;
             $scope.choosePort = false;
             $scope.port = 25565;
-            $scope.type = 'VANILLA';
+            $scope.type = $scope.types[0].value;
             $scope.version = 'LATEST';
             $scope.enableOperators = false;
             $scope.ops = [];

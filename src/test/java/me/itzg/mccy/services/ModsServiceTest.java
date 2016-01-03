@@ -1,18 +1,21 @@
 package me.itzg.mccy.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.common.hash.Hashing;
 import me.itzg.mccy.config.MccyFilesSettings;
+import me.itzg.mccy.config.MccySettings;
+import me.itzg.mccy.model.BukkitPluginInfo;
 import me.itzg.mccy.model.RegisteredMod;
 import me.itzg.mccy.types.MccyException;
+import me.itzg.mccy.types.YamlMapper;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mock.web.MockMultipartFile;
 
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyString;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -51,5 +54,29 @@ public class ModsServiceTest {
         assertEquals("Vending", registeredMod.getName());
         assertEquals("1.8", registeredMod.getMinecraftVersion());
         assertEquals("Vending", registeredMod.getNativeId());
+    }
+
+    @Test
+    public void testBukkitPluginInfoParsing() throws Exception {
+        final ClassPathResource resource = new ClassPathResource("plugin.yml");
+
+        ModsService modsService = new ModsService();
+        modsService.setYamlMapper(new YamlMapper(new ObjectMapper(new YAMLFactory())));
+        modsService.setMccySettings(new MccySettings());
+
+        final BukkitPluginInfo info = modsService.extractBukkitPluginInfo(resource.getInputStream());
+        assertNotNull(info);
+        assertEquals("ShowCaseStandalone", info.getName());
+        assertEquals("730", info.getVersion());
+        assertEquals("ShowCaseStandalone allows you to create mini shops on top of blocks.  The item for\n" +
+                "sale or purchase is displayed on top of the block.\n", info.getDescription());
+
+        final RegisteredMod registeredMod = modsService.from(info);
+        assertNotNull(registeredMod);
+        assertEquals("1.8", registeredMod.getMinecraftVersion());
+        assertEquals("ShowCaseStandalone", registeredMod.getName());
+        assertEquals("ShowCaseStandalone allows you to create mini shops on top of blocks.  The item for\n" +
+                "sale or purchase is displayed on top of the block.\n", registeredMod.getDescription());
+        assertEquals("730", registeredMod.getVersion());
     }
 }
