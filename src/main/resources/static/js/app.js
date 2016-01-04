@@ -68,5 +68,21 @@ angular.module('MccyApp', [
 
     })
 
+    .factory('sessionTimeoutInterceptor', function($log, $window) {
+        return {
+            response: function(response){
+                if (response.headers('x-login') === 'true') {
+                    $log.debug('Intercepted login redirect', response);
+                    // TODO prompt the user
+                    $window.location.reload();
+                }
+                return response;
+            }
+        }
+    })
+
+    .config(function($httpProvider){
+        $httpProvider.interceptors.push('sessionTimeoutInterceptor');
+    })
 
 ;

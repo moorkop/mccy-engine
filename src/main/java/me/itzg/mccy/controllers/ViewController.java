@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Geoff Bourne
@@ -21,7 +22,9 @@ public class ViewController {
     }
 
     @RequestMapping("/login")
-    ModelAndView loginPage(HttpServletRequest request, Model model) {
+    ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response, Model model) {
+        response.addHeader("x-login", "true");
+
         CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class
                 .getName());
 
