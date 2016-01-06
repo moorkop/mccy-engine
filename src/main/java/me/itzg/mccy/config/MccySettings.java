@@ -21,7 +21,7 @@ public class MccySettings {
     private String dockerCertPath;
 
     @NotNull(message = "The DOCKER_HOST URI is required")
-    @Pattern(regexp = "https?://.*", message = "The DOCKER_HOST URI must be HTTP or HTTPS")
+    @Pattern(regexp = "(https?|unix)://.*", message = "The DOCKER_HOST URI scheme must be http, https, or unix")
     private String dockerHostUri;
 
     @NotNull
