@@ -87,7 +87,7 @@ public class ContainersService {
         return proxy.access(dockerClient -> {
             //noinspection CodeBlock2Expr
             return dockerClient.listContainers(allContainers(), withLabel(MccyConstants.MCCY_LABEL))
-                    .stream().map(c -> ContainerSummary.from(c, getDockerHostIp()))
+                    .stream().map(c -> ContainerSummary.from(c, getDockerHostIp(), mccySettings.getConnectUsingHost()))
                     .collect(Collectors.toList());
         });
     }
@@ -103,7 +103,7 @@ public class ContainersService {
                 final ContainerDetails containerDetails = new ContainerDetails(containerInfo);
 
                 containerDetails.setSummary(ContainerSummary.from(containerInfo,
-                        URI.create(mccySettings.getDockerHostUri()).getHost()));
+                        getDockerHostIp(), mccySettings.getConnectUsingHost()));
 
                 return containerDetails;
             } else {
