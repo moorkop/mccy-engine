@@ -19,6 +19,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -48,7 +49,9 @@ public class FileStorageService {
         final Path tempFile = Files.createTempFile(categoryPath,
                 temporary ? "temp-" : "", suffix);
 
-        Files.copy(src.getInputStream(), tempFile);
+
+        // replace the empty placeholder created by createTempFile
+        Files.copy(src.getInputStream(), tempFile, StandardCopyOption.REPLACE_EXISTING);
 
         return tempFile.getFileName().toString();
     }

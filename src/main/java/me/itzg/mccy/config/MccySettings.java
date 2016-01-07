@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.net.URI;
+import java.util.Optional;
 
 /**
  * @author Geoff Bourne
@@ -61,6 +62,13 @@ public class MccySettings {
      * with a reasonable default.
      */
     private String defaultBukkitGameVersion = "1.8";
+
+    /**
+     * When set, this will always be used to derive the "connect using" address of the Minecraft
+     * server. This is primarily useful for a <code>dockerHostUri</code> in the <code>unix://</code>
+     * scheme, since the actual Docker host's address is not easily identifiable.
+     */
+    private Optional<String> connectUsingHost = Optional.empty();
 
     public String getDockerCertPath() {
         return dockerCertPath;
@@ -140,5 +148,13 @@ public class MccySettings {
 
     public void setDefaultBukkitGameVersion(String defaultBukkitGameVersion) {
         this.defaultBukkitGameVersion = defaultBukkitGameVersion;
+    }
+
+    public Optional<String> getConnectUsingHost() {
+        return connectUsingHost;
+    }
+
+    public void setConnectUsingHost(Optional<String> connectUsingHost) {
+        this.connectUsingHost = connectUsingHost;
     }
 }

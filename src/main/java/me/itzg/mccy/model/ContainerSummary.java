@@ -11,6 +11,7 @@ import java.net.URI;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -89,18 +90,33 @@ public class ContainerSummary {
         this.id = id;
     }
 
-    public static ContainerSummary from(Container container, String dockerHostIp) {
+    public static ContainerSummary from(Container container, String dockerHostIp, Optional<String> connectUsingHost) {
         final ContainerSummary summary = new ContainerSummary();
 
         summary.setId(container.id());
         summary.setName(normalizeName(container.names().get(0)));
         summary.setStatus(container.status());
-        summary.fromPortMapping(container.ports(), dockerHostIp);
+        container.ports().stream()
+                .filter(pm -> pm.getPrivatePort() == MccyConstants.SERVER_CONTAINER_PORT_INT)
+                .findFirst()
+                .ifPresent(pm -> {
+                    summary.setHostPort(pm.getPublicPort());
+                    final String ip = pm.getIp();
+                    if (connectUsingHost.isPresent()) {
+                        summary.setHostIp(connectUsingHost.get());
+                    }
+                    else if (ip.equals(MccyConstants.IP_ADDR_ALL_IF)) {
+                        summary.setHostIp(dockerHostIp);
+                    }
+                    else {
+                        summary.setHostIp(ip);
+                    }
+                });
 
         return summary;
     }
 
-    public static ContainerSummary from(ContainerInfo info, String dockerHostIp) {
+    public static ContainerSummary from(ContainerInfo info, String dockerHostIp, Optional<String> connectUsingHost) {
         ContainerSummary summary = new ContainerSummary();
 
         final Map<String, List<PortBinding>> ports = info.networkSettings().ports();
@@ -111,7 +127,10 @@ public class ContainerSummary {
 
             final String reportedHostIp = portBinding.hostIp();
             final String resolvedIp;
-            if (reportedHostIp.equals(MccyConstants.IP_ADDR_ALL_IF)) {
+            if (connectUsingHost.isPresent()) {
+                resolvedIp = connectUsingHost.get();
+            }
+            else if (reportedHostIp.equals(MccyConstants.IP_ADDR_ALL_IF)) {
                 resolvedIp = dockerHostIp;
             }
             else {
@@ -195,22 +214,6 @@ public class ContainerSummary {
 
     public void setModpack(URI modpack) {
         this.modpack = modpack;
-    }
-
-    private void fromPortMapping(List<Container.PortMapping> portMapping, String dockerHostIp) {
-        portMapping.stream()
-                .filter(pm -> pm.getPrivatePort() == MccyConstants.SERVER_CONTAINER_PORT_INT)
-                .findFirst()
-                .ifPresent(pm -> {
-                    setHostPort(pm.getPublicPort());
-                    final String ip = pm.getIp();
-                    if (ip.equals("0.0.0.0")) {
-                        setHostIp(dockerHostIp);
-                    }
-                    else {
-                        setHostIp(ip);
-                    }
-                });
     }
 
     public String getStatus() {

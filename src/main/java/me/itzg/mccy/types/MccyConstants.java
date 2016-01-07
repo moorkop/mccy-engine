@@ -2,6 +2,8 @@ package me.itzg.mccy.types;
 
 import me.itzg.mccy.MccySwarmApplication;
 
+import java.util.regex.Pattern;
+
 /**
  * @author Geoff Bourne
  * @since 12/21/2015
@@ -19,7 +21,7 @@ public class MccyConstants {
 
     public static final String X_XSRF_TOKEN = "X-XSRF-TOKEN";
 
-    public static final String FILE_MCMOD_INFO = "mcmod.info";
+    public static final String FILE_MCMOD_INFO = "mod.info";
     public static final String FILE_PLUGIN_META = "plugin.yml";
 
     public static final String TEMP_PREFIX = "temp-";
