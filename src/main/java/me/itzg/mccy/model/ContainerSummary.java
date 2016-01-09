@@ -94,7 +94,6 @@ public class ContainerSummary {
         final ContainerSummary summary = new ContainerSummary();
 
         summary.setId(container.id());
-        summary.setName(normalizeName(container.names().get(0)));
         summary.setStatus(container.status());
         container.ports().stream()
                 .filter(pm -> pm.getPrivatePort() == MccyConstants.SERVER_CONTAINER_PORT_INT)
@@ -112,6 +111,11 @@ public class ContainerSummary {
                         summary.setHostIp(ip);
                     }
                 });
+
+        final Map<String, String> labels = summary.getLabels();
+        fillFromLabel(labels, MccyConstants.MCCY_LABEL_NAME, v -> {
+            summary.setName(v);
+        }, normalizeContainerName(container.names().get(0)));
 
         return summary;
     }
@@ -157,11 +161,14 @@ public class ContainerSummary {
             summary.setVersion(v);
         });
 
-        summary.setName(normalizeName(info.name()));
+        final Map<String, String> labels = info.config().labels();
+        fillFromLabel(labels, MccyConstants.MCCY_LABEL_NAME, v -> {
+            summary.setName(v);
+        }, normalizeContainerName(info.name()));
 
         summary.setId(info.id());
 
-        summary.setLabels(info.config().labels().entrySet()
+        summary.setLabels(labels.entrySet()
                 .stream()
                 .filter(e -> e.getKey().startsWith(MccyConstants.MCCY_LABEL_PREFIX))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
@@ -200,6 +207,22 @@ public class ContainerSummary {
         }
     }
 
+    private static void fillFromLabel(Map<String, String> labels, String labelKey, Consumer<String> consumer,
+                                      String defaultValue) {
+        final String value = labels != null ? labels.get(labelKey) : null;
+        consumer.accept(value != null ? value : defaultValue);
+    }
+
+    private static String normalizeContainerName(String fullName) {
+        final int pos = fullName.lastIndexOf("/");
+        if (pos >= 0) {
+            return fullName.substring(pos + 1);
+        }
+        else {
+            return fullName;
+        }
+    }
+
     public Map<String, String> getLabels() {
         return labels;
     }
@@ -224,11 +247,4 @@ public class ContainerSummary {
         this.status = status;
     }
 
-    private static String normalizeName(String rawName) {
-        final int i = rawName.lastIndexOf("/");
-        if (i >= 0) {
-            return rawName.substring(i+1);
-        }
-        return rawName;
-    }
 }

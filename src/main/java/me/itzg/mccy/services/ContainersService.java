@@ -73,7 +73,7 @@ public class ContainersService {
             // Ensure latest image is always used
             dockerClient.pull(mccySettings.getImage());
 
-            final String containerId = dockerClient.createContainer(config, request.getName()).id();
+            final String containerId = dockerClient.createContainer(config, scrubContainerName(request.getName())).id();
 
             if (request.isStartOnCreate()) {
                 dockerClient.startContainer(containerId);
@@ -83,11 +83,16 @@ public class ContainersService {
         });
     }
 
+    public static String scrubContainerName(String givenName) {
+        return givenName.replaceAll("[^A-Za-z0-9]", "_");
+    }
+
     public List<ContainerSummary> getAll() throws DockerException, InterruptedException {
         return proxy.access(dockerClient -> {
             //noinspection CodeBlock2Expr
             return dockerClient.listContainers(allContainers(), withLabel(MccyConstants.MCCY_LABEL))
-                    .stream().map(c -> ContainerSummary.from(c, getDockerHostIp(), mccySettings.getConnectUsingHost()))
+                    .stream().map(c -> ContainerSummary.from(c,
+                            getDockerHostIp(), mccySettings.getConnectUsingHost()))
                     .collect(Collectors.toList());
         });
     }
@@ -167,6 +172,8 @@ public class ContainersService {
     protected Map<String, String> buildLabels(ContainerRequest request) {
         Map<String, String> labels = new HashMap<>();
         labels.put(MccyConstants.MCCY_LABEL, String.valueOf(true));
+        // store the name as provided by user
+        labels.put(MccyConstants.MCCY_LABEL_NAME, request.getName());
 
         if (!Strings.isNullOrEmpty(request.getModpack())) {
             labels.put(MccyConstants.MCCY_LABEL_MODPACK_URL, request.getModpack());
