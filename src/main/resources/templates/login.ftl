@@ -37,6 +37,8 @@
             </form>
         </div>
     </div>
+
+    <#include "ftl-bits/by-line.ftl">
 </div>
 
 <#include "ftl-bits/ext-js.ftl">

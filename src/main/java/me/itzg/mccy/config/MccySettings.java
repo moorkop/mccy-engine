@@ -3,6 +3,7 @@ package me.itzg.mccy.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -69,6 +70,12 @@ public class MccySettings {
      * scheme, since the actual Docker host's address is not easily identifiable.
      */
     private Optional<String> connectUsingHost = Optional.empty();
+
+    /**
+     * When set, this conveys a shout out to the deployment provider.
+     */
+    @Valid
+    private DeploymentPoweredBy deploymentPoweredBy = null;
 
     public String getDockerCertPath() {
         return dockerCertPath;
@@ -156,5 +163,36 @@ public class MccySettings {
 
     public void setConnectUsingHost(Optional<String> connectUsingHost) {
         this.connectUsingHost = connectUsingHost;
+    }
+
+    public DeploymentPoweredBy getDeploymentPoweredBy() {
+        return deploymentPoweredBy;
+    }
+
+    public void setDeploymentPoweredBy(DeploymentPoweredBy deploymentPoweredBy) {
+        this.deploymentPoweredBy = deploymentPoweredBy;
+    }
+
+    public static class DeploymentPoweredBy {
+        @NotNull @Size(min = 1)
+        private String imageSrc;
+
+        private URI href;
+
+        public String getImageSrc() {
+            return imageSrc;
+        }
+
+        public void setImageSrc(String imageSrc) {
+            this.imageSrc = imageSrc;
+        }
+
+        public URI getHref() {
+            return href;
+        }
+
+        public void setHref(URI href) {
+            this.href = href;
+        }
     }
 }

@@ -75,6 +75,8 @@ id=$(docker run $opts mccy \
   --security.user.password=$MCCY_PASSWORD \
   --mccy.docker-host-uri=$target_docker_uri \
   --mccy.docker-cert-path=/certs \
+  --mccy.deployment-powered-by.image-src=images/powered-by/powered-by-carina-wide.png \
+  --mccy.deployment-powered-by.href=https://getcarina.com/ \
   --spring.active-profiles=docker)
 
 appPort=$(docker port $id 8080)

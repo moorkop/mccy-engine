@@ -1,8 +1,11 @@
 package me.itzg.mccy.controllers;
 
+import me.itzg.mccy.config.MccySettings;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -15,6 +18,14 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Controller
 public class ViewController {
+
+    @Autowired
+    private MccySettings mccySettings;
+
+    @ModelAttribute("deploymentPoweredBy")
+    public MccySettings.DeploymentPoweredBy deploymentPoweredBy() {
+        return mccySettings.getDeploymentPoweredBy();
+    }
 
     @RequestMapping("/")
     String index() {

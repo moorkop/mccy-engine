@@ -1,6 +1,16 @@
 body {
 }
 
+.by-line {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.by-line > * {
+    padding: 5px;
+}
+
 .current-containers {
     /*max-height: 500px;*/
     /*overflow-y: auto;*/
@@ -117,4 +127,16 @@ button.tight {
 
 .registered-mod .actions > div {
     width: 100%;
+}
+
+.editable-input {
+    min-width: 400px;
+
+}
+
+.editable-empty {
+    width: 5em;
+    height: 1.5em;
+    background-color: #DFEBF6;
+    border-bottom: dashed 1px #428bca;
 }
