@@ -140,6 +140,16 @@ public class ModsService {
 
     }
 
+    public void save(String id, RegisteredMod mod) {
+        LOG.debug("Saving {} : {}", id, mod);
+
+        if (mod instanceof RegisteredFmlMod) {
+            fmlModRepo.save((RegisteredFmlMod) mod);
+        } else if (mod instanceof RegisteredBukkitPlugin) {
+            bukkitPluginRepo.save((RegisteredBukkitPlugin) mod);
+        }
+    }
+
     private RegisteredMod traverseZip(ZipInputStream zipIn) throws IOException, MccyException {
         RegisteredMod registeredMod = null;
 

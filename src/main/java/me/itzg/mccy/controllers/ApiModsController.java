@@ -59,6 +59,12 @@ public class ApiModsController {
         modsService.delete(id);
     }
 
+    @RequestMapping(value = "mods/{id}", method = RequestMethod.POST)
+    public void save(@PathVariable("id") String id,
+                     @RequestBody RegisteredMod mod) {
+        modsService.save(id, mod);
+    }
+
     @RequestMapping(value = "modpacks", method = RequestMethod.POST)
     public ResponseEntity<SingleValue<URI>> registerModPack(@Validated @RequestBody Collection<RegisteredModReference> modRefs,
                                                             UriComponentsBuilder requestUri) {

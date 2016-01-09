@@ -3,27 +3,27 @@
         <div class="col-md-10">
             <div class="field compressed">
                 <label>Name</label>
-                <a href="#" editable-text="mod.name">{{ mod.name }}</a>
+                <a href="#" editable-text="mod.name" onaftersave="markDirty()">{{ mod.name }}</a>
             </div>
 
             <div class="field compressed">
                 <label>Description</label>
-                <a href="#" editable-text="mod.description">{{ mod.description }}</a>
+                <a href="#" editable-text="mod.description" onaftersave="markDirty()">{{ mod.description }}</a>
             </div>
 
             <div class="field compressed">
                 <label>Homepage</label>
-                <a href="#" editable-text="mod.url">{{ mod.url }}</a>
+                <a href="#" editable-url="mod.url" onaftersave="markDirty()">{{ mod.url }}</a>
             </div>
 
             <div class="field compressed">
                 <label>Version</label>
-                <a href="#" editable-text="mod.version">{{ mod.version }}</a>
+                <a href="#" editable-text="mod.version" onaftersave="markDirty()">{{ mod.version }}</a>
             </div>
 
             <div class="field compressed">
                 <label>Compatible Minecraft Version</label>
-                <a href="#" editable-text="mod.minecraftVersion">{{ mod.minecraftVersion }}</a>
+                <a href="#" editable-text="mod.minecraftVersion" onaftersave="markDirty()">{{ mod.minecraftVersion }}</a>
             </div>
 
             <div class="field compressed">
@@ -38,6 +38,8 @@
         </div>
 
         <div class="col-md-2 actions">
+            <button ng-show="dirty" class="btn btn-primary btn-block" ng-click="save()">Save Changes</button>
+
             <button ng-show="showDelete" class="btn btn-warning btn-block" ng-click="delete()">Delete</button>
         </div>
 

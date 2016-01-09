@@ -12,7 +12,17 @@ angular.module('Mccy.mods',[
                 function(errResp){
                     Alerts.error(errResp.statusText, false);
                 });
-            }
+            };
+
+            $scope.markDirty = function() {
+                $scope.dirty = true;
+            };
+
+            $scope.save = function() {
+                $scope.mod.$save(function(){
+                    $scope.dirty = false;
+                });
+            };
 
             $scope.compatibleServerTypes = $scope.mod.serverTypes.map(function(envType){
                 return $filter('serverTypeLabel')(envType);

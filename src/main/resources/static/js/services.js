@@ -32,7 +32,7 @@ angular.module('Mccy.services',[
     })
 
     .service('Mods', function($resource){
-        return $resource('/api/mods/:id');
+        return $resource('/api/mods/:id', {id:"@id"});
     })
 
     .service('ModPacks', function($resource){
