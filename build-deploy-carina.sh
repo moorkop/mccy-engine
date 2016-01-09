@@ -79,15 +79,14 @@ id=$(docker run $opts mccy \
   --mccy.deployment-powered-by.href=https://getcarina.com/ \
   --spring.active-profiles=docker)
 
-appPort=$(docker port $id 8080)
 echo "
-READY for use on $DEPLOY_CLUSTER at http://$appPort
+READY for use on $DEPLOY_CLUSTER
 "
 
 if [[ -v CIRCLE_ARTIFACTS ]]; then
   cat <<EOF > $CIRCLE_ARTIFACTS/results.html
 <html><body>
-Ready for use on $DEPLOY_CLUSTER <a href="http://$appPort">here</a>
+Ready for use on $DEPLOY_CLUSTER
 </body></html>
 EOF
 
