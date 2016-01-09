@@ -112,7 +112,7 @@ public class ContainerSummary {
                     }
                 });
 
-        final Map<String, String> labels = summary.getLabels();
+        final Map<String, String> labels = container.labels();
         fillFromLabel(labels, MccyConstants.MCCY_LABEL_NAME, v -> {
             summary.setName(v);
         }, normalizeContainerName(container.names().get(0)));
@@ -209,7 +209,7 @@ public class ContainerSummary {
 
     private static void fillFromLabel(Map<String, String> labels, String labelKey, Consumer<String> consumer,
                                       String defaultValue) {
-        final String value = labels != null ? labels.get(labelKey) : null;
+        final String value = labels.get(labelKey);
         consumer.accept(value != null ? value : defaultValue);
     }
 
