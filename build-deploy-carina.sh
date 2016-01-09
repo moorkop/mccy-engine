@@ -57,7 +57,7 @@ docker build -t mccy .
 
 vol_from=$(docker ps -q -a --filter 'label=mccy-data')
 
-opts="-d --name $APP_NAME --restart=always -p 8080:8080"
+opts="-d --name $APP_NAME --restart=always"
 if [[ $vol_from ]]; then
   opts="$opts --volumes-from $vol_from"
 fi
