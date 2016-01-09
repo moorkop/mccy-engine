@@ -6,7 +6,7 @@
     <span>
         This deployment
         <#if deploymentPoweredBy.href??>
-            <a href="${deploymentPoweredBy.href}">
+            <a target="_blank" href="${deploymentPoweredBy.href}">
         </#if>
         <img src="${deploymentPoweredBy.imageSrc}"/>
         <#if deploymentPoweredBy.href??>
