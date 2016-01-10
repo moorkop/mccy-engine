@@ -115,7 +115,10 @@
 
             </div>
 
-            <button ng-click="ackEula=true" ng-show="!ackEula" class="btn btn-primary">I Accept the Minecraft EULA</button>
+            <div class="btn-group" role="group" aria-label="Eula buttons">
+                <button ng-click="ackEula=true" ng-show="!ackEula" class="btn btn-primary">I Accept the Minecraft EULA</button>
+                <a href="https://account.mojang.com/documents/minecraft_eula" ng-show="!ackEula" class="btn btn-default" target="_blank">Read</a>
+            </div>
             <button type="submit" class="btn btn-primary" ng-show="ackEula" ng-disabled="creating">Create It!</button>
             <button ng-click="cancelNewContainer()" class="btn btn-default">Cancel</button>
 
