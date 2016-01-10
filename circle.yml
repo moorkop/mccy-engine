@@ -6,8 +6,7 @@ general:
   branches:
     only:
       - master
-      - dev
-      - production
+      - develop
 
 dependencies:
   override:
@@ -19,11 +18,11 @@ test:
 
 deployment:
   staging:
-    branch: master
+    branch: develop
     commands:
       - ./build-deploy-carina.sh $TEST_CLUSTER
   production:
-    branch: production
+    branch: master
     commands:
       - ./build-deploy-carina.sh $TARGET_CLUSTER
 
