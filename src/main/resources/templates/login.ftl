@@ -42,6 +42,5 @@
 </div>
 
 <#include "ftl-bits/ext-js.ftl">
-<#include "ftl-bits/app-js.ftl">
 </body>
 </html>

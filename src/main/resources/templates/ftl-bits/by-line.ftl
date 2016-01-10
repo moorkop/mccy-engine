@@ -1,5 +1,5 @@
 <div class="by-line text-muted">
-    <span><abbr title="Minecraft Container Yard">M<small>in</small>CCY</abbr> is created by
+    <span><abbr title="pronounced like em-cee">MCCY</abbr> is created by
         <a target="_blank" href="https://github.com/itzg">Geoff Bourne</a></span>
     <span><a target="_blank" href="https://github.com/itzg/minecraft-container-yard/issues"><i class="fa fa-question-circle"></i> Help and Support</a></span>
     <#if deploymentPoweredBy??>

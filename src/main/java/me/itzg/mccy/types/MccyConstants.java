@@ -15,6 +15,8 @@ public class MccyConstants {
     public static final String MCCY_LABEL = MCCY_LABEL_PREFIX;
     public static final String MCCY_LABEL_MODPACK_URL = MCCY_LABEL_PREFIX+".modpack-url";
     public static final String MCCY_LABEL_NAME = MCCY_LABEL_PREFIX+".name";
+    public static final String MCCY_LABEL_PUBLIC = MCCY_LABEL_PREFIX+".public";
+    public static final String MCCY_LABEL_OWNER = MCCY_LABEL_PREFIX+".owner";
 
     public static final int SERVER_CONTAINER_PORT_INT = 25565;
     public static final String SERVER_CONTAINER_PORT = String.valueOf(SERVER_CONTAINER_PORT_INT)+ "/tcp";

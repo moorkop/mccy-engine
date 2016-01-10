@@ -31,6 +31,10 @@
                             ng-click="goto(v)">{{v.label}}</button>
 
                 </div>
+
+                <div class="col-md-12 col-sm-6">
+                    <button class="btn btn-default btn-block" ng-click="logout()">Logout</button>
+                </div>
             </div>
         </div>
 

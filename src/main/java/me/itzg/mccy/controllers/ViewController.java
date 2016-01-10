@@ -27,6 +27,12 @@ public class ViewController {
         return mccySettings.getDeploymentPoweredBy();
     }
 
+    @ModelAttribute("csrf")
+    public CsrfToken csrfToken(HttpServletRequest request) {
+        return (CsrfToken) request.getAttribute(CsrfToken.class
+                .getName());
+    }
+
     @RequestMapping("/")
     String index() {
         return "index";
@@ -36,11 +42,7 @@ public class ViewController {
     ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response, Model model) {
         response.addHeader("x-login", "true");
 
-        CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class
-                .getName());
-
-        final ModelAndView modelAndView = new ModelAndView()
-                .addObject("csrf", csrf);
+        final ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
 
         return modelAndView;

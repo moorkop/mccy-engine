@@ -5,10 +5,12 @@ import me.itzg.mccy.types.MccyConstants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 /**
  * @author Geoff Bourne
@@ -19,29 +21,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        2015-12-23 12:07:  INFO 10796 --- [ost-startStop-1] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/css/**'], []
-//        2015-12-23 12:07:48.681  INFO 10796 --- [ost-startStop-1] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/js/**'], []
-//        2015-12-23 12:07:48.681  INFO 10796 --- [ost-startStop-1] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/images/**'], []
-//        2015-12-23 12:07:48.681  INFO 10796 --- [ost-startStop-1] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/**/favicon.ico'], []
-//        2015-12-23 12:07:48.6848.6811  INFO 10796 --- [ost-startStop-1] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/error'], []
 
         http
                 .authorizeRequests()
-                    .antMatchers("/css/**").permitAll()
-                    .antMatchers("/js/**").permitAll()
-                    .antMatchers("/fonts/**").permitAll()
-                    .antMatchers("/webjars/**").permitAll()
-                    .antMatchers("/images/**").permitAll()
-                    .antMatchers("/ng-bits/**").permitAll()
-                    .antMatchers("/views/**").permitAll()
-                    .antMatchers("/**/favicon.ico").permitAll()
                     .antMatchers("/api/downloads/**").permitAll()
+                    .antMatchers("/api/settings").permitAll()
+                    .antMatchers("/api/containers").permitAll()
                 .antMatchers("/**").hasRole("USER")
                 .and().formLogin()
                     .loginPage("/login")
+                    .defaultSuccessUrl("/")
                     .permitAll()
+                .and().logout().logoutSuccessUrl("/")
                 .and().addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
                 .csrf().csrfTokenRepository(csrfTokenRepository());
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring()
+                .antMatchers("/css/**")
+                .antMatchers("/js/**")
+                .antMatchers("/fonts/**")
+                .antMatchers("/webjars/**")
+                .antMatchers("/images/**")
+                .antMatchers("/ng-bits/**")
+                .antMatchers("/views/**")
+                .antMatchers("/**/favicon.ico");
     }
 
     @Bean

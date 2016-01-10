@@ -19,6 +19,15 @@ angular.module('Mccy.NewContainerCtrl', [
             }
         });
 
+        Versions.query({type:'VANILLA'}, function(response){
+            $scope.versions = $scope.versions.concat(response.map(function(v){
+                return {
+                    value: v,
+                    label: v
+                }
+            }))
+        });
+
         reset();
 
         $scope.$watch('type', function(newValue){
