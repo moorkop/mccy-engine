@@ -115,16 +115,13 @@
 
             </div>
 
-            <div class="checkbox space-before">
-                <label>
-                    <input type="checkbox" ng-model="ackEula">
-                    Accept the <a href="https://account.mojang.com/documents/minecraft_eula" target="_blank">Minecraft
-                    EULA</a>
-                </label>
+            <div class="btn-group" ng-show="!ackEula" role="group" aria-label="Eula buttons">
+                <button ng-click="ackEula=true" class="btn btn-primary">I Accept the Minecraft EULA</button>
+                <a href="https://account.mojang.com/documents/minecraft_eula" class="btn btn-default" target="_blank">Read</a>
             </div>
-
-            <button type="submit" class="btn btn-primary" ng-disabled="!ackEula || creating">Create It!</button>
+            <button type="submit" class="btn btn-primary" ng-show="ackEula" ng-disabled="creating">Create It!</button>
             <button ng-click="cancelNewContainer()" class="btn btn-default">Cancel</button>
+
 
         </form>
     </div>
