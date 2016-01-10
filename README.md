@@ -54,3 +54,9 @@ After following the steps above in **Building with Docker**, start a MCCY contai
     docker run -d --name mccy -p 8080:8080 mccy --mccy.docker-host-uri=...
     
 where the last part is the same command-line options described above.
+
+## Contributing
+
+Please do! We are a very friendly group of developers and we would love to hear from you. If you have an idea, or want to start on a project, come by [Gitter](https://gitter.im/itzg/minecraft-container-yard) and let us know. We might have some extra info to help you before you get started and we want to help your pull request succeed.
+
+All of the extra details can be found at the [wiki](https://github.com/itzg/minecraft-container-yard/wiki/Contributing).
