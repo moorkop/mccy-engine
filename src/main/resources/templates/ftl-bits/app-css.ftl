@@ -1,3 +1,4 @@
 <!-- Local -->
-<link href="css/style.css" type="text/css" rel="stylesheet">
-<link href="css/theme.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<!-- Admin Theme CSS App -->
+<link rel="stylesheet" type="text/css" href="css/theme.css">
