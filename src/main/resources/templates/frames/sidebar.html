@@ -3,20 +3,19 @@
         <div class="side-menu-container">
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">
-                    <div class="icon fa fa-cubes"></div>
-                    <abbr title="Minecraft Container Yard">MCCY</abbr>
+                    <div class="icon fa fa-cubes"></div>MCCY
                 </a>
                 <button type="button" class="navbar-expand-toggle pull-right visible-xs">
                     <i class="fa fa-times icon"></i>
                 </button>
             </div>
-            <ul class="nav navbar-nav">
-                <li class="active">
-                    <a href="index.html">
-                        <span class="icon fa fa-tachometer"></span><span class="title">Dashboard</span>
+            <ul class="nav navbar-nav" ng-repeat="view in views">
+                <li ng-if="$index == 0" class="active">
+                    <a href="#" ng-click="goto(view)">
+                        <span class="{{view.settings.icon}}"></span><span class="title">{{view.settings.label}}</span>
                     </a>
                 </li>
-                <li ng-repeat="view in views track by view.view">
+                <li ng-if="$index > 0">
                     <a href="#" ng-click="goto(view)">
                         <span class="{{view.settings.icon}}"></span><span class="title">{{view.settings.label}}</span>
                     </a>
