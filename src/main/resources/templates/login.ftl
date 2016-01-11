@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <#include "ftl-bits/head-meta.ftl">
+    <!-- The above head-meta *must* come first in the head; any other head content must come *after* these tags -->
     <#include "ftl-bits/ext-css.ftl">
     <#include "ftl-bits/app-css.ftl">
     <title>Minecraft Container Yard - Login</title>
@@ -36,8 +36,6 @@
             </form>
         </div>
     </div>
-
-    <#include "ftl-bits/by-line.ftl">
 </div>
 
 <span>

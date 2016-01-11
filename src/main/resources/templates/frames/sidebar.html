@@ -10,12 +10,12 @@
                     <i class="fa fa-times icon"></i>
                 </button>
             </div>
-            <ul class="nav navbar-nav" ng-repeat="v in views">
-                <li class="panel panel-default">
-                    <span class="v.icon"
-                    ng-class="{'active':isCurrentView(v)}"
-                    ng-click="goto(v)"
-                    ng-show="v.show">{{v.label}}</span>
+            <ul class="nav navbar-nav">
+                <li class="panel panel-default" ng-click="goto(view)" ng-repeat="view in views">
+                    <span ng-click="goto(view)">
+                        <span class="{{view.settings.icon}}"></span>
+                        <span class="title">{{view.settings.label}}</span>
+                    </span>
                 </li>
             </ul>
         </div>
