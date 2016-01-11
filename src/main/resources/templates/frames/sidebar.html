@@ -3,18 +3,19 @@
         <div class="side-menu-container">
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">
-                    <div class="icon fa fa-paper-plane"></div>
-                    <div class="title">Flat Admin V.2</div>
+                    <div class="icon fa fa-cubes"></div>
+                    <abbr title="Minecraft Container Yard">MCCY</abbr>
                 </a>
                 <button type="button" class="navbar-expand-toggle pull-right visible-xs">
                     <i class="fa fa-times icon"></i>
                 </button>
             </div>
-            <ul class="nav navbar-nav">
-                <li>
-                    <a href="../index.html">
-                        <span class="icon fa fa-tachometer"></span><span class="title">Dashboard</span>
-                    </a>
+            <ul class="nav navbar-nav" ng-repeat="v in views">
+                <li class="panel panel-default">
+                    <span class="v.icon"
+                    ng-class="{'active':isCurrentView(v)}"
+                    ng-click="goto(v)"
+                    ng-show="v.show">{{v.label}}</span>
                 </li>
             </ul>
         </div>
