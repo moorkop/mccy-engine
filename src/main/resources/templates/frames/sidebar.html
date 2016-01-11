@@ -11,11 +11,15 @@
                 </button>
             </div>
             <ul class="nav navbar-nav">
-                <li class="panel panel-default" ng-click="goto(view)" ng-repeat="view in views">
-                    <span ng-click="goto(view)">
-                        <span class="{{view.settings.icon}}"></span>
-                        <span class="title">{{view.settings.label}}</span>
-                    </span>
+                <li class="active">
+                    <a href="index.html">
+                        <span class="icon fa fa-tachometer"></span><span class="title">Dashboard</span>
+                    </a>
+                </li>
+                <li ng-repeat="view in views track by view.view">
+                    <a href="#" ng-click="goto(view)">
+                        <span class="{{view.settings.icon}}"></span><span class="title">{{view.settings.label}}</span>
+                    </a>
                 </li>
             </ul>
         </div>
