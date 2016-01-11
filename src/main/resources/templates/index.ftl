@@ -8,40 +8,27 @@
     <title>Minecraft Container Yard</title>
 
 </head>
-<body ng-controller="MainCtrl">
+<body class="theme" ng-controller="MainCtrl">
 <toaster-container toaster-options="toasterOptions"></toaster-container>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-2">
-            <img src="images/mccy_logo_120.png"/>
-        </div>
-        <div class="col-md-10">
-            <h1> Minecraft Container Yard <small ng-show="settings">via {{settings.mccy.dockerHostUri}}</small></h1>
-        </div>
+<div class="app-container">
+    <div class="row content-container">
+        <#include "ftl-bits/navbar.ftl">
     </div>
-
     <div class="row">
         <div class="col-md-2 actions">
             <h2>Actions</h2>
-
             <div class="row">
                 <div class="col-md-12 col-sm-6" ng-repeat="v in views">
                     <button class="btn btn-default btn-block" ng-class="{'active':isCurrentView(v)}"
                         ng-click="goto(v)">{{v.label}}</button>
-
                 </div>
             </div>
         </div>
-
         <div class="col-md-10">
             <div class="row" ng-view>
-
             </div>
         </div>
-
     </div>
-
-    <#include "ftl-bits/by-line.ftl">
 </div>
 
 <span>
