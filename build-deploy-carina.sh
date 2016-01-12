@@ -60,6 +60,9 @@ mkdir -p tmp
 $carina credentials --path=tmp/build-creds $DEPLOY_CLUSTER > /dev/null
 $carina credentials --path=certs $TARGET_CLUSTER > /dev/null
 
+cat certs/docker.env
+exit 1
+
 # learn about target 
 
 source certs/docker.env
