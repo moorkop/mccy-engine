@@ -12,11 +12,15 @@ check_var() {
 }
 
 check_volume() {
-  if docker volume ls |awk "\$2 == \"$1\"{++m} END {exit (m>0?0:1)}"; then
-    return
+  if docker volume &> /dev/null; then
+    if docker volume ls |awk "\$2 == \"$1\"{++m} END {exit (m>0?0:1)}"; then
+      return
+    else
+      echo "Missing required volume $1"
+      exit 1
+    fi
   else
-    echo "Missing required volume $1"
-    exit 1
+    echo "WARN: 'docker volume' not supported so we'll have to trust $1 exists"
   fi
 }
 
@@ -35,6 +39,7 @@ check_var LETSENCRYPT_EMAIL
 check_var LETSENCRYPT_DOMAIN
 
 check_volume dhparam-cache
+exit
 check_volume letsencrypt
 check_volume letsencrypt-backups
 check_volume mccy
