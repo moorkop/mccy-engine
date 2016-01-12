@@ -1,0 +1,28 @@
+
+mccy:
+  build: .
+  volumes:
+    - mccy:/data
+  command: >
+    --security.user.password=$MCCY_PASSWORD 
+    --mccy.docker-host-uri=$TARGET_DOCKER_URI
+    --mccy.docker-cert-path=/certs 
+    --mccy.deployment-powered-by.image-src=images/powered-by/powered-by-carina-wide.png 
+    --mccy.deployment-powered-by.href=https://getcarina.com/ 
+    --spring.active-profiles=docker
+
+proxy:
+  image: smashwilson/lets-nginx
+  links:
+    - mccy
+  ports:
+    - "80:80"
+    - "443:443"
+  environment:
+    - "UPSTREAM=mccy:8080"
+    - "EMAIL=$LETSENCRYPT_EMAIL"
+    - "DOMAIN=$LETSENCRYPT_DOMAIN"
+  volumes:
+    - dhparam-cache:/cache
+    - letsencrypt:/etc/letsencrypt
+    - letsencrypt-backups:/var/lib/letsencrypt

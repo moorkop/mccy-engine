@@ -7,3 +7,4 @@ bin/
 tmp/
 es/
 *.log/
+.build.env
