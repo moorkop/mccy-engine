@@ -18,13 +18,17 @@ test:
 
 deployment:
   staging:
-    branch: develop
-    commands:
-      - ./build-deploy-carina.sh $TEST_CLUSTER
-  production:
     branch: master
     commands:
-      - ./build-deploy-carina.sh $TARGET_CLUSTER
+      - ./build-deploy-carina.sh $TEST_CLUSTER:
+         environment:
+           LETSENCRYPT_DOMAIN: mccy-staging.itzg.me
+  production:
+    branch: production
+    commands:
+      - ./build-deploy-carina.sh $TARGET_CLUSTER:
+         environment:
+           LETSENCRYPT_DOMAIN: mccy.itzg.me
 
 notify:
   webhooks:
