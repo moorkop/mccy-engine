@@ -39,7 +39,6 @@ check_var LETSENCRYPT_EMAIL
 check_var LETSENCRYPT_DOMAIN
 
 check_volume dhparam-cache
-exit
 check_volume letsencrypt
 check_volume letsencrypt-backups
 check_volume mccy
