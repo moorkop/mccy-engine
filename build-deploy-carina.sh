@@ -38,11 +38,6 @@ check_var CIRCLE_BRANCH
 check_var LETSENCRYPT_EMAIL
 check_var LETSENCRYPT_DOMAIN
 
-check_volume dhparam-cache
-check_volume letsencrypt
-check_volume letsencrypt-backups
-check_volume mccy
-
 set -e
 
 #### SETUP Carina CLI
@@ -71,6 +66,11 @@ fi
 
 #### BUILD AND DEPLOY
 source tmp/build-creds/docker.env
+
+check_volume dhparam-cache
+check_volume letsencrypt
+check_volume letsencrypt-backups
+check_volume mccy
 
 # Ensure the latest of our app image is always built
 docker-compose -p $CIRCLE_BRANCH build --pull
