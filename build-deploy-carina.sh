@@ -60,9 +60,6 @@ mkdir -p tmp
 $carina credentials --path=tmp/build-creds $DEPLOY_CLUSTER > /dev/null
 $carina credentials --path=certs $TARGET_CLUSTER > /dev/null
 
-cat certs/docker.env
-exit 1
-
 # learn about target 
 
 source certs/docker.env
@@ -75,7 +72,11 @@ fi
 #### BUILD AND DEPLOY
 source tmp/build-creds/docker.env
 
+# Ensure the latest of our app image is always built
+docker-compose -p $CIRCLE_BRANCH build --pull
+# ...and ensure proxy image is the latest
 docker-compose -p $CIRCLE_BRANCH pull
+
 docker-compose -p $CIRCLE_BRANCH up -d
 
 echo "
