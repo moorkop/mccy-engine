@@ -43,6 +43,12 @@ public class MccySettings {
     private URI externalUri;
 
     /**
+     * This indicates if a Docker link should be established and used from the minecraft-server
+     * container to the MCCY container to download world and mod content.
+     */
+    private boolean usingLinkForContent = false;
+
+    /**
      * This refers to the official versions.json Minecraft catalog.
      */
     private URI officialVersionsUri = URI.create("https://s3.amazonaws.com/Minecraft.Download/versions/versions.json");
@@ -171,6 +177,14 @@ public class MccySettings {
 
     public void setDeploymentPoweredBy(DeploymentPoweredBy deploymentPoweredBy) {
         this.deploymentPoweredBy = deploymentPoweredBy;
+    }
+
+    public boolean isUsingLinkForContent() {
+        return usingLinkForContent;
+    }
+
+    public void setUsingLinkForContent(boolean usingLinkForContent) {
+        this.usingLinkForContent = usingLinkForContent;
     }
 
     public static class DeploymentPoweredBy {

@@ -5,8 +5,13 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import me.itzg.mccy.types.YamlMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /**
  * @author Geoff Bourne
@@ -29,5 +34,11 @@ public class GeneralConfig {
     public YamlMapper yamlMapper() {
         final YAMLFactory yamlFactory = new YAMLFactory();
         return new YamlMapper(new ObjectMapper(yamlFactory));
+    }
+
+    @Bean @Autowired
+    public String ourContainerId(Environment env) throws UnknownHostException {
+        return env.acceptsProfiles("docker") ?
+                InetAddress.getLocalHost().getHostName() : null;
     }
 }

@@ -2,8 +2,6 @@ package me.itzg.mccy.types;
 
 import me.itzg.mccy.MccySwarmApplication;
 
-import java.util.regex.Pattern;
-
 /**
  * @author Geoff Bourne
  * @since 12/21/2015
@@ -42,4 +40,5 @@ public class MccyConstants {
     public static final String ENV_MODPACK = "MODPACK";
     public static final String ENV_TYPE = "TYPE";
     public static final String ENV_PLUGINS = "PLUGINS";
+    public static final String LINK_MCCY = "mccy";
 }
