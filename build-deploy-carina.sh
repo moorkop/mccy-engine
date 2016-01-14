@@ -78,7 +78,7 @@ docker-compose -p $CIRCLE_BRANCH build --pull
 # ...and ensure proxy image is the latest
 docker-compose -p $CIRCLE_BRANCH pull
 
-docker-compose -p $CIRCLE_BRANCH up -d
+docker-compose --verbose -p $CIRCLE_BRANCH up -d
 
 echo "
 READY for use on $DEPLOY_CLUSTER
