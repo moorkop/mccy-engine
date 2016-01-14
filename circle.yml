@@ -7,10 +7,6 @@ machine:
   services:
     - docker
 
-dependencies:
-  override:
-    - docker info
-
 deployment:
   staging:
     branch: master
