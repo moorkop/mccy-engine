@@ -73,12 +73,18 @@ check_volume letsencrypt
 check_volume letsencrypt-backups
 check_volume mccy
 
+export COMPOSE_PROJECT_NAME="$CIRCLE_BRANCH"
 # Ensure the latest of our app image is always built
-docker-compose -p $CIRCLE_BRANCH build --pull
+docker-compose build --pull
 # ...and ensure proxy image is the latest
-docker-compose -p $CIRCLE_BRANCH pull
+docker-compose pull
 
-docker-compose --verbose -p $CIRCLE_BRANCH up -d
+# At this point (v1.5.2) docker compose seems to get confused by volumes created with
+# 'docker volume' and goes to convoluted lengths to carry over the volume from the previous
+# container instance. So...we'll brute force tear them down and create them again.
+docker-compose stop
+docker-compose rm -f
+docker-compose up -d
 
 echo "
 READY for use on $DEPLOY_CLUSTER
