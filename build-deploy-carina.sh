@@ -1,11 +1,11 @@
 #!/bin/bash
 
 usage() {
-  echo "Usage: $0 DEPLOY_CLUSTER"
+  echo "Usage: $0 DEPLOY_CLUSTER PINNED_NODE"
 }
 
 check_var() {
-  if [[ ! -v $1 ]]; then
+  if [[ ! -v $1 || -z $1 ]]; then
     echo "Missing environment variable $1"
     exit 1
   fi
@@ -24,11 +24,12 @@ check_volume() {
   fi
 }
 
-if [[ $* < 1 ]]; then
+if [[ $* < 2 ]]; then
   usage
   exit 1
 fi
 DEPLOY_CLUSTER=$1
+export PINNED_NODE=$2
 
 check_var TARGET_CLUSTER
 check_var CARINA_USERNAME
