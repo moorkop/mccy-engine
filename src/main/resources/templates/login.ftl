@@ -8,32 +8,31 @@
     <title>Minecraft Container Yard - Login</title>
 </head>
 
-<body>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-2">
-            <img src="images/mccy_logo_120.png"/>
-        </div>
-        <div class="col-md-10">
-            <h1>Minecraft Container Yard</h1>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-4 col-md-offset-2">
-            <form action="/login" method="post">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input name="username" class="form-control" id="username" required="true">
+<body class="theme login-page">
+<div class="container">
+    <div class="login-box">
+        <div>
+            <div class="login-form row">
+                <div class="col-sm-12 text-center login-header">
+                    <h4 class="login-title">Minecraft Container Yard</h4>
                 </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input name="password" type="password" class="form-control" id="password" placeholder="Password">
+                <div class="col-sm-12">
+                    <div class="login-body">
+                        <form action="/login" method="post">
+                            <input type="hidden" name="${csrf.parameterName}" value="${csrf.token}" />
+                            <div class="login-form">
+                                <input name="username" type="text" class="form-control" id="username" placeholder="Username" required="true">
+                            </div>
+                            <div class="login-form">
+                                <input name="password" type="password" class="form-control" id="password" placeholder="Password">
+                            </div>
+                            <div class="login-button text-center">
+                                <input type="submit" class="btn btn-primary" value="Login">
+                            </div>
+                        </form>
+                    </div>
                 </div>
-
-                <input type="hidden" name="${csrf.parameterName}" value="${csrf.token}" />
-                <button type="submit" class="btn btn-default">Login</button>
-            </form>
+            </div>
         </div>
     </div>
 </div>

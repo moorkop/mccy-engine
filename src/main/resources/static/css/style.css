@@ -729,7 +729,7 @@ a:hover {
 }
 
 body.login-page {
-    background: url(../../img/app-header-bg.jpg) no-repeat center center fixed;
+    background-image: url("../images/login-background.jpg");
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -1270,7 +1270,7 @@ body.login-page .login-footer {
 }
 .landing-page .app-header {
     padding-top: 100px;
-    background-image: url("../img/app-header-bg.jpg");
+    background-image: url("../images/app-header-bg.jpg");
     background-repeat: no-repeat;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -1290,7 +1290,7 @@ body.login-page .login-footer {
     padding-bottom: 20px;
 }
 .landing-page .app-content-b.feature-1 {
-    background-image: url("../img/bg/picjumbo.com_HNCK3558.jpg");
+    background-image: url("../images/bg/picjumbo.com_HNCK3558.jpg");
     background-repeat: no-repeat;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -1302,7 +1302,7 @@ body.login-page .login-footer {
 .landing-page .app-content-b.contact-us {
     padding-top: 60px;
     padding-bottom: 60px;
-    background-image: url("../img/contact-us-bg.jpg");
+    background-image: url("../images/contact-us-bg.jpg");
     background-repeat: no-repeat;
     -webkit-background-size: cover;
     -moz-background-size: cover;
