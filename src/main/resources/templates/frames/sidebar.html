@@ -10,13 +10,8 @@
                 </button>
             </div>
             <ul class="nav navbar-nav" ng-repeat="view in views">
-                <li ng-if="$index == 0" class="active">
-                    <a href="#" ng-click="goto(view)">
-                        <span class="{{view.settings.icon}}"></span><span class="title">{{view.settings.label}}</span>
-                    </a>
-                </li>
-                <li ng-if="$index > 0">
-                    <a href="#" ng-click="goto(view)">
+                <li ng-class="{'active':isCurrentView(view)}">
+                    <a href="" ng-click="goto(view)">
                         <span class="{{view.settings.icon}}"></span><span class="title">{{view.settings.label}}</span>
                     </a>
                 </li>
