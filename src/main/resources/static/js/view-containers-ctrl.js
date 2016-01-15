@@ -45,11 +45,17 @@ angular.module('Mccy.ViewContainersCtrl', [
         };
 
         $scope.stop = function (container) {
-            Containers.stop({id: container.id}, {}, handleSuccess, handleRequestError);
+            Containers.stop({id: container.id}, {}, function(){
+                Alerts.success("Container stopped");
+                reload();
+            }, Alerts.handleRequestError);
         };
 
         $scope.start = function (container) {
-            Containers.start({id: container.id}, {}, handleSuccess, handleRequestError);
+            Containers.start({id: container.id}, {}, function(){
+                Alerts.success("Container started");
+                reload();
+            }, Alerts.handleRequestError);
         };
 
         $scope.remove = function (container) {

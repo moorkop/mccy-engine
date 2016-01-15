@@ -1,4 +1,4 @@
-FROM java:8-jdk
+FROM java:8u66-jdk
 
 MAINTAINER itzg
 
@@ -10,7 +10,7 @@ COPY certs /certs
 RUN cd /build && ./mvnw -B package \
   && cp /build/target/mccy-swarm-*.jar /usr/local/bin/mccy-swarm.jar \
   && rm -rf /build $HOME/.m2 
-RUN ls -l /usr/local/bin/mccy-swarm.jar /certs
+
 WORKDIR /data
 
 ENV SPRING_PROFILES_ACTIVE docker

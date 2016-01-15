@@ -17,13 +17,12 @@ import me.itzg.mccy.types.MccyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.embedded.EmbeddedWebApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.spotify.docker.client.DockerClient.ListContainersParam.allContainers;
@@ -46,6 +45,12 @@ public class ContainersService {
     @Autowired
     private MccySettings mccySettings;
 
+    @Autowired
+    private String ourContainerId;
+
+    @Autowired
+    private Optional<EmbeddedWebApplicationContext> embeddedWebApplicationContext;
+
     public String create(ContainerRequest request) throws MccyException, DockerException, InterruptedException {
 
         final int requestedPort = request.getPort();
@@ -54,16 +59,20 @@ public class ContainersService {
         Map<String, List<PortBinding>> portBindings =
                 singletonMap(MccyConstants.SERVER_CONTAINER_PORT, singletonList(portBinding));
 
-        HostConfig hostConfig = HostConfig.builder()
-                .portBindings(portBindings)
-                .build();
+        final HostConfig.Builder hostConfig = HostConfig.builder()
+                .portBindings(portBindings);
+
+        if (ourContainerId != null && needsLink(request)) {
+            hostConfig.links(ourContainerId+":"+ MccyConstants.LINK_MCCY);
+        }
+
         final ContainerConfig config = ContainerConfig.builder()
                 .attachStdin(true)
                 .tty(true)
                 .exposedPorts(MccyConstants.SERVER_CONTAINER_PORT)
                 .env(fillEnv(request))
                 .image(mccySettings.getImage())
-                .hostConfig(hostConfig)
+                .hostConfig(hostConfig.build())
                 .labels(buildLabels(request))
                 .build();
 
@@ -81,6 +90,11 @@ public class ContainersService {
 
             return containerId;
         });
+    }
+
+    private boolean needsLink(ContainerRequest request) {
+        return request.getModpack() != null ||
+                request.getWorld() != null;
     }
 
     public static String scrubContainerName(String givenName) {
@@ -191,8 +205,15 @@ public class ContainersService {
 
         fillStringInEnv(env, request.getVersion(), MccyConstants.ENV_VERSION);
         fillStringInEnv(env, request.getIcon(), MccyConstants.ENV_ICON);
-        fillStringInEnv(env, request.getWorld(), MccyConstants.ENV_WORLD);
-        fillStringInEnv(env, request.getModpack(), MccyConstants.ENV_MODPACK);
+
+        if (ourContainerId != null && mccySettings.isUsingLinkForContent()) {
+            fillLinkedUriInEnv(env, request.getWorld(), MccyConstants.ENV_WORLD);
+            fillLinkedUriInEnv(env, request.getModpack(), MccyConstants.ENV_MODPACK);
+        }
+        else {
+            fillStringInEnv(env, request.getWorld(), MccyConstants.ENV_WORLD);
+            fillStringInEnv(env, request.getModpack(), MccyConstants.ENV_MODPACK);
+        }
 
         final ServerType type = request.getType();
         if (type != null) {
@@ -203,6 +224,23 @@ public class ContainersService {
         fillPlayerList(env, request.getOps(), "OPS");
 
         return env;
+    }
+
+    private void fillLinkedUriInEnv(ArrayList<String> env, String originalUri, String varName) {
+        if (originalUri == null) {
+            return;
+        }
+
+        final String viaLink = UriComponentsBuilder.fromHttpUrl(originalUri)
+                .host(MccyConstants.LINK_MCCY)
+                .port(getOurPort())
+                .build().toUriString();
+        fillStringInEnv(env, viaLink, varName);
+    }
+
+    private int getOurPort() {
+        return embeddedWebApplicationContext.orElseThrow(IllegalStateException::new)
+                .getEmbeddedServletContainer().getPort();
     }
 
     protected void addToEnv(ArrayList<String> env, String key, Object value) {

@@ -1,28 +1,43 @@
 #!/bin/bash
 
-APP_NAME=mccy-app
-
 usage() {
-  echo "Usage: $0 DEPLOY_CLUSTER"
+  echo "Usage: $0 DEPLOY_CLUSTER PINNED_NODE"
 }
 
-checkVar() {
-  if [[ ! -v $1 ]]; then
-    echo "Missing $1"
+check_var() {
+  if [[ ! -v $1 || -z $1 ]]; then
+    echo "Missing environment variable $1"
     exit 1
   fi
 }
 
-if [[ $* < 1 ]]; then
+check_volume() {
+  if docker volume &> /dev/null; then
+    if docker volume ls |awk "\$2 == \"$1\"{++m} END {exit (m>0?0:1)}"; then
+      return
+    else
+      echo "Missing required volume $1"
+      exit 1
+    fi
+  else
+    echo "WARN: 'docker volume' not supported so we'll have to trust $1 exists"
+  fi
+}
+
+if [[ $* < 2 ]]; then
   usage
   exit 1
 fi
 DEPLOY_CLUSTER=$1
+export PINNED_NODE=$2
 
-checkVar TARGET_CLUSTER
-checkVar CARINA_USERNAME
-checkVar CARINA_APIKEY
-checkVar MCCY_PASSWORD
+check_var TARGET_CLUSTER
+check_var CARINA_USERNAME
+check_var CARINA_APIKEY
+check_var MCCY_PASSWORD
+check_var CIRCLE_BRANCH
+check_var LETSENCRYPT_EMAIL
+check_var LETSENCRYPT_DOMAIN
 
 set -e
 
@@ -45,39 +60,31 @@ $carina credentials --path=certs $TARGET_CLUSTER > /dev/null
 
 source certs/docker.env
 if [[ $DOCKER_TLS_VERIFY == 1 ]]; then
-  target_docker_uri=$(echo $DOCKER_HOST | sed 's#tcp://#https://#')
+  export TARGET_DOCKER_URI=$(echo $DOCKER_HOST | sed 's#tcp://#https://#')
 else
-  target_docker_uri=$(echo $DOCKER_HOST | sed 's#tcp://#http://#')
+  export TARGET_DOCKER_URI=$(echo $DOCKER_HOST | sed 's#tcp://#http://#')
 fi
 
-#### BUILD
+#### BUILD AND DEPLOY
 source tmp/build-creds/docker.env
 
-docker build -t mccy .
+check_volume dhparam-cache
+check_volume letsencrypt
+check_volume letsencrypt-backups
+check_volume mccy
 
-vol_from=$(docker ps -q -a --filter 'label=mccy-data')
+export COMPOSE_PROJECT_NAME="$CIRCLE_BRANCH"
+# Ensure the latest of our app image is always built
+docker-compose build --pull
+# ...and ensure proxy image is the latest
+docker-compose pull
 
-opts="-d --name $APP_NAME --restart=always"
-if [[ $vol_from ]]; then
-  opts="$opts --volumes-from $vol_from"
-fi
-
-running=$(docker ps -q -a --filter "name=$APP_NAME" --filter "status=running")
-if [[ $running ]]; then
-  docker stop $running
-fi
-exists=$(docker ps -q -a --filter "name=$APP_NAME")
-if [[ $exists ]]; then
-  docker rm $exists
-fi
-
-id=$(docker run $opts mccy \
-  --security.user.password=$MCCY_PASSWORD \
-  --mccy.docker-host-uri=$target_docker_uri \
-  --mccy.docker-cert-path=/certs \
-  --mccy.deployment-powered-by.image-src=images/powered-by/powered-by-carina-wide.png \
-  --mccy.deployment-powered-by.href=https://getcarina.com/ \
-  --spring.active-profiles=docker)
+# At this point (v1.5.2) docker compose seems to get confused by volumes created with
+# 'docker volume' and goes to convoluted lengths to carry over the volume from the previous
+# container instance. So...we'll brute force tear them down and create them again.
+docker-compose stop
+docker-compose rm -f
+docker-compose up -d
 
 echo "
 READY for use on $DEPLOY_CLUSTER
