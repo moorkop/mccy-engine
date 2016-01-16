@@ -14,7 +14,7 @@
     <div class="row content-container">
         <#include "frames/topbar.ftl">
         <#include "frames/sidebar.ftl">
-        <#include "frames/view.html">
+        <#include "frames/view.ftl">
         <#include "frames/footer.ftl">
     </div>
 </div>
