@@ -512,7 +512,7 @@
 .theme .tabs-left > .nav-tabs .active > a:hover,
 .theme .tabs-left > .nav-tabs .active > a:focus {
     border-color: #E4E4E4 transparent #E4E4E4 #E4E4E4;
-    *border-right-color: #FFF; }
+    border-right-color: #FFF; }
 .theme .tabs-right > .nav-tabs {
     border-left: 1px solid #E4E4E4; }
 .theme .tabs-right > .nav-tabs > li > a:hover,
@@ -522,7 +522,7 @@
 .theme .tabs-right > .nav-tabs .active > a:hover,
 .theme .tabs-right > .nav-tabs .active > a:focus {
     border-color: #E4E4E4 #E4E4E4 #E4E4E4 transparent;
-    *border-left-color: #FFF; }
+    border-left-color: #FFF; }
 .theme .step .nav-tabs {
     background-color: #FFF; }
 .theme .step .nav-tabs > li {
