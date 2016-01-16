@@ -5,7 +5,7 @@
         <form ng-submit="submitNewContainer()">
             <div class="form-group">
                 <label>Name
-                    <input class="form-control" required="true" ng-model="name">
+                    <input class="form-control" ng-model="name" required>
                 </label>
                 <p class="help-block">This will be the name of the container.</p>
             </div>
@@ -43,7 +43,7 @@
             </div>
             <div class="form-group" ng-show="choosePort">
                 <label>Port
-                    <input type="number" min="25565" required="true" class="form-control" ng-model="port">
+                    <input type="number" min="25565" class="form-control" ng-model="port" required>
                     <p class="help-block">This is the port exposed to the outside world. Minecraft's default is 25565, so
                         use that if possible.</p>
                 </label>
