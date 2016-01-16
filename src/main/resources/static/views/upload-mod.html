@@ -1,7 +1,7 @@
-<div class="col-md-10">
+<div class="col-md-10 col-md-offset-1">
 
     <div ng-hide="hideUploadArea">
-        <div class="btn btn-default upload-mod jumbotron"
+        <div class="btn btn-default btn-block upload-mod"
              ngf-select ngf-drop ngf-multiple="true"
              ngf-change="uploadModFile($files)"
              name="modFile"
@@ -9,22 +9,20 @@
              ngf-pattern="allowedPatterns" ngf-accept="'application/jar'">
             <div class="title">
                 Drop file(s) here or click to select
-                </div>
-            <div><i class="fa fa-sticky-note"></i> Mods and plugins should be .jar files.</div>
-
+            </div>
+            <div>
+                <i class="fa fa-sticky-note"></i> Mods and plugins should be .jar files.
+            </div>
             <div ng-show="showProgress">
                 <uib-progressbar value="progress">
                     {{progress}}%
                 </uib-progressbar>
             </div>
         </div>
-
     </div>
 
     <div ng-show="registeredMods" class="registered-mods">
-
         <div mccy-mod-panel="mod" ng-repeat="mod in registeredMods"></div>
-
     </div>
 
 
