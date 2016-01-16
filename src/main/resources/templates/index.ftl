@@ -12,10 +12,10 @@
 <toaster-container toaster-options="toasterOptions"></toaster-container>
 <div class="app-container">
     <div class="row content-container">
-        <#include "frames/topbar.html">
-        <#include "frames/sidebar.html">
-        <#include "frames/view.html">
-        <#include "frames/footer.html">
+        <#include "topbar.ftl">
+        <#include "sidebar.ftl">
+        <#include "view.html">
+        <#include "footer.ftl">
     </div>
 </div>
 
