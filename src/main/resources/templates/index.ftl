@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="MccyApp">
 <head>
-    <#include "ftl-bits/head-meta.ftl">
+    <#include "includes/head-meta.ftl">
     <!-- The above head-meta *must* come first in the head; any other head content must come *after* these tags -->
-    <#include "ftl-bits/ext-css.ftl">
-    <#include "ftl-bits/app-css.ftl">
+    <#include "includes/ext-css.ftl">
+    <#include "includes/app-css.ftl">
     <title>Minecraft Container Yard</title>
 </head>
 
@@ -12,16 +12,16 @@
 <toaster-container toaster-options="toasterOptions"></toaster-container>
 <div class="app-container">
     <div class="row content-container">
-        <#include "topbar.ftl">
-        <#include "sidebar.ftl">
-        <#include "view.html">
-        <#include "footer.ftl">
+        <#include "frames/topbar.ftl">
+        <#include "frames/sidebar.ftl">
+        <#include "frames/view.html">
+        <#include "frames/footer.ftl">
     </div>
 </div>
 
 <span>
-    <#include "ftl-bits/ext-js.ftl">
-    <#include "ftl-bits/app-js.ftl">
+    <#include "includes/ext-js.ftl">
+    <#include "includes/app-js.ftl">
 </span>
 
 </body>
