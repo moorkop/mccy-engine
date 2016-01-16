@@ -5,7 +5,7 @@
     <!-- The above head-meta *must* come first in the head; any other head content must come *after* these tags -->
     <#include "ftl-bits/ext-css.ftl">
     <#include "ftl-bits/app-css.ftl">
-    <title>Minecraft Container Yard - Login</title>
+    <title>Container Yard - Login</title>
 </head>
 
 <body class="theme login-page">

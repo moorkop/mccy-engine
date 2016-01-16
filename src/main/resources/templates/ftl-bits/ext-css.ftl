@@ -15,3 +15,5 @@
 <link rel="stylesheet" type="text/css" href="webjars/DataTables/1.10.10/media/css/jquery.dataTables.min.css">
 <link rel="stylesheet" type="text/css" href="webjars/DataTables/1.10.10/media/css/dataTables.bootstrap.css">
 <link rel="stylesheet" type="text/css" href="webjars/select2/4.0.1/dist/css/select2.min.css">
+<!-- Admin Theme CSS App -->
+<link rel="stylesheet" type="text/css" href="css/theme.css">

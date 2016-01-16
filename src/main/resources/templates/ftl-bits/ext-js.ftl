@@ -26,3 +26,12 @@
 <script type="text/javascript" src="webjars/ace-builds/1.2.2/src/ace.js"></script>
 <script type="text/javascript" src="webjars/ace-builds/1.2.2/src/mode-html.js"></script>
 <script type="text/javascript" src="webjars/ace-builds/1.2.2/src/theme-github.js"></script>
+<!-- Tui2tone admin v.2 bootstrap -->
+<script type="text/javascript" src="js/navbar.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/alert.js"></script>
+<script type="text/javascript" src="js/button.js"></script>
+<script type="text/javascript" src="js/card.js"></script>
+<script type="text/javascript" src="js/theming.js"></script>
+<script type="text/javascript" src="js/chartjs.js"></script>
+<script type="text/javascript" src="js/modal.js"></script>
