@@ -138,7 +138,7 @@ angular.module('Mccy.NewContainerCtrl', [
             return tag.text;
         }
 
-        function handleSuccess(value) {
+        function handleSuccess() {
             Alerts.success('The server container was successfully created', true);
 
             close();
