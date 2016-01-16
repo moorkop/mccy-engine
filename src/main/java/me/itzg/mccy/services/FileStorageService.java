@@ -29,12 +29,11 @@ import java.nio.file.StandardCopyOption;
 public class FileStorageService {
     private static Logger LOG = LoggerFactory.getLogger(FileStorageService.class);
 
-    private MccyFilesSettings settings;
     private Path repoPath;
 
     @Autowired
     public void setSettings(MccyFilesSettings settings) throws IOException {
-        this.settings = settings;
+        MccyFilesSettings settings1 = settings;
 
         repoPath = Paths.get(settings.getRepoDir());
         Files.createDirectories(repoPath);
