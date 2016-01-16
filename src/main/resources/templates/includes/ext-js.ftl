@@ -17,4 +17,5 @@
 <script type="text/javascript" src="webjars/angular-xeditable/0.1.9/dist/js/xeditable.min.js"></script>
 <script type="text/javascript" src="webjars/angular-clipboard/1.2.0/angular-clipboard.js"></script>
 <!-- Additional non-webjar libraries -->
+<!--suppress HtmlUnknownTarget -->
 <script type="text/javascript" src="vendors/tui2tone/navbar.js"></script>

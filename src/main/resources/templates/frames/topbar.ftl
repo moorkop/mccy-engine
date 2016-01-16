@@ -9,9 +9,11 @@
             </button>
         </div>
         <ul class="nav navbar-nav navbar-right">
-            <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
-                <i class="fa fa-times icon"></i>
-            </button>
+            <li>
+                <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
+                    <i class="fa fa-times icon"></i>
+                </button>
+            </li>
         </ul>
     </div>
 </nav>

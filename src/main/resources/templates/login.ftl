@@ -18,6 +18,7 @@
                 </div>
                 <div class="col-sm-12">
                     <div class="login-body">
+                        <!--suppress HtmlUnknownTarget -->
                         <form action="/login" method="post">
                             <input type="hidden" name="${csrf.parameterName}" value="${csrf.token}" />
                             <div class="login-form">
