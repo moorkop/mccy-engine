@@ -1,7 +1,6 @@
 package me.itzg.mccy.services;
 
 import me.itzg.mccy.types.MccyConstants;
-import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;

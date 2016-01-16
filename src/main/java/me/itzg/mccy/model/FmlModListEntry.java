@@ -1,7 +1,5 @@
 package me.itzg.mccy.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.List;
 
 /**

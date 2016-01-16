@@ -1,7 +1,6 @@
 package me.itzg.mccy.types;
 
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 
 import java.io.BufferedInputStream;
 import java.io.File;
