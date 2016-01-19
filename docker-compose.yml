@@ -1,6 +1,9 @@
 
 mccy:
-  build: .
+  build:
+    context: .
+    args:
+      - "constraint:node==$PINNED_NODE"
   volumes:
     - mccy:/data
   environment:
