@@ -20,7 +20,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.zip.ZipOutputStream;
 
 /**
  * @author Geoff Bourne
@@ -30,12 +29,11 @@ import java.util.zip.ZipOutputStream;
 public class FileStorageService {
     private static Logger LOG = LoggerFactory.getLogger(FileStorageService.class);
 
-    private MccyFilesSettings settings;
     private Path repoPath;
 
     @Autowired
     public void setSettings(MccyFilesSettings settings) throws IOException {
-        this.settings = settings;
+        MccyFilesSettings settings1 = settings;
 
         repoPath = Paths.get(settings.getRepoDir());
         Files.createDirectories(repoPath);

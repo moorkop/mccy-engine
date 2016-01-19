@@ -1,13 +1,7 @@
 package me.itzg.mccy.services;
 
-import com.google.common.base.Optional;
-import com.spotify.docker.client.DefaultDockerClient;
-import com.spotify.docker.client.DockerCertificateException;
-import com.spotify.docker.client.DockerCertificates;
-import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.DockerException;
 import com.spotify.docker.client.messages.Container;
-import me.itzg.mccy.config.MccySettings;
 import me.itzg.mccy.types.MccyConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,12 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.nio.file.Paths;
 import java.util.List;
 
 import static com.spotify.docker.client.DockerClient.ListContainersParam.allContainers;
-import static com.spotify.docker.client.DockerClient.ListContainersParam.create;
 import static com.spotify.docker.client.DockerClient.ListContainersParam.withLabel;
 
 /**

@@ -32,7 +32,7 @@ angular.module('MccyApp', [
         // NOTE: first view is assumed to be the default
         $scope.views = MccyViews;
 
-        $scope.$on('$routeChangeSuccess', function(evt, current, previous){
+        $scope.$on('$routeChangeSuccess', function(evt, current){
             $scope.currentView = current.originalPath;
             $log.debug('route change', current);
         });

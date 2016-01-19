@@ -3,7 +3,7 @@ angular.module('Mccy.ViewContainersCtrl', [
         'ui.bootstrap',
         'angular-clipboard',
         'template/modal/backdrop.html',
-        'template/modal/window.html',
+        'template/modal/window.html'
     ])
 
     .controller('ViewContainersCtrl', function ($scope, $timeout, $uibModal, Containers, Alerts, cTimeouts) {

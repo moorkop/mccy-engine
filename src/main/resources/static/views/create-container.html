@@ -1,35 +1,39 @@
-<div class="col-md-12">
+<div class="col-sm-12">
 
     <div class="well">
         <h3>Describe your new Minecraft Server</h3>
         <form ng-submit="submitNewContainer()">
             <div class="form-group">
-                <label>Name</label>
-                <input class="form-control" required="true" ng-model="name">
+                <label>Name
+                    <input class="form-control" ng-model="name" required>
+                </label>
                 <p class="help-block">This will be the name of the container.</p>
             </div>
 
             <div class="form-group">
-                <label>Type</label>
-                <select class="form-control" ng-model="type" ng-options="t.value as t.label for t in types"></select>
+                <label>Type
+                    <select class="form-control" ng-model="type" ng-options="t.value as t.label for t in types"></select>
+                </label>
             </div>
 
             <div class="form-group">
-                <label>Version</label>
-                <select class="form-control" ng-model="version"
-                        ng-options="v.value as v.label for v in applicableVersions"></select>
+                <label>Version
+                    <select class="form-control" ng-model="version"
+                            ng-options="v.value as v.label for v in applicableVersions"></select>
+                </label>
             </div>
 
             <div ng-show="chooseMods">
-                <label>Mods to include</label>
-                <tags-input ng-model="selectedMods"
-                            display-property="name" key-property="id"
-                            add-from-autocomplete-only="true"
-                            placeholder="Click here to pick mods">
-                    <auto-complete source="suggestMods($query)"
-                                   min-length="0" load-on-focus="true" load-on-empty="true"
-                                   template="ng-bits/mod-suggestion.html"></auto-complete>
-                </tags-input>
+                <label>Mods to include
+                    <tags-input ng-model="selectedMods"
+                                display-property="name" key-property="id"
+                                add-from-autocomplete-only="true"
+                                placeholder="Click here to pick mods">
+                        <auto-complete source="suggestMods($query)"
+                                       min-length="0" load-on-focus="true" load-on-empty="true"
+                                       template="ng-bits/mod-suggestion.html"></auto-complete>
+                    </tags-input>
+                </label>
             </div>
 
             <div class="checkbox" ng-hide="choosePort">
@@ -38,10 +42,11 @@
                 </label>
             </div>
             <div class="form-group" ng-show="choosePort">
-                <label>Port</label>
-                <input type="number" min="25565" required="true" class="form-control" ng-model="port">
-                <p class="help-block">This is the port exposed to the outside world. Minecraft's default is 25565, so
-                    use that if possible.</p>
+                <label>Port
+                    <input type="number" min="25565" class="form-control" ng-model="port" required>
+                    <p class="help-block">This is the port exposed to the outside world. Minecraft's default is 25565, so
+                        use that if possible.</p>
+                </label>
             </div>
 
             <div class="checkbox" ng-hide="enableOperators">
@@ -50,11 +55,12 @@
                 </label>
             </div>
             <div class="form-group" ng-show="enableOperators">
-                <label>Operators</label>
-                <tags-input placeholder="Add Minecraft user" ng-model="ops"></tags-input>
-                <p class="help-block">Declare who will operate or administer the server as a list of Minecraft
-                    usernames.
-                    Press <kbd>Enter</kbd> to finish each username.</p>
+                <label>Operators
+                    <tags-input placeholder="Add Minecraft user" ng-model="ops"></tags-input>
+                    <p class="help-block">Declare who will operate or administer the server as a list of Minecraft
+                        usernames.
+                        Press <kbd>Enter</kbd> to finish each username.</p>
+                </label>
             </div>
 
             <div class="checkbox" ng-hide="enableWhitelist">
@@ -63,11 +69,12 @@
                 </label>
             </div>
             <div class="form-group" ng-show="enableWhitelist">
-                <label>Whitelist</label>
-                <tags-input placeholder="Add Minecraft user" ng-model="whitelist"></tags-input>
-                <p class="help-block">Declare who can access your server as a list of Minecraft usernames. Leave empty
-                    to allow anyone.
-                    Press <kbd>Enter</kbd> to finish each username.</p>
+                <label>Whitelist
+                    <tags-input placeholder="Add Minecraft user" ng-model="whitelist"></tags-input>
+                    <p class="help-block">Declare who can access your server as a list of Minecraft usernames. Leave empty
+                        to allow anyone.
+                        Press <kbd>Enter</kbd> to finish each username.</p>
+                </label>
             </div>
 
             <div class="checkbox" ng-hide="enableIcon">
@@ -77,11 +84,11 @@
             </div>
             <div class="form-group" ng-show="enableIcon">
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-sm-8">
                         <label>Server Icon</label>
                         <input class="form-control" type="url" ng-model="iconUrl">
                     </div>
-                    <div class="col-md-4" ng-show="iconUrl">
+                    <div class="col-sm-4" ng-show="iconUrl">
                         <img ng-src="{{iconUrl}}" class="icon-preview"/>
                     </div>
                 </div>
@@ -95,21 +102,23 @@
             </div>
             <div class="form-group" ng-show="enableWorld">
                 <div class="row">
-                    <div class="col-md-8" ng-hide="worldFile">
-                        <label>Download from</label>
-                        <input class="form-control" type="url" ng-model="worldUrl">
+                    <div class="col-sm-8" ng-hide="worldFile">
+                        <label>Download from
+                            <input class="form-control" type="url" ng-model="worldUrl">
+                        </label>
                     </div>
-                    <div class="col-md-4">
-                        <label>...or upload one</label>
-                        <div>
-                            <div class="btn btn-default upload" ngf-select ngf-drop ng-model="worldFile"
-                                 ng-class="{dropped:worldFile}" name="worldFile"
-                                 ngf-pattern="'.zip'" ngf-accept="'application/zip'">
-                                <span ng-hide="worldFile" class="select">Select...</span>
-                                <span class="target">Drop Here</span>
-                                <span ng-show="worldFile" class="select">Got it</span>
+                    <div class="col-sm-4">
+                        <label>...or upload one
+                            <div>
+                                <div class="btn btn-default upload" ngf-select ngf-drop ng-model="worldFile"
+                                     ng-class="{dropped:worldFile}" name="worldFile"
+                                     ngf-pattern="'.zip'" ngf-accept="'application/zip'">
+                                    <span ng-hide="worldFile" class="select">Select...</span>
+                                    <span class="target">Drop Here</span>
+                                    <span ng-show="worldFile" class="select">Got it</span>
+                                </div>
                             </div>
-                        </div>
+                        </label>
                     </div>
                 </div>
 

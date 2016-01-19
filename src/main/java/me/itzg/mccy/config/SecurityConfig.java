@@ -21,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 //        2015-12-23 12:07:  INFO 10796 --- [ost-startStop-1] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/css/**'], []
 //        2015-12-23 12:07:48.681  INFO 10796 --- [ost-startStop-1] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/js/**'], []
-//        2015-12-23 12:07:48.681  INFO 10796 --- [ost-startStop-1] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/images/**'], []
+//        2015-12-23 12:07:48.681  INFO 10796 --- [ost-startStop-1] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/img/**'], []
 //        2015-12-23 12:07:48.681  INFO 10796 --- [ost-startStop-1] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/**/favicon.ico'], []
 //        2015-12-23 12:07:48.6848.6811  INFO 10796 --- [ost-startStop-1] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/error'], []
 
@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/js/**").permitAll()
                     .antMatchers("/fonts/**").permitAll()
                     .antMatchers("/webjars/**").permitAll()
-                    .antMatchers("/images/**").permitAll()
+                    .antMatchers("/img/**").permitAll()
                     .antMatchers("/ng-bits/**").permitAll()
                     .antMatchers("/views/**").permitAll()
                     .antMatchers("/**/favicon.ico").permitAll()

@@ -1,17 +1,11 @@
 package me.itzg.mccy.controllers;
 
-import com.spotify.docker.client.DockerException;
 import com.spotify.docker.client.DockerRequestException;
 import me.itzg.mccy.model.FailedRequest;
-import me.itzg.mccy.model.SingleValue;
 import me.itzg.mccy.types.MccyClientException;
-import me.itzg.mccy.types.MccyNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Geoff Bourne
