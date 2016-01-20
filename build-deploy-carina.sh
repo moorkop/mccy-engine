@@ -75,9 +75,9 @@ check_volume mccy
 
 export COMPOSE_PROJECT_NAME="$CIRCLE_BRANCH"
 # Ensure the latest of our app image is always built
-docker-compose build --pull
-# ...and ensure proxy image is the latest
-docker-compose pull
+# ...but do it with a 'docker build' since build args aren't support until docker-compose 1.6
+# ...and that requires Docker server 1.22
+docker build --build-arg=constraint:node==$PINNED_NODE -t mccy_$COMPOSE_PROJECT_NAME .
 
 # At this point (v1.5.2) docker compose seems to get confused by volumes created with
 # 'docker volume' and goes to convoluted lengths to carry over the volume from the previous
