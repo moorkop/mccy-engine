@@ -3,7 +3,7 @@ FROM java:8u66-jdk
 MAINTAINER itzg
 
 # Do the maven build in two parts so we can cache the dependencies in one layer
-COPY pom.xml /build
+COPY pom.xml /build/pom.xml
 RUN cd /build && ./mvnw -B dependency:resolve
 
 COPY . /build
