@@ -1,6 +1,6 @@
 
 mccy:
-  image: mccy_$COMPOSE_PROJECT_NAME
+  image: ${COMPOSE_PROJECT_NAME}_mccy
   volumes:
     - mccy:/data
   environment:
