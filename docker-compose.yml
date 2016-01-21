@@ -1,6 +1,7 @@
 
 mccy:
   image: ${COMPOSE_PROJECT_NAME}_mccy
+  restart: always
   volumes:
     - mccy:/data
   environment:
@@ -15,6 +16,7 @@ mccy:
 
 proxy:
   image: ${COMPOSE_PROJECT_NAME}_letsencrypt
+  restart: always
   links:
     - mccy
   ports:
