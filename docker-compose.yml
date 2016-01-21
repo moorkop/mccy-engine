@@ -14,7 +14,7 @@ mccy:
     --spring.active-profiles=docker
 
 proxy:
-  image: smashwilson/lets-nginx
+  image: ${COMPOSE_PROJECT_NAME}_letsencrypt
   links:
     - mccy
   ports:
