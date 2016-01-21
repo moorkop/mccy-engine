@@ -9,7 +9,7 @@ mccy:
     --security.user.password=$MCCY_PASSWORD 
     --mccy.docker-host-uri=$TARGET_DOCKER_URI
     --mccy.docker-cert-path=/certs 
-    --mccy.deployment-powered-by.image-src=images/powered-by/powered-by-carina-wide.png 
+    --mccy.deployment-powered-by.image-src=img/powered-by/powered-by-carina-wide.png
     --mccy.deployment-powered-by.href=https://getcarina.com/ 
     --spring.active-profiles=docker
 
