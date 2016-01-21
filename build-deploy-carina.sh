@@ -78,6 +78,7 @@ export COMPOSE_PROJECT_NAME="$CIRCLE_BRANCH"
 # ...but do it with a 'docker build' since build args aren't support until docker-compose 1.6
 # ...and that requires Docker server 1.22
 docker build --build-arg=constraint:node==$PINNED_NODE -t ${COMPOSE_PROJECT_NAME}_mccy .
+docker build --build-arg=constraint:node==$PINNED_NODE -t ${COMPOSE_PROJECT_NAME}_letsencrypt https://github.com/itzg/lets-nginx.git
 
 # At this point (v1.5.2) docker compose seems to get confused by volumes created with
 # 'docker volume' and goes to convoluted lengths to carry over the volume from the previous
