@@ -93,8 +93,8 @@ public class ContainersService {
     }
 
     private boolean needsLink(ContainerRequest request) {
-        return request.getModpack() != null ||
-                request.getWorld() != null;
+        return mccySettings.isUsingLinkForContent() &&
+                (request.getModpack() != null || request.getWorld() != null);
     }
 
     public static String scrubContainerName(String givenName) {
