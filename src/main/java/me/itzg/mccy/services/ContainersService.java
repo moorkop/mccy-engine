@@ -51,6 +51,9 @@ public class ContainersService {
     @Autowired
     private Optional<EmbeddedWebApplicationContext> embeddedWebApplicationContext;
 
+    @Autowired
+    private MetadataConversionService metadataConversionService;
+
     public String create(ContainerRequest request) throws MccyException, DockerException, InterruptedException {
 
         final int requestedPort = request.getPort();
@@ -121,8 +124,12 @@ public class ContainersService {
             if (isOurs(containerInfo)) {
                 final ContainerDetails containerDetails = new ContainerDetails(containerInfo);
 
-                containerDetails.setSummary(ContainerSummary.from(containerInfo,
-                        getDockerHostIp(), mccySettings.getConnectUsingHost()));
+                final ContainerSummary summary = ContainerSummary.from(containerInfo,
+                        getDockerHostIp(), mccySettings.getConnectUsingHost());
+
+                metadataConversionService.fillFromEnv(containerInfo.config().env(), summary);
+
+                containerDetails.setSummary(summary);
 
                 return containerDetails;
             } else {

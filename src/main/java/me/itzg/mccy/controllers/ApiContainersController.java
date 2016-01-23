@@ -40,22 +40,22 @@ public class ApiContainersController {
 
     }
 
-    @RequestMapping(value = "{containerId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{containerId}", method = RequestMethod.GET)
     public ContainerDetails getContainer(@PathVariable("containerId") String containerId) throws DockerException, InterruptedException {
         return containers.get(containerId);
     }
 
-    @RequestMapping(value = "{containerId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{containerId}", method = RequestMethod.DELETE)
     public void deleteContainer(@PathVariable("containerId") String containerId) throws DockerException, InterruptedException {
         containers.delete(containerId);
     }
 
-    @RequestMapping(value = "{containerId}/_start", method = RequestMethod.POST)
+    @RequestMapping(value = "/{containerId}/_start", method = RequestMethod.POST)
     public void startContainer(@PathVariable("containerId") String containerId) throws DockerException, InterruptedException {
         containers.start(containerId);
     }
 
-    @RequestMapping(value = "{containerId}/_stop", method = RequestMethod.POST)
+    @RequestMapping(value = "/{containerId}/_stop", method = RequestMethod.POST)
     public void stopContainer(@PathVariable("containerId") String containerId) throws DockerException, InterruptedException {
         containers.stop(containerId);
     }

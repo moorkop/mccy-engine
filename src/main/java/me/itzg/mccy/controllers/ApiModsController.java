@@ -37,7 +37,7 @@ public class ApiModsController {
     @Autowired
     private MccySettings mccySettings;
 
-    @RequestMapping("mods")
+    @RequestMapping(value = "/mods", method = RequestMethod.GET)
     public List<? extends RegisteredMod> get(@RequestParam("mcversion")Optional<String> byVersion) {
         if (byVersion.isPresent()) {
             return modsService.queryByMinecraftVersion(byVersion.get());
@@ -47,25 +47,25 @@ public class ApiModsController {
         }
     }
 
-    @RequestMapping("mods/_suggest")
+    @RequestMapping(value = "/mods/_suggest", method = RequestMethod.GET)
     public List<? extends RegisteredMod> suggestWithinVersion(@RequestParam("mcversion") String minecraftVersion,
                                                               @RequestParam("type") ServerType type,
                                                               @RequestParam("input") String autoCompleteInput) {
         return modsService.querySuggestions(minecraftVersion, type, autoCompleteInput);
     }
 
-    @RequestMapping(value = "mods/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/mods/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") String id) {
         modsService.delete(id);
     }
 
-    @RequestMapping(value = "mods/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/mods/{id}", method = RequestMethod.POST)
     public void save(@PathVariable("id") String id,
                      @RequestBody RegisteredMod mod) {
         modsService.save(id, mod);
     }
 
-    @RequestMapping(value = "modpacks", method = RequestMethod.POST)
+    @RequestMapping(value = "/modpacks", method = RequestMethod.POST)
     public ResponseEntity<SingleValue<URI>> registerModPack(@Validated @RequestBody Collection<RegisteredModReference> modRefs,
                                                             UriComponentsBuilder requestUri) {
 

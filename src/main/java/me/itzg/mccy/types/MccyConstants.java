@@ -36,9 +36,20 @@ public class MccyConstants {
 
     public static final String ENV_ICON = "ICON";
     public static final String ENV_VERSION = "VERSION";
+    public static final String ENV_FORGEVERSION = "FORGEVERSION";
     public static final String ENV_WORLD = "WORLD";
     public static final String ENV_MODPACK = "MODPACK";
     public static final String ENV_TYPE = "TYPE";
-    public static final String ENV_PLUGINS = "PLUGINS";
+    public static final String ENV_DIFFICULTY = "DIFFICULTY";
+    public static final String ENV_WHITELIST = "WHITELIST";
+    public static final String ENV_OPS = "OPS";
+    public static final String ENV_SEED = "SEED";
+    public static final String ENV_MODE = "MODE";
+    public static final String ENV_MOTD = "MOTD";
+    public static final String ENV_PVP = "PVP";
+    public static final String ENV_LEVEL_TYPE = "LEVEL_TYPE";
+    public static final String ENV_GENERATOR_SETTINGS = "GENERATOR_SETTINGS";
+    public static final String ENV_LEVEL = "LEVEL";
+
     public static final String LINK_MCCY = "mccy";
 }

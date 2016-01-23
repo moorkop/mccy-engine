@@ -24,10 +24,6 @@ public class ContainerSummary {
 
     private String name;
 
-    private String type;
-
-    private String version;
-
     private String hostIp;
 
     private int hostPort;
@@ -36,11 +32,55 @@ public class ContainerSummary {
 
     private String status;
 
+    private Map<String,String> labels;
+
+    @EnvironmentVariable(MccyConstants.ENV_TYPE)
+    private ServerType type;
+
+    @EnvironmentVariable(MccyConstants.ENV_VERSION)
+    private String version;
+
+    @EnvironmentVariable(MccyConstants.ENV_FORGEVERSION)
+    private String forgeVersion;
+
+    @EnvironmentVariable(MccyConstants.ENV_ICON)
     private URI icon;
 
+    @EnvironmentVariable(MccyConstants.ENV_WORLD)
+    private URI world;
+
+    @EnvironmentVariable(MccyConstants.ENV_MODPACK)
     private URI modpack;
 
-    private Map<String,String> labels;
+    @EnvironmentVariable(MccyConstants.ENV_OPS)
+    private String[] ops;
+
+    @EnvironmentVariable(MccyConstants.ENV_WHITELIST)
+    private String[] whitelist;
+
+    @EnvironmentVariable(MccyConstants.ENV_SEED)
+    private String seed;
+
+    @EnvironmentVariable(MccyConstants.ENV_MODE)
+    private String mode;
+
+    @EnvironmentVariable(MccyConstants.ENV_MOTD)
+    private String motd;
+
+    @EnvironmentVariable(MccyConstants.ENV_PVP)
+    private Boolean pvp;
+
+    @EnvironmentVariable(MccyConstants.ENV_LEVEL_TYPE)
+    private LevelType levelType;
+
+    @EnvironmentVariable(MccyConstants.ENV_GENERATOR_SETTINGS)
+    private String generatorSettings;
+
+    @EnvironmentVariable(MccyConstants.ENV_LEVEL)
+    private String level;
+
+    @EnvironmentVariable(MccyConstants.ENV_DIFFICULTY)
+    private String difficulty;
 
     public String getHostIp() {
         return hostIp;
@@ -150,17 +190,6 @@ public class ContainerSummary {
 
         summary.setRunning(info.state().running());
 
-        final List<String> env = info.config().env();
-        fillFromEnv(env, MccyConstants.ENV_ICON, v -> {
-            summary.setIcon(URI.create(v));
-        });
-        fillFromEnv(env, MccyConstants.ENV_TYPE, v -> {
-            summary.setType(v);
-        });
-        fillFromEnv(env, MccyConstants.ENV_VERSION, v -> {
-            summary.setVersion(v);
-        });
-
         final Map<String, String> labels = info.config().labels();
         fillFromLabel(labels, MccyConstants.MCCY_LABEL_NAME, v -> {
             summary.setName(v);
@@ -181,11 +210,14 @@ public class ContainerSummary {
         return summary;
     }
 
-    public String getType() {
+    /**
+     * The type of server, such as an official, vanilla server or one of the mod/plugin variants.
+     */
+    public ServerType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(ServerType type) {
         this.type = type;
     }
 
@@ -195,6 +227,102 @@ public class ContainerSummary {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public String[] getOps() {
+        return ops;
+    }
+
+    public void setOps(String[] ops) {
+        this.ops = ops;
+    }
+
+    public String getForgeVersion() {
+        return forgeVersion;
+    }
+
+    public void setForgeVersion(String forgeVersion) {
+        this.forgeVersion = forgeVersion;
+    }
+
+    public String[] getWhitelist() {
+        return whitelist;
+    }
+
+    public void setWhitelist(String[] whitelist) {
+        this.whitelist = whitelist;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public String getSeed() {
+        return seed;
+    }
+
+    public void setSeed(String seed) {
+        this.seed = seed;
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
+    public String getMotd() {
+        return motd;
+    }
+
+    public void setMotd(String motd) {
+        this.motd = motd;
+    }
+
+    public Boolean getPvp() {
+        return pvp;
+    }
+
+    public void setPvp(Boolean pvp) {
+        this.pvp = pvp;
+    }
+
+    public LevelType getLevelType() {
+        return levelType;
+    }
+
+    public void setLevelType(LevelType levelType) {
+        this.levelType = levelType;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getGeneratorSettings() {
+        return generatorSettings;
+    }
+
+    public void setGeneratorSettings(String generatorSettings) {
+        this.generatorSettings = generatorSettings;
+    }
+
+    public URI getWorld() {
+        return world;
+    }
+
+    public void setWorld(URI world) {
+        this.world = world;
     }
 
     private static void fillFromEnv(List<String> env, String envKey, Consumer<String> consumer) {

@@ -7,6 +7,7 @@ import me.itzg.mccy.services.VersionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -27,17 +28,27 @@ public class ApiController {
     @Autowired
     private SettingsService settingsService;
 
-    @RequestMapping("info")
+    @RequestMapping(value = "/info", method = RequestMethod.GET)
     public ApplicationInfo getAppInfo() {
         return settingsService.getAppInfo();
     }
 
-    @RequestMapping("versions/{type}")
+    /**
+     * Provides the server versions that apply to the given server type.
+     * @param type
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/versions/{type}", method = RequestMethod.GET)
     public Collection<String> getVersions(@PathVariable("type")ServerType type) throws IOException {
         return versionsService.getVersions(type);
     }
 
-    @RequestMapping("settings")
+    /**
+     * Provides the application settings that apply to UI/clients
+     * @return
+     */
+    @RequestMapping(value = "/settings", method = RequestMethod.GET)
     public Map<String,Object> getUiSettings() {
         return settingsService.getUiSettings();
     }

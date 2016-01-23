@@ -40,7 +40,7 @@ public class ApiUploadsController {
     @Autowired
     private MccySettings mccySettings;
 
-    @RequestMapping(value = "worlds", method = RequestMethod.POST)
+    @RequestMapping(value = "/worlds", method = RequestMethod.POST)
     public ResponseEntity<SingleValue<URI>> uploadWorld(@RequestParam("file")MultipartFile worldFile,
                                                    UriComponentsBuilder requestUri) throws IOException {
 
@@ -54,7 +54,7 @@ public class ApiUploadsController {
                 .body(SingleValue.of(downloadsUri));
     }
 
-    @RequestMapping(value = "mods", method = RequestMethod.POST)
+    @RequestMapping(value = "/mods", method = RequestMethod.POST)
     public UploadModsResponse uploadMods(@RequestPart("files") MultipartFile[] modFiles)
             throws IOException, MccyException {
         LOG.debug("Upload mods provided: {}", modFiles);
