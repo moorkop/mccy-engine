@@ -234,6 +234,16 @@
                 <groupId>nl.geodienstencentrum.maven</groupId>
                 <artifactId>sass-maven-plugin</artifactId>
                 <version>${sass-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>update-stylesheets</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <destination>${project.build.directory}/classes/static/css</destination>
+                </configuration>
             </plugin>
 
         </plugins>
