@@ -950,10 +950,11 @@ body.login-page {
     .login-header {
       padding: 1em 0;
       background-color: #111;
+      opacity: 0.95;
     }
 
     .login-title {
-      font-size: 1.75em !important;
+      font-size: 22px;
     }
 
     .login-body {
