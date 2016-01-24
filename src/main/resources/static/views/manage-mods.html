@@ -1,18 +1,25 @@
 <div class="col-xs-12">
-
-    <h3>Manage Your Existing Mods</h3>
-
-    <div ng-switch="registeredMods.length > 0">
-        <div ng-switch-when="true"
-             mccy-mod-panel="mod" mccy-mod-panel-show-delete="true" ng-repeat="mod in registeredMods">
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">
+                <div class="title">Manage your existing mods</div>
+            </div>
         </div>
 
-        <div ng-switch-when="false" class="big">
-            <h4>No mods have been uploaded yet <i class="fa fa-frown-o"></i></h4>
-            <h4><!--suppress HtmlUnknownAnchorTarget -->
-                <a href="#/upload-mod">Upload Some!</a></h4>
-        </div>
+        <div class="card-body">
+            <div ng-switch="registeredMods.length > 0">
+                <div ng-switch-when="true"
+                     mccy-mod-panel="mod" mccy-mod-panel-show-delete="true" ng-repeat="mod in registeredMods">
+                </div>
 
+                <div ng-switch-when="false" class="big">
+                    <h4>No mods have been uploaded yet <i class="fa fa-frown-o"></i></h4>
+                    <h4><!--suppress HtmlUnknownAnchorTarget -->
+                        <a href="#/upload-mod">Upload Some!</a></h4>
+                </div>
+
+            </div>
+
+        </div>
     </div>
-
 </div>
