@@ -14,6 +14,7 @@
             <div class="field compressed">
                 <label>Homepage</label>
                 <a href="#" editable-url="mod.url" onaftersave="markDirty()">{{ mod.url }}</a>
+                <a target="_blank" ng-href="{{mod.url}}" ng-if="mod.url"><i class="fa fa-external-link"></i></a>
             </div>
 
             <div class="field compressed">

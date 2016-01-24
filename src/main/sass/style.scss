@@ -1877,3 +1877,16 @@ body.login-page {
     margin-bottom: 20px;
   }
 }
+
+.editable-input {
+  min-width: 400px;
+  margin: 5px 0;
+}
+
+.editable-empty {
+  display: inline-block;
+  width: 5em;
+  height: 1.5em;
+  background-color: #DFEBF6;
+  border-bottom: dashed 1px #428bca;
+}
