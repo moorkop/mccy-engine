@@ -24,6 +24,13 @@
                     <button type="submit" class="btn btn-primary">Login</button>
                 </form>
             </div>
+            <#if error>
+                <div class="login-footer">
+                    <div class="login-failed text-center">
+                        Login failed.
+                    </div>
+                </div>
+            </#if>
         </div>
     </div>
 </div>
