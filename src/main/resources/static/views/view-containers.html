@@ -1,10 +1,17 @@
-<div class="col-sm-12">
-    <h2>Current Containers
-        <button class="btn btn-sm btn-default" ng-click="reload()">Reload</button>
-    </h2>
-    <div class="current-containers">
+<div class="col-xs-12">
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">
+                <div class="title">Current containers</div>
+            </div>
+        </div>
 
-        <div ng-repeat="c in containers" class="panel panel-default" ng-include="'ng-bits/current-container.html'">
+        <div class="card-body">
+            <div class="current-containers">
+                <div ng-repeat="c in containers" class="panel panel-default" ng-include="'ng-bits/current-container.html'">
+                </div>
+            </div>
+            <button class="btn btn-primary" ng-click="reload()">Reload</button>
         </div>
     </div>
 </div>

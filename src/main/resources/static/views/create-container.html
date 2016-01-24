@@ -1,137 +1,135 @@
-<div class="col-sm-12">
+<div class="col-xs-12">
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">
+                <div class="title">Describe your new Minecraft Server</div>
+            </div>
+        </div>
 
-    <div class="well">
-        <h3>Describe your new Minecraft Server</h3>
-        <form ng-submit="submitNewContainer()">
-            <div class="form-group">
-                <label>Name
-                    <input class="form-control" ng-model="name" required>
-                </label>
-                <p class="help-block">This will be the name of the container.</p>
-            </div>
-
-            <div class="form-group">
-                <label>Type
-                    <select class="form-control" ng-model="type" ng-options="t.value as t.label for t in types"></select>
-                </label>
-            </div>
-
-            <div class="form-group">
-                <label>Version
-                    <select class="form-control" ng-model="version"
-                            ng-options="v.value as v.label for v in applicableVersions"></select>
-                </label>
-            </div>
-
-            <div ng-show="chooseMods">
-                <label>Mods to include
-                    <tags-input ng-model="selectedMods"
-                                display-property="name" key-property="id"
-                                add-from-autocomplete-only="true"
-                                placeholder="Click here to pick mods">
-                        <auto-complete source="suggestMods($query)"
-                                       min-length="0" load-on-focus="true" load-on-empty="true"
-                                       template="ng-bits/mod-suggestion.html"></auto-complete>
-                    </tags-input>
-                </label>
-            </div>
-
-            <div class="checkbox" ng-hide="choosePort">
-                <label>
-                    <input type="checkbox" ng-model="choosePort">Choose Specific Port
-                </label>
-            </div>
-            <div class="form-group" ng-show="choosePort">
-                <label>Port
-                    <input type="number" min="25565" class="form-control" ng-model="port" required>
-                    <p class="help-block">This is the port exposed to the outside world. Minecraft's default is 25565, so
-                        use that if possible.</p>
-                </label>
-            </div>
-
-            <div class="checkbox" ng-hide="enableOperators">
-                <label>
-                    <input type="checkbox" ng-model="enableOperators">Configure Operators
-                </label>
-            </div>
-            <div class="form-group" ng-show="enableOperators">
-                <label>Operators
-                    <tags-input placeholder="Add Minecraft user" ng-model="ops"></tags-input>
-                    <p class="help-block">Declare who will operate or administer the server as a list of Minecraft
-                        usernames.
-                        Press <kbd>Enter</kbd> to finish each username.</p>
-                </label>
-            </div>
-
-            <div class="checkbox" ng-hide="enableWhitelist">
-                <label>
-                    <input type="checkbox" ng-model="enableWhitelist">Configure Whitelist
-                </label>
-            </div>
-            <div class="form-group" ng-show="enableWhitelist">
-                <label>Whitelist
-                    <tags-input placeholder="Add Minecraft user" ng-model="whitelist"></tags-input>
-                    <p class="help-block">Declare who can access your server as a list of Minecraft usernames. Leave empty
-                        to allow anyone.
-                        Press <kbd>Enter</kbd> to finish each username.</p>
-                </label>
-            </div>
-
-            <div class="checkbox" ng-hide="enableIcon">
-                <label>
-                    <input type="checkbox" ng-model="enableIcon">Configure Server Icon
-                </label>
-            </div>
-            <div class="form-group" ng-show="enableIcon">
-                <div class="row">
-                    <div class="col-sm-8">
-                        <label>Server Icon</label>
-                        <input class="form-control" type="url" ng-model="iconUrl">
-                    </div>
-                    <div class="col-sm-4" ng-show="iconUrl">
-                        <img ng-src="{{iconUrl}}" class="icon-preview"/>
-                    </div>
+        <div class="card-body">
+            <form ng-submit="submitNewContainer()">
+                <div class="form-group">
+                    <label>Name</label>
+                        <input class="form-control" ng-model="name" required>
+                    <p class="help-block">This will be the name of the container.</p>
                 </div>
 
-            </div>
+                <div class="form-group">
+                    <label>Type
+                        <select class="form-control" ng-model="type" ng-options="t.value as t.label for t in types"></select>
+                    </label>
+                </div>
 
-            <div class="checkbox" ng-hide="enableWorld">
-                <label>
-                    <input type="checkbox" ng-model="enableWorld">World Save/Map
-                </label>
-            </div>
-            <div class="form-group" ng-show="enableWorld">
-                <div class="row">
-                    <div class="col-sm-8" ng-hide="worldFile">
-                        <label>Download from
-                            <input class="form-control" type="url" ng-model="worldUrl">
-                        </label>
+                <div class="form-group">
+                    <label>Version
+                        <select class="form-control" ng-model="version"
+                                ng-options="v.value as v.label for v in applicableVersions"></select>
+                    </label>
+                </div>
+
+                <div ng-show="chooseMods">
+                    <label>Mods to include</label>
+                        <tags-input ng-model="selectedMods"
+                                    display-property="name" key-property="id"
+                                    add-from-autocomplete-only="true"
+                                    placeholder="Click here to pick mods">
+                            <auto-complete source="suggestMods($query)"
+                                           min-length="0" load-on-focus="true" load-on-empty="true"
+                                           template="ng-bits/mod-suggestion.html"></auto-complete>
+                        </tags-input>
+                </div>
+
+                <div class="checkbox" ng-hide="choosePort">
+                    <label>
+                        <input type="checkbox" ng-model="choosePort">Choose Specific Port
+                    </label>
+                </div>
+                <div class="form-group" ng-show="choosePort">
+                    <label>Port</label>
+                        <input type="number" min="25565" class="form-control" ng-model="port" required>
+                        <p class="help-block">This is the port exposed to the outside world. Minecraft's default is 25565, so
+                            use that if possible.</p>
+                </div>
+
+                <div class="checkbox" ng-hide="enableOperators">
+                    <label>
+                        <input type="checkbox" ng-model="enableOperators">Configure Operators
+                    </label>
+                </div>
+                <div class="form-group" ng-show="enableOperators">
+                    <label>Operators</label>
+                        <tags-input placeholder="Add Minecraft user" ng-model="ops"></tags-input>
+                        <p class="help-block">Declare who will operate or administer the server as a list of Minecraft
+                            usernames.
+                            Press <kbd>Enter</kbd> to finish each username.</p>
+                </div>
+
+                <div class="checkbox" ng-hide="enableWhitelist">
+                    <label>
+                        <input type="checkbox" ng-model="enableWhitelist">Configure Whitelist
+                    </label>
+                </div>
+                <div class="form-group" ng-show="enableWhitelist">
+                    <label>Whitelist</label>
+                        <tags-input placeholder="Add Minecraft user" ng-model="whitelist"></tags-input>
+                        <p class="help-block">Declare who can access your server as a list of Minecraft usernames. Leave empty
+                            to allow anyone.
+                            Press <kbd>Enter</kbd> to finish each username.</p>
+                </div>
+
+                <div class="checkbox" ng-hide="enableIcon">
+                    <label>
+                        <input type="checkbox" ng-model="enableIcon">Configure Server Icon
+                    </label>
+                </div>
+                <div class="form-group" ng-show="enableIcon">
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <label>Server Icon</label>
+                            <input class="form-control" type="url" ng-model="iconUrl">
+                        </div>
+                        <div class="col-xs-4" ng-show="iconUrl">
+                            <img ng-src="{{iconUrl}}" class="icon-preview"/>
+                        </div>
                     </div>
-                    <div class="col-sm-4">
-                        <label>...or upload one
-                            <div>
-                                <div class="btn btn-default upload" ngf-select ngf-drop ng-model="worldFile"
-                                     ng-class="{dropped:worldFile}" name="worldFile"
-                                     ngf-pattern="'.zip'" ngf-accept="'application/zip'">
-                                    <span ng-hide="worldFile" class="select">Select...</span>
-                                    <span class="target">Drop Here</span>
-                                    <span ng-show="worldFile" class="select">Got it</span>
+
+                </div>
+
+                <div class="checkbox" ng-hide="enableWorld">
+                    <label>
+                        <input type="checkbox" ng-model="enableWorld">World Save/Map
+                    </label>
+                </div>
+                <div class="form-group" ng-show="enableWorld">
+                    <div class="row">
+                        <div class="col-xs-8" ng-hide="worldFile">
+                            <label>Download from
+                                <input class="form-control" type="url" ng-model="worldUrl">
+                            </label>
+                        </div>
+                        <div class="col-xs-4">
+                            <label>...or upload one</label>
+                                <div>
+                                    <div class="btn btn-default upload" ngf-select ngf-drop ng-model="worldFile"
+                                         ng-class="{dropped:worldFile}" name="worldFile"
+                                         ngf-pattern="'.zip'" ngf-accept="'application/zip'">
+                                        <span ng-hide="worldFile" class="select">Select...</span>
+                                        <span class="target">Drop Here</span>
+                                        <span ng-show="worldFile" class="select">Got it</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </label>
+                        </div>
                     </div>
+
                 </div>
 
-            </div>
-
-            <div class="btn-group" ng-show="!ackEula" role="group" aria-label="Eula buttons">
-                <button ng-click="ackEula=true" class="btn btn-primary">I Accept the Minecraft EULA</button>
-                <a href="https://account.mojang.com/documents/minecraft_eula" class="btn btn-default" target="_blank">Read</a>
-            </div>
-            <button type="submit" class="btn btn-primary" ng-show="ackEula" ng-disabled="creating">Create It!</button>
-            <button ng-click="cancelNewContainer()" class="btn btn-default">Cancel</button>
-
-
-        </form>
+                <div class="btn-group" ng-show="!ackEula" role="group" aria-label="Eula buttons">
+                    <button ng-click="ackEula=true" class="btn btn-primary">Accept Minecraft EULA</button>
+                    <a href="https://account.mojang.com/documents/minecraft_eula" class="btn btn-default" target="_blank">Read</a>
+                </div>
+                <button type="submit" class="btn btn-primary" ng-show="ackEula" ng-disabled="creating">Create It!</button>
+                <button ng-click="cancelNewContainer()" class="btn btn-default">Cancel</button>
+            </form>
+        </div>
     </div>
 </div>
