@@ -1,7 +1,7 @@
 package me.itzg.mccy.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.itzg.mccy.config.MccySettings;
+import me.itzg.mccy.config.MccyVersionSettings;
 import me.itzg.mccy.model.ServerType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +20,8 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.*;
 
 /**
+ * Unit test of the {@link VersionsService}
+ *
  * Created by geoff on 12/27/15.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -34,8 +36,8 @@ public class VersionsServiceTest {
         }
 
         @Bean
-        public MccySettings settings() throws IOException {
-            final MccySettings mccySettings = new MccySettings();
+        public MccyVersionSettings settings() throws IOException {
+            final MccyVersionSettings mccySettings = new MccyVersionSettings();
             mccySettings.setOfficialVersionsUri(
                     new ClassPathResource("versions.json").getURI());
 

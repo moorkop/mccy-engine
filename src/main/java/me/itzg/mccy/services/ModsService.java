@@ -9,6 +9,7 @@ import com.google.common.hash.HashFunction;
 import com.google.common.hash.HashingInputStream;
 import me.itzg.mccy.config.MccyFilesSettings;
 import me.itzg.mccy.config.MccySettings;
+import me.itzg.mccy.config.MccyVersionSettings;
 import me.itzg.mccy.model.BukkitPluginInfo;
 import me.itzg.mccy.model.FmlModInfo;
 import me.itzg.mccy.model.FmlModListEntry;
@@ -75,6 +76,9 @@ public class ModsService {
     private MccySettings mccySettings;
 
     @Autowired
+    private MccyVersionSettings mccyVersionSettings;
+
+    @Autowired
     private MccyFilesSettings filesSettings;
 
     @Autowired
@@ -95,8 +99,8 @@ public class ModsService {
     /**
      * Ingests a raw file's input stream, determines first if it's even a valid mod file, and
      * if so stages it for importing.
-     * @param fileIn
-     * @return
+     * @param fileIn the uploaded file to potentially ingest
+     * @return the saved registration object of the ingested mod/plugin
      */
     public RegisteredMod ingest(MultipartFile fileIn) throws MccyException, IOException {
 
@@ -269,7 +273,7 @@ public class ModsService {
         bukkitPlugin.setName(info.getName());
         bukkitPlugin.setDescription(info.getDescription());
         bukkitPlugin.setNativeId(info.getMain());
-        bukkitPlugin.setMinecraftVersion(mccySettings.getDefaultBukkitGameVersion());
+        bukkitPlugin.setMinecraftVersion(mccyVersionSettings.getDefaultBukkitGameVersion());
 
         return bukkitPlugin;
     }

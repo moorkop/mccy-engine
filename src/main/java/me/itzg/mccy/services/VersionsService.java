@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import me.itzg.mccy.config.MccySettings;
+import me.itzg.mccy.config.MccyVersionSettings;
 import me.itzg.mccy.model.MinecraftVersions;
 import me.itzg.mccy.model.ServerType;
 import me.itzg.mccy.types.ComparableVersion;
@@ -25,6 +25,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
+ * Encapsulates the lookup of Minecraft versions and the subsets supported by the mod platforms.
+ *
  * Created by geoff on 12/27/15.
  */
 @Service
@@ -34,14 +36,14 @@ public class VersionsService {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private MccySettings settings;
+    private MccyVersionSettings versionSettings;
 
     private LoadingCache<Boolean, Collection<String>> officialVersionCache;
 
     @PostConstruct
     public void init() {
         this.officialVersionCache = CacheBuilder.newBuilder()
-                .expireAfterWrite(settings.getOfficialVersionsCacheTime(), TimeUnit.MINUTES)
+                .expireAfterWrite(versionSettings.getOfficialVersionsCacheTime(), TimeUnit.MINUTES)
                 .build(new CacheLoader<Boolean, Collection<String>>() {
                     @Override
                     public Collection<String> load(Boolean key) throws Exception {
@@ -55,7 +57,7 @@ public class VersionsService {
             return getOfficialVersionsCached(type == ServerType.VANILLA);
         }
         else if (type.isBukkitCompatible()) {
-            return Arrays.asList(settings.getBukkitVersions());
+            return Arrays.asList(versionSettings.getBukkitVersions());
         }
         else {
             return getOfficialVersionsCached(true).stream()
@@ -87,14 +89,14 @@ public class VersionsService {
     }
 
     private List<String> getOfficialVersions(Boolean isVanilla) throws IOException {
-        try (InputStream versionsIn = settings.getOfficialVersionsUri().toURL().openStream()) {
+        try (InputStream versionsIn = versionSettings.getOfficialVersionsUri().toURL().openStream()) {
             final MinecraftVersions content = objectMapper.readValue(versionsIn, MinecraftVersions.class);
 
             return content.getVersions()
                     .stream()
                     .filter(v -> v.getType() == (isVanilla ?
                             MinecraftVersions.Type.release : MinecraftVersions.Type.snapshot))
-                    .map(v -> v.getId())
+                    .map(MinecraftVersions.VersionEntry::getId)
                     .collect(Collectors.toList());
         }
     }
