@@ -18,7 +18,8 @@
         </div>
         <div class="col-sm-4">
             <a class="pull-right" target="_blank" href="https://github.com/itzg/minecraft-container-yard/issues">
-                MCCY 0.0 <i class="fa fa-question-circle"></i>
+                MCCY ${build.version}<#if build.branch?has_content>-${build.branch}</#if><#if build.job?has_content>-${build.job}</#if>
+                <i class="fa fa-question-circle"></i> Support
             </a>
         </div>
     </div>
