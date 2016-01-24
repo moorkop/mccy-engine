@@ -948,8 +948,12 @@ body.login-page {
     padding: 0em;
 
     .login-header {
-      margin-bottom: 1.2em;
-      font-size: 1.5em;
+      padding: 1em 0;
+      background-color: #111;
+    }
+
+    .login-title {
+      font-size: 1.75em !important;
     }
 
     .login-body {
@@ -979,9 +983,12 @@ body.login-page {
     padding-top: 8px;
     padding-bottom: 8px;
     width: 100%;
-    text-align: right;
+    text-align: center;
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
+    font-size: 1.25em;
+    background-color: rgb(255, 153, 153);
+    color: #a10000;
   }
 }
 
