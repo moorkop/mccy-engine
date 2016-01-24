@@ -15,11 +15,11 @@
         <#include "frames/topbar.ftl">
         <#include "frames/sidebar.ftl">
         <#include "frames/view.ftl">
-        <#include "frames/footer.ftl">
     </div>
 </div>
 
 <span>
+    <#include "frames/footer.ftl">
     <#include "includes/ext-js.ftl">
     <#include "includes/app-js.ftl">
 </span>
