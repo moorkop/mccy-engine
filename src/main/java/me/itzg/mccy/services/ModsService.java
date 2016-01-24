@@ -217,7 +217,7 @@ public class ModsService {
 
         for (String modId : modPack.getMods()) {
             final String filename = modId + MccyConstants.EXT_MODS;
-            zipOut.putNextEntry(new ZipEntry(filename));
+            zipOut.putNextEntry(new ZipEntry(getOriginalFileName(modId)));
 
             fileStorageService.copyTo(MccyConstants.CATEGORY_MODS, filename, zipOut);
 
@@ -225,6 +225,20 @@ public class ModsService {
         }
 
         zipOut.close();
+    }
+
+    private String getOriginalFileName(String modId) throws MccyNotFoundException {
+        final RegisteredFmlMod fmlMod = fmlModRepo.findOne(modId);
+        if (fmlMod != null) {
+            return fmlMod.getOriginalFilename();
+        }
+
+        final RegisteredBukkitPlugin bukkitPlugin = bukkitPluginRepo.findOne(modId);
+        if (bukkitPlugin != null) {
+            return bukkitPlugin.getOriginalFilename();
+        }
+
+        throw new MccyNotFoundException("Unable to locate an FML mod or Bukkit plugin with id " + modId);
     }
 
     RegisteredMod from(FmlModInfo info) {
