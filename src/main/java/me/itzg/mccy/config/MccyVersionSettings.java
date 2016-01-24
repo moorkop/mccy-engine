@@ -24,6 +24,12 @@ public class MccyVersionSettings {
     private long officialVersionsCacheTime = 5;
 
     /**
+     * The minimum supportable version of Forge, which was where they supported the new launcher patching
+     * mechanism.
+     */
+    private String forgeMinimumVersion = "1.7.2";
+
+    /**
      * There is limited support of Bukkit in the itzg/minecraft-server image, so the supported versions need to
      * explicitly defined.
      */
@@ -65,5 +71,13 @@ public class MccyVersionSettings {
 
     public void setDefaultBukkitGameVersion(String defaultBukkitGameVersion) {
         this.defaultBukkitGameVersion = defaultBukkitGameVersion;
+    }
+
+    public String getForgeMinimumVersion() {
+        return forgeMinimumVersion;
+    }
+
+    public void setForgeMinimumVersion(String forgeMinimumVersion) {
+        this.forgeMinimumVersion = forgeMinimumVersion;
     }
 }

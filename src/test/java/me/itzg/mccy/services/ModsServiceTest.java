@@ -5,6 +5,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.common.hash.Hashing;
 import me.itzg.mccy.config.MccyFilesSettings;
 import me.itzg.mccy.config.MccySettings;
+import me.itzg.mccy.config.MccyVersionSettings;
 import me.itzg.mccy.model.BukkitPluginInfo;
 import me.itzg.mccy.model.RegisteredMod;
 import me.itzg.mccy.types.MccyException;
@@ -62,7 +63,7 @@ public class ModsServiceTest {
 
         ModsService modsService = new ModsService();
         modsService.setYamlMapper(new YamlMapper(new ObjectMapper(new YAMLFactory())));
-        modsService.setMccySettings(new MccySettings());
+        modsService.setMccyVersionSettings(new MccyVersionSettings());
 
         final BukkitPluginInfo info = modsService.extractBukkitPluginInfo(resource.getInputStream());
         assertNotNull(info);

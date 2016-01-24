@@ -73,9 +73,6 @@ public class ModsService {
     private YamlMapper yamlMapper;
 
     @Autowired
-    private MccySettings mccySettings;
-
-    @Autowired
     private MccyVersionSettings mccyVersionSettings;
 
     @Autowired
@@ -396,8 +393,8 @@ public class ModsService {
         this.fileStorageService = fileStorageService;
     }
 
-    void setMccySettings(MccySettings mccySettings) {
-        this.mccySettings = mccySettings;
+    void setMccyVersionSettings(MccyVersionSettings mccyVersionSettings) {
+        this.mccyVersionSettings = mccyVersionSettings;
     }
 
     void setYamlMapper(YamlMapper yamlMapper) {

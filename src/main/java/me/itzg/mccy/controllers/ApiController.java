@@ -4,6 +4,7 @@ import me.itzg.mccy.model.ApplicationInfo;
 import me.itzg.mccy.model.ServerType;
 import me.itzg.mccy.services.SettingsService;
 import me.itzg.mccy.services.VersionsService;
+import me.itzg.mccy.types.ComparableVersion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,7 +41,7 @@ public class ApiController {
      * @throws IOException
      */
     @RequestMapping(value = "/versions/{type}", method = RequestMethod.GET)
-    public Collection<String> getVersions(@PathVariable("type")ServerType type) throws IOException {
+    public List<ComparableVersion> getVersions(@PathVariable("type")ServerType type) throws IOException {
         return versionsService.getVersions(type);
     }
 

@@ -1,5 +1,7 @@
 package me.itzg.mccy.types;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -7,7 +9,7 @@ import java.util.stream.Stream;
 
 /**
  * @author Geoff Bourne
- * @since 12/31/2015
+ * @since 0.1
  */
 public class ComparableVersion implements Comparable<ComparableVersion> {
     private final List<Object> parts;
@@ -18,12 +20,17 @@ public class ComparableVersion implements Comparable<ComparableVersion> {
                 .collect(Collectors.toList());
     }
 
+    public static ComparableVersion of(String rawVersion) {
+        return new ComparableVersion(rawVersion);
+    }
+
     private ComparableVersion(List<Object> parts) {
         this.parts = parts;
     }
 
     @Override
     public boolean equals(Object obj) {
+        //noinspection SimplifiableIfStatement
         if (obj instanceof ComparableVersion) {
             return Objects.equals(parts, ((ComparableVersion) obj).parts);
         }
@@ -74,11 +81,16 @@ public class ComparableVersion implements Comparable<ComparableVersion> {
                 .collect(Collectors.toList()));
     }
 
+    @JsonValue
     @Override
     public String toString() {
         return parts.stream()
                 .map(Object::toString)
                 .collect(Collectors.joining("."));
+    }
+
+    public ComparableVersion trimTo(int squashToTheseParts) {
+        return new ComparableVersion(parts.subList(0, squashToTheseParts));
     }
 
     private static Object promote(String s) {
