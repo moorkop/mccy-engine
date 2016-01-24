@@ -922,8 +922,6 @@ body.login-page {
   -o-background-size: cover;
   background-size: cover;
 
-  // background-color: #22A7F0;
-
   .login-box {
     width: 100%;
     max-width: 320px;
@@ -945,21 +943,25 @@ body.login-page {
   }
 
   .login-form {
+    font-family: 'Roboto Condensed', sans-serif;
     padding: 0px;
 
     .login-header {
-      padding: 2px 0px;
-      background-color: #111;
+      padding: 8px 0px;
+      background-color: #000000;
       margin-bottom: 0px;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
     }
 
     .login-title {
-      font-size: 22px;
+      font-size: 18px;
     }
 
     .login-body {
       padding: 1.5em;
       border-radius: 1px;
+      margin-bottom: 0px;
     }
 
     input {
@@ -985,11 +987,21 @@ body.login-page {
     padding-bottom: 8px;
     width: 100%;
     text-align: center;
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
-    font-size: 1.25em;
-    background-color: rgb(255, 153, 153);
-    color: #a10000;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    font-size: 14px;
+  }
+
+  .login-default {
+    @extend .login-footer;
+    background-color: #154900;
+    color: #D8E2C9;
+  }
+
+  .login-error {
+    @extend .login-footer;
+    background-color: #BDA782;
+    color: #2D0101;
   }
 }
 
