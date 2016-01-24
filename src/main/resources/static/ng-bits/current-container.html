@@ -5,10 +5,10 @@
 </div>
 
 <div class="panel-body row">
-    <div class="col-sm-10 row">
-        <div class="field col-sm-6"><label>Type</label> <span>{{c.type | serverTypeLabel}}</span></div>
-        <div class="field col-sm-6"><label>Version</label> <span>{{c.version}}</span></div>
-        <div class="field col-sm-6" ng-show="hasConnectInfo(c)">
+    <div class="col-xs-10 row">
+        <div class="field col-xs-6"><label>Type</label> <span>{{c.type | serverTypeLabel}}</span></div>
+        <div class="field col-xs-6"><label>Version</label> <span>{{c.version}}</span></div>
+        <div class="field col-xs-6" ng-show="hasConnectInfo(c)">
             <label>Connect using</label>
             <span>{{serverAddress(c)}}
                 <button class="btn btn-default btn-sm" clipboard text="serverAddress(c)" on-copied="showCopied(c)"
@@ -19,12 +19,12 @@
                 </button>
             </span>
         </div>
-        <div class="field col-sm-6" ng-show="c.modpack"><label>Download client-side mods</label>
+        <div class="field col-xs-6" ng-show="c.modpack"><label>Download client-side mods</label>
             <a ng-href="{{c.modpack}}"><i class="fa fa-download fa-2x"></i></a></div>
-        <div class="field col-sm-6"><label>Status</label> <span>{{c.status}}</span></div>
+        <div class="field col-xs-6"><label>Status</label> <span>{{c.status}}</span></div>
     </div>
 
-    <div class="col-sm-2 container-actions">
+    <div class="col-xs-2 container-actions">
         <button class="btn btn-default btn-sm btn-block" ng-click="stop(c)" ng-show="isRunning(c)">Stop</button>
         <button class="btn btn-default btn-sm btn-block" ng-click="start(c)" ng-show="!isRunning(c)">Start</button>
         <button class="btn btn-warning btn-sm btn-block" ng-click="remove(c)">Remove</button>

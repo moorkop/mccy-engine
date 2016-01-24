@@ -1,9 +1,9 @@
 <footer class="app-footer">
     <div class="wrapper">
-        <div class="col-sm-4">
+        <div class="col-xs-4">
             <a class="pull-left" target="_blank" href="https://github.com/itzg">© 2016 Geoff Bourne</a>.
         </div>
-        <div class="col-sm-4 text-center">
+        <div class="col-xs-4 text-center">
         <#if deploymentPoweredBy??>
             <span>
                 <#if deploymentPoweredBy.href??>
@@ -16,7 +16,7 @@
             </span>
         </#if>
         </div>
-        <div class="col-sm-4">
+        <div class="col-xs-4">
             <a class="pull-right" target="_blank" href="https://github.com/itzg/minecraft-container-yard/issues">
                 MCCY 0.0 <i class="fa fa-question-circle"></i>
             </a>

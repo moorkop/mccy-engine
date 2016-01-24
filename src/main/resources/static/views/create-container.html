@@ -1,4 +1,4 @@
-<div class="col-sm-12">
+<div class="col-xs-12">
 
     <div class="well">
         <h3>Describe your new Minecraft Server</h3>
@@ -84,11 +84,11 @@
             </div>
             <div class="form-group" ng-show="enableIcon">
                 <div class="row">
-                    <div class="col-sm-8">
+                    <div class="col-xs-8">
                         <label>Server Icon</label>
                         <input class="form-control" type="url" ng-model="iconUrl">
                     </div>
-                    <div class="col-sm-4" ng-show="iconUrl">
+                    <div class="col-xs-4" ng-show="iconUrl">
                         <img ng-src="{{iconUrl}}" class="icon-preview"/>
                     </div>
                 </div>
@@ -102,12 +102,12 @@
             </div>
             <div class="form-group" ng-show="enableWorld">
                 <div class="row">
-                    <div class="col-sm-8" ng-hide="worldFile">
+                    <div class="col-xs-8" ng-hide="worldFile">
                         <label>Download from
                             <input class="form-control" type="url" ng-model="worldUrl">
                         </label>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-xs-4">
                         <label>...or upload one
                             <div>
                                 <div class="btn btn-default upload" ngf-select ngf-drop ng-model="worldFile"
