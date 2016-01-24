@@ -50,6 +50,7 @@
 		<java.version>1.8</java.version>
         <angularjs.version>1.4.8</angularjs.version>
         <enunciate.version>2.2.0</enunciate.version>
+        <sass-maven-plugin.version>2.15</sass-maven-plugin.version>
     </properties>
 
 	<dependencies>
@@ -227,6 +228,22 @@
                         <version>${enunciate.version}</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>nl.geodienstencentrum.maven</groupId>
+                <artifactId>sass-maven-plugin</artifactId>
+                <version>${sass-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>update-stylesheets</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <destination>${project.build.directory}/classes/static/css</destination>
+                </configuration>
             </plugin>
 
         </plugins>
