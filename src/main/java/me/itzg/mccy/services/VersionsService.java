@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import me.itzg.mccy.config.MccySettings;
+import me.itzg.mccy.config.MccyVersionSettings;
 import me.itzg.mccy.model.MinecraftVersions;
 import me.itzg.mccy.model.ServerType;
 import me.itzg.mccy.types.ComparableVersion;
@@ -15,16 +15,16 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
+ * Encapsulates the lookup of Minecraft versions and the subsets supported by the mod platforms.
+ *
  * Created by geoff on 12/27/15.
  */
 @Service
@@ -34,41 +34,46 @@ public class VersionsService {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private MccySettings settings;
+    private MccyVersionSettings mccyVersionSettings;
 
-    private LoadingCache<Boolean, Collection<String>> officialVersionCache;
+    private LoadingCache<Boolean, List<ComparableVersion>> officialVersionCache;
 
     @PostConstruct
     public void init() {
         this.officialVersionCache = CacheBuilder.newBuilder()
-                .expireAfterWrite(settings.getOfficialVersionsCacheTime(), TimeUnit.MINUTES)
-                .build(new CacheLoader<Boolean, Collection<String>>() {
+                .expireAfterWrite(mccyVersionSettings.getOfficialVersionsCacheTime(), TimeUnit.MINUTES)
+                .build(new CacheLoader<Boolean, List<ComparableVersion>>() {
                     @Override
-                    public Collection<String> load(Boolean key) throws Exception {
+                    public List<ComparableVersion> load(Boolean key) throws Exception {
                         return getOfficialVersions(key);
                     }
                 });
     }
 
-    public Collection<String> getVersions(ServerType type) throws IOException {
+    public List<ComparableVersion> getVersions(ServerType type) throws IOException {
         if (type.isOfficial()) {
             return getOfficialVersionsCached(type == ServerType.VANILLA);
         }
         else if (type.isBukkitCompatible()) {
-            return Arrays.asList(settings.getBukkitVersions());
+            return Stream.of(mccyVersionSettings.getBukkitVersions())
+                    .map(ComparableVersion::new)
+                    .collect(Collectors.toList());
         }
         else {
+            final ComparableVersion minForgeVersion =
+                    new ComparableVersion(mccyVersionSettings.getForgeMinimumVersion());
+
             return getOfficialVersionsCached(true).stream()
                     .map(v -> squashAbove(v, MccyConstants.FORGE_VERSION_CUTOFF, 2))
+                    .filter(v -> v.compareTo(minForgeVersion) >= 0)
+                    .distinct()
                     .sorted(Collections.reverseOrder())
-                    .collect(
-                            // use a set to eliminate dupes and treeset to sort
-                            Collectors.toCollection(LinkedHashSet::new));
+                    .collect(Collectors.toList());
         }
 
     }
 
-    private Collection<String> getOfficialVersionsCached(boolean isVanilla) throws IOException {
+    private List<ComparableVersion> getOfficialVersionsCached(boolean isVanilla) throws IOException {
         try {
             return officialVersionCache.get(isVanilla);
         } catch (ExecutionException e) {
@@ -76,25 +81,25 @@ public class VersionsService {
         }
     }
 
-    private String squashAbove(String givenVersion, ComparableVersion atOrAboveThisVersion, int squashToTheseParts) {
-        ComparableVersion givenComparable = new ComparableVersion(givenVersion);
-        if (givenComparable.compareTo(atOrAboveThisVersion) < 0) {
+    private ComparableVersion squashAbove(ComparableVersion givenVersion, ComparableVersion atOrAboveThisVersion, int squashToTheseParts) {
+        if (givenVersion.compareTo(atOrAboveThisVersion) < 0) {
             return givenVersion;
         }
         else {
-            return givenComparable.trimToString(squashToTheseParts);
+            return givenVersion.trimTo(squashToTheseParts);
         }
     }
 
-    private List<String> getOfficialVersions(Boolean isVanilla) throws IOException {
-        try (InputStream versionsIn = settings.getOfficialVersionsUri().toURL().openStream()) {
+    private List<ComparableVersion> getOfficialVersions(Boolean isVanilla) throws IOException {
+        try (InputStream versionsIn = mccyVersionSettings.getOfficialVersionsUri().toURL().openStream()) {
             final MinecraftVersions content = objectMapper.readValue(versionsIn, MinecraftVersions.class);
 
             return content.getVersions()
                     .stream()
                     .filter(v -> v.getType() == (isVanilla ?
                             MinecraftVersions.Type.release : MinecraftVersions.Type.snapshot))
-                    .map(v -> v.getId())
+                    .map(MinecraftVersions.VersionEntry::getId)
+                    .map(ComparableVersion::new)
                     .collect(Collectors.toList());
         }
     }

@@ -1,5 +1,6 @@
 package me.itzg.mccy.controllers;
 
+import me.itzg.mccy.config.MccyBuildSettings;
 import me.itzg.mccy.config.MccySettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -24,9 +25,17 @@ public class ViewController {
     @Autowired
     private MccySettings mccySettings;
 
+    @Autowired
+    private MccyBuildSettings mccyBuildSettings;
+
     @ModelAttribute("deploymentPoweredBy")
     public MccySettings.DeploymentPoweredBy deploymentPoweredBy() {
         return mccySettings.getDeploymentPoweredBy();
+    }
+
+    @ModelAttribute("build")
+    public MccyBuildSettings getBuildSettings() {
+        return mccyBuildSettings;
     }
 
     @RequestMapping("/")

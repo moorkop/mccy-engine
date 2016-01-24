@@ -51,6 +51,8 @@
         <angularjs.version>1.4.8</angularjs.version>
         <enunciate.version>2.2.0</enunciate.version>
         <sass-maven-plugin.version>2.15</sass-maven-plugin.version>
+        <build.branch></build.branch>
+        <build.job></build.job>
     </properties>
 
 	<dependencies>
@@ -244,6 +246,27 @@
                 <configuration>
                     <destination>${project.build.directory}/classes/static/css</destination>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.5.201505241946</version>
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>

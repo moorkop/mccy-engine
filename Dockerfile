@@ -2,8 +2,11 @@ FROM java:8u66-jdk
 
 MAINTAINER itzg
 
+ARG BUILD_BRANCH=
+ARG BUILD_JOB=
+
 COPY . /build
-RUN cd /build && ./mvnw -B package \
+RUN cd /build && ./mvnw -B package -Dbuild.branch=${BUILD_BRANCH} -Dbuild.job=${BUILD_JOB} \
   && cp /build/target/mccy-swarm-*.jar /usr/local/bin/mccy-swarm.jar \
   && rm -rf /build $HOME/.m2 
 

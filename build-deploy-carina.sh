@@ -77,7 +77,10 @@ export COMPOSE_PROJECT_NAME="$CIRCLE_BRANCH"
 # Ensure the latest of our app image is always built
 # ...but do it with a 'docker build' since build args aren't support until docker-compose 1.6
 # ...and that requires Docker server 1.22
-docker build --build-arg=constraint:node==$PINNED_NODE -t ${COMPOSE_PROJECT_NAME}_mccy .
+docker build --build-arg=constraint:node==$PINNED_NODE \
+    --build-arg BUILD_BRANCH=$CIRCLE_BRANCH \
+    --build-arg BUILD_JOB=$CIRCLE_BUILD_NUM \
+    -t ${COMPOSE_PROJECT_NAME}_mccy .
 docker build --build-arg=constraint:node==$PINNED_NODE -t ${COMPOSE_PROJECT_NAME}_letsencrypt https://github.com/itzg/lets-nginx.git
 
 # At this point (v1.5.2) docker compose seems to get confused by volumes created with
