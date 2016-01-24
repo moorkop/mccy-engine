@@ -9,9 +9,8 @@
         <div class="card-body">
             <form ng-submit="submitNewContainer()">
                 <div class="form-group">
-                    <label>Name
+                    <label>Name</label>
                         <input class="form-control" ng-model="name" required>
-                    </label>
                     <p class="help-block">This will be the name of the container.</p>
                 </div>
 
@@ -29,7 +28,7 @@
                 </div>
 
                 <div ng-show="chooseMods">
-                    <label>Mods to include
+                    <label>Mods to include</label>
                         <tags-input ng-model="selectedMods"
                                     display-property="name" key-property="id"
                                     add-from-autocomplete-only="true"
@@ -38,7 +37,6 @@
                                            min-length="0" load-on-focus="true" load-on-empty="true"
                                            template="ng-bits/mod-suggestion.html"></auto-complete>
                         </tags-input>
-                    </label>
                 </div>
 
                 <div class="checkbox" ng-hide="choosePort">
@@ -47,11 +45,10 @@
                     </label>
                 </div>
                 <div class="form-group" ng-show="choosePort">
-                    <label>Port
+                    <label>Port</label>
                         <input type="number" min="25565" class="form-control" ng-model="port" required>
                         <p class="help-block">This is the port exposed to the outside world. Minecraft's default is 25565, so
                             use that if possible.</p>
-                    </label>
                 </div>
 
                 <div class="checkbox" ng-hide="enableOperators">
@@ -60,12 +57,11 @@
                     </label>
                 </div>
                 <div class="form-group" ng-show="enableOperators">
-                    <label>Operators
+                    <label>Operators</label>
                         <tags-input placeholder="Add Minecraft user" ng-model="ops"></tags-input>
                         <p class="help-block">Declare who will operate or administer the server as a list of Minecraft
                             usernames.
                             Press <kbd>Enter</kbd> to finish each username.</p>
-                    </label>
                 </div>
 
                 <div class="checkbox" ng-hide="enableWhitelist">
@@ -74,12 +70,11 @@
                     </label>
                 </div>
                 <div class="form-group" ng-show="enableWhitelist">
-                    <label>Whitelist
+                    <label>Whitelist</label>
                         <tags-input placeholder="Add Minecraft user" ng-model="whitelist"></tags-input>
                         <p class="help-block">Declare who can access your server as a list of Minecraft usernames. Leave empty
                             to allow anyone.
                             Press <kbd>Enter</kbd> to finish each username.</p>
-                    </label>
                 </div>
 
                 <div class="checkbox" ng-hide="enableIcon">
@@ -113,7 +108,7 @@
                             </label>
                         </div>
                         <div class="col-xs-4">
-                            <label>...or upload one
+                            <label>...or upload one</label>
                                 <div>
                                     <div class="btn btn-default upload" ngf-select ngf-drop ng-model="worldFile"
                                          ng-class="{dropped:worldFile}" name="worldFile"
@@ -123,14 +118,13 @@
                                         <span ng-show="worldFile" class="select">Got it</span>
                                     </div>
                                 </div>
-                            </label>
                         </div>
                     </div>
 
                 </div>
 
                 <div class="btn-group" ng-show="!ackEula" role="group" aria-label="Eula buttons">
-                    <button ng-click="ackEula=true" class="btn btn-primary">I Accept the Minecraft EULA</button>
+                    <button ng-click="ackEula=true" class="btn btn-primary">Accept Minecraft EULA</button>
                     <a href="https://account.mojang.com/documents/minecraft_eula" class="btn btn-default" target="_blank">Read</a>
                 </div>
                 <button type="submit" class="btn btn-primary" ng-show="ackEula" ng-disabled="creating">Create It!</button>
