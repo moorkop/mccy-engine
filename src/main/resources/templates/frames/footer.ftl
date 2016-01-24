@@ -1,7 +1,7 @@
 <div class="app-footer">
     <div class="wrapper">
         <div class="row no-gap">
-            <div class="col-xs-12 col-sm-4 text-center">
+            <div class="col-xs-12 col-sm-3 col-sm-offset-1 text-center">
                 <a target="_blank" href="https://github.com/itzg">© 2016 Geoff Bourne</a>.
             </div>
             <div class="col-xs-12 col-sm-4 text-center">
