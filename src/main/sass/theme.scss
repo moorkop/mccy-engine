@@ -51,8 +51,7 @@ $theme-success-color: #00B16A;
 $color-blue: #22A7F0;
 $theme-danger-color: $color-red;
 
-// Blue Themes
-.flat-blue {
+.theme {
 
   background-color: $color-light-grey;
 
@@ -1260,7 +1259,7 @@ $theme-danger-color: $color-red;
 }
 
 // Landing Pages
-.flat-blue.landing-page {
+.theme.landing-page {
   .navbar-inverse .navbar-toggle:focus, .navbar-inverse .navbar-toggle:hover {
     background-color: transparent;
   }
