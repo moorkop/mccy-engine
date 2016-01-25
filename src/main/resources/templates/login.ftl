@@ -19,16 +19,15 @@
     <!-- Wrapper for slides -->
     <div class="carousel-inner" role="listbox">
         <div class="item active">
-            <#include "frames/gateway.ftl">
+            <#include "frames/login-form.ftl">
         </div>
         <div class="item">
-            <#include "frames/login-form.ftl">
+            <#include "frames/gateway.ftl">
         </div>
     </div>
 </div>
 
 <#include "includes/ext-js.ftl">
-<#include "includes/app-js.ftl">
 
 </body>
 </html>
