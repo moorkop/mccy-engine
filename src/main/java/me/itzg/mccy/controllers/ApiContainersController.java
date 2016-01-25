@@ -51,8 +51,9 @@ public class ApiContainersController {
     }
 
     @RequestMapping(value = "/{containerId}", method = RequestMethod.GET)
-    public ContainerDetails getContainer(@PathVariable("containerId") String containerId) throws DockerException, InterruptedException {
-        return containers.get(containerId);
+    public ContainerDetails getContainer(@PathVariable("containerId") String containerId,
+                                         Authentication auth) throws DockerException, InterruptedException {
+        return containers.get(containerId, getAuthUsername(auth));
     }
 
     @RequestMapping(value = "/{containerId}", method = RequestMethod.DELETE)

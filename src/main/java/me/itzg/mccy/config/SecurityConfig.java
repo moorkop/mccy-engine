@@ -4,6 +4,7 @@ import me.itzg.mccy.controllers.CsrfHeaderFilter;
 import me.itzg.mccy.types.MccyConstants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -24,9 +25,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
-                    .antMatchers("/api/downloads/**").permitAll()
-                    .antMatchers("/api/settings").permitAll()
-                    .antMatchers("/api/containers").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/downloads/**").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/settings").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/containers").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/containers/*").permitAll()
                 .antMatchers("/**").hasRole("USER")
                 .and().formLogin()
                     .loginPage("/login")

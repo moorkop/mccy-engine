@@ -49,6 +49,7 @@ public class ContainersService {
     @Autowired
     private String ourContainerId;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     private Optional<EmbeddedWebApplicationContext> embeddedWebApplicationContext;
 
@@ -128,8 +129,7 @@ public class ContainersService {
             //noinspection CodeBlock2Expr
             return dockerClient
                     .listContainers(allContainers(),
-                    withLabel(MccyConstants.MCCY_LABEL),
-                    withLabel(MccyConstants.MCCY_LABEL_PUBLIC))
+                    withLabel(MccyConstants.MCCY_LABEL_PUBLIC, TRUE_VALUE))
                     .stream().map(c -> ContainerSummary.from(c,
                             getDockerHostIp(), mccySettings.getConnectUsingHost()))
                     .collect(Collectors.toList());
@@ -140,10 +140,10 @@ public class ContainersService {
         return URI.create(mccySettings.getDockerHostUri()).getHost();
     }
 
-    public ContainerDetails get(String containerId) throws DockerException, InterruptedException {
+    public ContainerDetails get(String containerId, String authUsername) throws DockerException, InterruptedException {
         return proxy.access(dockerClient -> {
             final ContainerInfo containerInfo = dockerClient.inspectContainer(containerId);
-            if (isOurs(containerInfo)) {
+            if (isOurs(containerInfo) && canRead(containerInfo, authUsername)) {
                 final ContainerDetails containerDetails = new ContainerDetails(containerInfo);
 
                 final ContainerSummary summary = ContainerSummary.from(containerInfo,
@@ -158,6 +158,17 @@ public class ContainersService {
                 return null;
             }
         });
+    }
+
+    private boolean canRead(ContainerInfo containerInfo, String authUsername) {
+        if (authUsername == null) {
+            final String publicVal = containerInfo.config().labels().get(MccyConstants.MCCY_LABEL_PUBLIC);
+            return publicVal != null && Boolean.getBoolean(publicVal);
+        }
+        else {
+            final String ownerVal = containerInfo.config().labels().get(MccyConstants.MCCY_LABEL_OWNER);
+            return ownerVal != null && ownerVal.equals(authUsername);
+        }
     }
 
     public void delete(String containerId) throws DockerException, InterruptedException {
