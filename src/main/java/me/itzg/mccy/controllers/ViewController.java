@@ -33,6 +33,12 @@ public class ViewController {
         return mccySettings.getDeploymentPoweredBy();
     }
 
+    @ModelAttribute("csrf")
+    public CsrfToken csrfToken(HttpServletRequest request) {
+        return (CsrfToken) request.getAttribute(CsrfToken.class
+                .getName());
+    }
+
     @ModelAttribute("build")
     public MccyBuildSettings getBuildSettings() {
         return mccyBuildSettings;
@@ -48,11 +54,7 @@ public class ViewController {
                            @RequestParam Map<String,String> reqParams) {
         response.addHeader("x-login", "true");
 
-        CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class
-                .getName());
-
-        final ModelAndView modelAndView = new ModelAndView()
-                .addObject("csrf", csrf);
+        final ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
 
         modelAndView.addObject("error", reqParams.containsKey("error"));

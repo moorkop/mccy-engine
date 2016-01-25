@@ -44,6 +44,8 @@ public class ContainerRequest {
 
     private boolean startOnCreate = true;
 
+    private boolean visibleToPublic;
+
     public boolean isAckEula() {
         return ackEula;
     }
@@ -134,5 +136,13 @@ public class ContainerRequest {
 
     public void setModpack(String modpack) {
         this.modpack = modpack;
+    }
+
+    public boolean isVisibleToPublic() {
+        return visibleToPublic;
+    }
+
+    public void setVisibleToPublic(boolean visibleToPublic) {
+        this.visibleToPublic = visibleToPublic;
     }
 }

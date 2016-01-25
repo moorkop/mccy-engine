@@ -8,6 +8,8 @@ import me.itzg.mccy.model.SingleValue;
 import me.itzg.mccy.services.ContainersService;
 import me.itzg.mccy.types.MccyException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,14 +31,22 @@ public class ApiContainersController {
     private ContainersService containers;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<ContainerSummary> getAllMccyContainers() throws DockerException, InterruptedException {
-        return containers.getAll();
+    public List<ContainerSummary> getAllMccyContainers(Authentication auth)
+            throws DockerException, InterruptedException {
+
+        if (auth != null) {
+            return containers.getAll(getAuthUsername(auth));
+        }
+        else {
+            return containers.getAllPublic();
+        }
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public SingleValue<String> createContainer(@RequestBody @Valid ContainerRequest request) throws MccyException, DockerException, InterruptedException {
+    public SingleValue<String> createContainer(@RequestBody @Valid ContainerRequest request,
+                                               Authentication auth) throws MccyException, DockerException, InterruptedException {
 
-        return SingleValue.of(containers.create(request));
+        return SingleValue.of(containers.create(request, getAuthUsername(auth)));
 
     }
 
@@ -58,5 +68,13 @@ public class ApiContainersController {
     @RequestMapping(value = "/{containerId}/_stop", method = RequestMethod.POST)
     public void stopContainer(@PathVariable("containerId") String containerId) throws DockerException, InterruptedException {
         containers.stop(containerId);
+    }
+
+    private static String getAuthUsername(Authentication auth) {
+        if (auth == null) {
+            return null;
+        }
+        final User user = (User) auth.getPrincipal();
+        return user.getUsername();
     }
 }

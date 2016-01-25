@@ -10,22 +10,19 @@ angular.module('MccyApp', [
     'ngTagsInput'
 ])
 
-    .controller('MainCtrl', function ($scope, $timeout, $location, $log,
+    .controller('MainCtrl', function ($scope, $timeout, $location, $log, $window,
                                       $uibModal,
-                                      Containers, MccyApi, Versions, Alerts, MccyViews,
+                                      Containers, MccyApi, Versions, Users,
+                                      Alerts, MccyViews,
                                       cToasterOptions, cBaseVersions) {
         $scope.settings = {};
 
         $scope.versions = cBaseVersions;
 
-        Versions.query({type:'VANILLA'}, function(response){
-            $scope.versions = $scope.versions.concat(response.map(function(v){
-                return {
-                    value: v,
-                    label: v
-                }
-            }))
-        });
+        $scope.logout = function() {
+            Users.logout();
+            $window.location.reload();
+        };
 
         $scope.toasterOptions = cToasterOptions;
 
