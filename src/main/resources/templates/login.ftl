@@ -28,6 +28,7 @@
 </div>
 
 <#include "includes/ext-js.ftl">
+<#include "includes/app-js.ftl">
 
 </body>
 </html>
