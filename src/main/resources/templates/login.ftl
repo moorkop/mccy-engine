@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="MccyApp">
 <head>
 <#include "includes/head-meta.ftl">
     <!-- The above head-meta *must* come first in the head; any other head content must come *after* these tags -->
@@ -8,7 +8,7 @@
     <title>Container Yard - Login</title>
 </head>
 
-<body class="theme login-page">
+<body class="theme login-page" ng-controller="MainCtrl">
 <div id="myCarousel" class="carousel slide">
     <!-- Indicators -->
     <ol class="carousel-indicators">
