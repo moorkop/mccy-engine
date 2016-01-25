@@ -8,7 +8,7 @@
     <title>Container Yard - Login</title>
 </head>
 
-<body class="theme login-page" ng-controller="MainCtrl">
+<body class="theme login-page" ng-controller="LoginCtrl">
 <div id="myCarousel" class="carousel slide">
     <!-- Indicators -->
     <ol class="carousel-indicators">

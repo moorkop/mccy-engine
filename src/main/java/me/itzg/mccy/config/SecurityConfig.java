@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/ng-bits/**")
                 .antMatchers("/views/**")
                 .antMatchers("/**/favicon.ico")
-                .antMatchers('/apidocs/**');
+                .antMatchers("/apidocs/**");
     }
 
     @Bean

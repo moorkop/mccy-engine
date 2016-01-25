@@ -65,6 +65,13 @@ angular.module('MccyApp', [
 
     })
 
+    .controller('LoginCtrl', function($scope, Containers) {
+
+        $scope.containers = Containers.query();
+
+        //TODO
+    })
+
     .factory('sessionTimeoutInterceptor', function($log, $window) {
         return {
             response: function(response){
