@@ -87,7 +87,9 @@ public class ContainersService {
             // Ensure latest image is always used
             dockerClient.pull(mccySettings.getImage());
 
-            final String containerId = dockerClient.createContainer(config, scrubContainerName(request.getName())).id();
+            final String containerId = dockerClient
+                    .createContainer(config, scrubContainerName(request.getName()))
+                    .id();
 
             if (request.isStartOnCreate()) {
                 dockerClient.startContainer(containerId);
@@ -163,7 +165,7 @@ public class ContainersService {
     private boolean canRead(ContainerInfo containerInfo, String authUsername) {
         if (authUsername == null) {
             final String publicVal = containerInfo.config().labels().get(MccyConstants.MCCY_LABEL_PUBLIC);
-            return publicVal != null && Boolean.getBoolean(publicVal);
+            return publicVal != null && Boolean.parseBoolean(publicVal);
         }
         else {
             final String ownerVal = containerInfo.config().labels().get(MccyConstants.MCCY_LABEL_OWNER);
