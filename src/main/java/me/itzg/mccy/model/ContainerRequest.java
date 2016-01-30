@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * @author Geoff Bourne
- * @since 12/21/2015
+ * @since 0.1
  */
 public class ContainerRequest {
     @AssertTrue(message = "The Minecraft EULA needs to be accepted for each created container")
@@ -35,10 +35,6 @@ public class ContainerRequest {
     @Pattern(regexp = "https?://.+", message = "needs to be a valid http or https URL")
     private String world;
 
-    /**
-     * Refers to either a zip of Forge mods or a zip of Bukkit/Spigot plugins, but generalizes
-     * on the term "mod pack"
-     */
     @Pattern(regexp = "https?://.+", message = "needs to be a valid http or https URL")
     private String modpack;
 
@@ -78,6 +74,10 @@ public class ContainerRequest {
         this.startOnCreate = startOnCreate;
     }
 
+    /**
+     * A specific Minecraft version or the special values <code>LATEST</code> or <code>SNAPSHOT</code>
+     * @return
+     */
     public String getVersion() {
         return version;
     }
@@ -130,6 +130,10 @@ public class ContainerRequest {
         this.world = world;
     }
 
+    /**
+     * Refers to either a zip of Forge mods or a zip of Bukkit/Spigot plugins, but generalizes
+     * on the term "mod pack"
+     */
     public String getModpack() {
         return modpack;
     }
@@ -138,6 +142,11 @@ public class ContainerRequest {
         this.modpack = modpack;
     }
 
+    /**
+     * Indicates if the container's summary should be visible to public (non-authenticated) users
+     * of the site. These containers will be visible on the landing page.
+     * @return true if the container is visible to the public
+     */
     public boolean isVisibleToPublic() {
         return visibleToPublic;
     }
