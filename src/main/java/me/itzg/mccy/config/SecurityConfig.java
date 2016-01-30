@@ -2,8 +2,10 @@ package me.itzg.mccy.config;
 
 import me.itzg.mccy.controllers.CsrfHeaderFilter;
 import me.itzg.mccy.types.MccyConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -19,6 +21,9 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
  */
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private Environment env;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -37,6 +42,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().logout().logoutSuccessUrl("/")
                 .and().addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
                 .csrf().csrfTokenRepository(csrfTokenRepository());
+
+        if (env.acceptsProfiles(MccyConstants.PROFILE_BASIC_AUTH)) {
+            http
+                    .httpBasic()
+                    .and().csrf().ignoringAntMatchers("/**");
+        }
     }
 
     @Override

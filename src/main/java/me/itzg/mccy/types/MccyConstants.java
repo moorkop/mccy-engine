@@ -54,4 +54,5 @@ public class MccyConstants {
     public static final String ENV_LEVEL = "LEVEL";
 
     public static final String LINK_MCCY = "mccy";
+    public static final String PROFILE_BASIC_AUTH = "basicAuth";
 }
