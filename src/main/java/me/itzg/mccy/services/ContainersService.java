@@ -36,6 +36,7 @@ import static java.util.Collections.singletonMap;
  */
 @Service
 public class ContainersService {
+    public static final String TRUE_VALUE = String.valueOf(true);
     private static Logger LOG = LoggerFactory.getLogger(ContainersService.class);
 
     //TODO replace this approach with some AOP magic
@@ -48,13 +49,14 @@ public class ContainersService {
     @Autowired
     private String ourContainerId;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     private Optional<EmbeddedWebApplicationContext> embeddedWebApplicationContext;
 
     @Autowired
     private MetadataConversionService metadataConversionService;
 
-    public String create(ContainerRequest request) throws MccyException, DockerException, InterruptedException {
+    public String create(ContainerRequest request, String ownerUsername) throws MccyException, DockerException, InterruptedException {
 
         final int requestedPort = request.getPort();
         PortBinding portBinding = PortBinding.of("",
@@ -76,7 +78,7 @@ public class ContainersService {
                 .env(fillEnv(request))
                 .image(mccySettings.getImage())
                 .hostConfig(hostConfig.build())
-                .labels(buildLabels(request))
+                .labels(buildLabels(request, ownerUsername))
                 .build();
 
         LOG.debug("Creating the container: {}", config);
@@ -85,7 +87,9 @@ public class ContainersService {
             // Ensure latest image is always used
             dockerClient.pull(mccySettings.getImage());
 
-            final String containerId = dockerClient.createContainer(config, scrubContainerName(request.getName())).id();
+            final String containerId = dockerClient
+                    .createContainer(config, scrubContainerName(request.getName()))
+                    .id();
 
             if (request.isStartOnCreate()) {
                 dockerClient.startContainer(containerId);
@@ -104,10 +108,30 @@ public class ContainersService {
         return givenName.replaceAll("[^A-Za-z0-9]", "_");
     }
 
-    public List<ContainerSummary> getAll() throws DockerException, InterruptedException {
+    public List<ContainerSummary> getAll(String ownedByUsername) throws DockerException, InterruptedException {
         return proxy.access(dockerClient -> {
             //noinspection CodeBlock2Expr
-            return dockerClient.listContainers(allContainers(), withLabel(MccyConstants.MCCY_LABEL))
+            return dockerClient
+                    .listContainers(allContainers(),
+                            withLabel(MccyConstants.MCCY_LABEL))
+                    .stream()
+                    .filter(c -> {
+                        final String owner = c.labels().get(MccyConstants.MCCY_LABEL_OWNER);
+                        // for backward compatibility, unowned containers are also matched
+                        return owner == null || owner.equals(ownedByUsername);
+                    })
+                    .map(c -> ContainerSummary.from(c,
+                            getDockerHostIp(), mccySettings.getConnectUsingHost()))
+                    .collect(Collectors.toList());
+        });
+    }
+
+    public List<ContainerSummary> getAllPublic() throws DockerException, InterruptedException {
+        return proxy.access(dockerClient -> {
+            //noinspection CodeBlock2Expr
+            return dockerClient
+                    .listContainers(allContainers(),
+                    withLabel(MccyConstants.MCCY_LABEL_PUBLIC, TRUE_VALUE))
                     .stream().map(c -> ContainerSummary.from(c,
                             getDockerHostIp(), mccySettings.getConnectUsingHost()))
                     .collect(Collectors.toList());
@@ -118,10 +142,10 @@ public class ContainersService {
         return URI.create(mccySettings.getDockerHostUri()).getHost();
     }
 
-    public ContainerDetails get(String containerId) throws DockerException, InterruptedException {
+    public ContainerDetails get(String containerId, String authUsername) throws DockerException, InterruptedException {
         return proxy.access(dockerClient -> {
             final ContainerInfo containerInfo = dockerClient.inspectContainer(containerId);
-            if (isOurs(containerInfo)) {
+            if (isOurs(containerInfo) && canRead(containerInfo, authUsername)) {
                 final ContainerDetails containerDetails = new ContainerDetails(containerInfo);
 
                 final ContainerSummary summary = ContainerSummary.from(containerInfo,
@@ -136,6 +160,17 @@ public class ContainersService {
                 return null;
             }
         });
+    }
+
+    private boolean canRead(ContainerInfo containerInfo, String authUsername) {
+        if (authUsername == null) {
+            final String publicVal = containerInfo.config().labels().get(MccyConstants.MCCY_LABEL_PUBLIC);
+            return publicVal != null && Boolean.parseBoolean(publicVal);
+        }
+        else {
+            final String ownerVal = containerInfo.config().labels().get(MccyConstants.MCCY_LABEL_OWNER);
+            return ownerVal != null && ownerVal.equals(authUsername);
+        }
     }
 
     public void delete(String containerId) throws DockerException, InterruptedException {
@@ -190,11 +225,15 @@ public class ContainersService {
         });
     }
 
-    protected Map<String, String> buildLabels(ContainerRequest request) {
+    protected Map<String, String> buildLabels(ContainerRequest request, String ownerUsername) {
         Map<String, String> labels = new HashMap<>();
-        labels.put(MccyConstants.MCCY_LABEL, String.valueOf(true));
+        labels.put(MccyConstants.MCCY_LABEL, TRUE_VALUE);
         // store the name as provided by user
         labels.put(MccyConstants.MCCY_LABEL_NAME, request.getName());
+        labels.put(MccyConstants.MCCY_LABEL_OWNER, ownerUsername);
+        if (request.isVisibleToPublic()) {
+            labels.put(MccyConstants.MCCY_LABEL_PUBLIC, TRUE_VALUE);
+        }
 
         if (!Strings.isNullOrEmpty(request.getModpack())) {
             labels.put(MccyConstants.MCCY_LABEL_MODPACK_URL, request.getModpack());

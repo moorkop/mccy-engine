@@ -10,22 +10,19 @@ angular.module('MccyApp', [
     'ngTagsInput'
 ])
 
-    .controller('MainCtrl', function ($scope, $timeout, $location, $log,
+    .controller('MainCtrl', function ($scope, $timeout, $location, $log, $window,
                                       $uibModal,
-                                      Containers, MccyApi, Versions, Alerts, MccyViews,
+                                      Containers, MccyApi, Versions, Users,
+                                      Alerts, MccyViews,
                                       cToasterOptions, cBaseVersions) {
         $scope.settings = {};
 
         $scope.versions = cBaseVersions;
 
-        Versions.query({type:'VANILLA'}, function(response){
-            $scope.versions = $scope.versions.concat(response.map(function(v){
-                return {
-                    value: v,
-                    label: v
-                }
-            }))
-        });
+        $scope.logout = function() {
+            Users.logout();
+            $window.location.reload();
+        };
 
         $scope.toasterOptions = cToasterOptions;
 
@@ -66,6 +63,29 @@ angular.module('MccyApp', [
             $scope.goto($scope.views[0]);
         });
 
+    })
+
+    .controller('LoginCtrl', function($scope, Containers, Alerts) {
+
+        reload();
+
+        // Need to refactor this and the same code in ViewContainersCtrl
+        function fetchContainerDetails(containers) {
+            _.each(containers, function (container) {
+                Containers.get({id:container.id}, function(details){
+                    _.assign(container, details.summary);
+                    container.info = details.info;
+                }, Alerts.handleRequestError);
+            });
+        }
+
+        function reload() {
+            $scope.containers = Containers.query(function (response) {
+                fetchContainerDetails(response);
+            }, Alerts.handleRequestError);
+        }
+
+        //TODO
     })
 
     .factory('sessionTimeoutInterceptor', function($log, $window) {

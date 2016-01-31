@@ -39,6 +39,15 @@ angular.module('Mccy.services',[
         return $resource('/api/modpacks');
     })
 
+    .service('Users', function($resource){
+        return $resource('/', {}, {
+            logout: {
+                url: '/logout',
+                method: 'POST'
+            }
+        });
+    })
+
     .service('Alerts', function($rootScope, toaster){
         function popAndReload(level, title, msg, reload, timeout) {
             toaster.pop(level, title, msg, timeout);

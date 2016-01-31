@@ -922,6 +922,20 @@ body.login-page {
   -o-background-size: cover;
   background-size: cover;
 
+  .carousel {
+    width: 100%;
+    max-width: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0;
+
+    .item {
+      background-color: transparent;
+    }
+  }
+
   .login-box {
     width: 100%;
     max-width: 320px;

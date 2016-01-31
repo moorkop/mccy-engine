@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration({
         GeneralConfig.class,
-        MetadataConversionService.class
+        MetadataConversionServiceImpl.class
 })
 public class MetadataConversionServiceTest {
 

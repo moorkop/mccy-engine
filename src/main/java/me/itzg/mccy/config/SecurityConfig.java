@@ -2,13 +2,18 @@ package me.itzg.mccy.config;
 
 import me.itzg.mccy.controllers.CsrfHeaderFilter;
 import me.itzg.mccy.types.MccyConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 /**
  * @author Geoff Bourne
@@ -17,32 +22,46 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private Environment env;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        2015-12-23 12:07:  INFO 10796 --- [ost-startStop-1] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/css/**'], []
-//        2015-12-23 12:07:48.681  INFO 10796 --- [ost-startStop-1] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/js/**'], []
-//        2015-12-23 12:07:48.681  INFO 10796 --- [ost-startStop-1] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/img/**'], []
-//        2015-12-23 12:07:48.681  INFO 10796 --- [ost-startStop-1] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/**/favicon.ico'], []
-//        2015-12-23 12:07:48.6848.6811  INFO 10796 --- [ost-startStop-1] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/error'], []
 
         http
                 .authorizeRequests()
-                    .antMatchers("/css/**").permitAll()
-                    .antMatchers("/js/**").permitAll()
-                    .antMatchers("/fonts/**").permitAll()
-                    .antMatchers("/webjars/**").permitAll()
-                    .antMatchers("/img/**").permitAll()
-                    .antMatchers("/ng-bits/**").permitAll()
-                    .antMatchers("/views/**").permitAll()
-                    .antMatchers("/**/favicon.ico").permitAll()
-                    .antMatchers("/api/downloads/**").permitAll()
-                    .antMatchers("/apidocs/**").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/downloads/**").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/settings").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/containers").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/containers/*").permitAll()
                 .antMatchers("/**").hasRole("USER")
                 .and().formLogin()
                     .loginPage("/login")
+                    .defaultSuccessUrl("/")
                     .permitAll()
+                .and().logout().logoutSuccessUrl("/")
                 .and().addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
                 .csrf().csrfTokenRepository(csrfTokenRepository());
+
+        if (env.acceptsProfiles(MccyConstants.PROFILE_BASIC_AUTH)) {
+            http
+                    .httpBasic()
+                    .and().csrf().ignoringAntMatchers("/**");
+        }
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring()
+                .antMatchers("/css/**")
+                .antMatchers("/js/**")
+                .antMatchers("/fonts/**")
+                .antMatchers("/webjars/**")
+                .antMatchers("/img/**")
+                .antMatchers("/ng-bits/**")
+                .antMatchers("/views/**")
+                .antMatchers("/**/favicon.ico")
+                .antMatchers("/apidocs/**");
     }
 
     @Bean
