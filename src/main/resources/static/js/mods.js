@@ -4,7 +4,7 @@ angular.module('Mccy.mods',[
 
     .directive('mccyModPanel', function(){
 
-        function controller($scope, $rootScope, $filter, Alerts, Mods, Versions, cModdedTypes) {
+        function controller($scope, $rootScope, $filter, Alerts, Mods, Versions) {
             $scope.delete = function() {
                 Mods.delete({id:$scope.mod.jarChecksum}, {}, function() {
                         $rootScope.$broadcast('reload');
@@ -28,8 +28,6 @@ angular.module('Mccy.mods',[
                 return $filter('serverTypeLabel')(envType);
             }).join(', ');
 
-            $scope.applicableVersions = Versions.query({type:$scope.mod.serverTypes[0]});
-
             $scope.update = function() {
                 Versions.query({type:$scope.mod.serverTypes[0]}, function(response){
                     $scope.applicableVersions = _.map(response, function(v) {
@@ -48,7 +46,6 @@ angular.module('Mccy.mods',[
             scope: {
                 mod: '=mccyModPanel',
                 showDelete: '=mccyModPanelShowDelete',
-                versions: '=mccyModPanelVersions'
             },
             controller: controller
         }
