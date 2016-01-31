@@ -24,7 +24,8 @@
 
             <div class="field compressed">
                 <label>Compatible Minecraft Version</label>
-                <a href="#" editable-select="mod.minecraftVersion" e-ng-options="v.value as v.label for v in versions"
+                <a href="#" ng-click="update()" editable-select="mod.minecraftVersion"
+                   e-ng-options="v.value as v.label for v in applicableVersions"
                    onaftersave="markDirty()">{{ mod.minecraftVersion }}</a>
             </div>
 
