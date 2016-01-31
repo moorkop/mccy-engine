@@ -30,7 +30,11 @@ public class MccyConstants {
     public static final String CATEGORY_WORLDS = "worlds";
     public static final String CATEGORY_MODS = "mods";
 
-    public static final ComparableVersion FORGE_VERSION_CUTOFF = new ComparableVersion("1.8");
+    public static final ComparableVersion[] FORGE_VERSIONS_SQUASHED = new ComparableVersion[]{
+            ComparableVersion.of("1.8"),
+            ComparableVersion.of("1.8.8")
+    };
+    public static final int FORGE_VERSIONS_SQUASHED_SIZE = 2;
 
     public static final String EXT_WORLDS = ".zip";
     public static final String EXT_MODS = ".jar";

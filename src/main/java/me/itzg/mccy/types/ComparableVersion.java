@@ -67,6 +67,30 @@ public class ComparableVersion implements Comparable<ComparableVersion> {
         return Long.compare(parts.size(), o.parts.size());
     }
 
+    public boolean le(ComparableVersion o) {
+        return this.compareTo(o) <= 0;
+    }
+    public boolean lt(ComparableVersion o) {
+        return this.compareTo(o) < 0;
+    }
+    public boolean eq(ComparableVersion o) {
+        return this.compareTo(o) == 0;
+    }
+    public boolean gt(ComparableVersion o) {
+        return this.compareTo(o) > 0;
+    }
+    public boolean ge(ComparableVersion o) {
+        return this.compareTo(o) >= 0;
+    }
+
+    /**
+     * This performs the same logic as {@link #trim(int)} put directly computes the resulting string. If you're
+     * needing a string in the end, then this is slightly more efficient since an intermediate object is not
+     * created.
+     * @param leadingParts the number of leading parts of the version to include in the returned value
+     * @return the trimmed version as a string
+     * @see #trim(int)
+     */
     public String trimToString(int leadingParts) {
         return parts.stream()
                 .limit(leadingParts)
@@ -74,11 +98,17 @@ public class ComparableVersion implements Comparable<ComparableVersion> {
                 .collect(Collectors.joining("."));
     }
 
+    /**
+     * This takes the given version and potentially trims it back to no more than the given number of leading parts.
+     * <p>
+     *     For example, a given version of 1.8.1 with <code>leadingParts</code> of 2 would become 1.8.
+     * </p>
+     * @param leadingParts the number of leading parts of the version to include in the returned value
+     * @return a new {@link ComparableVersion} that is trimmed back to just the number of parts specified by
+     * <code>leadingParts</code>
+     */
     public ComparableVersion trim(int leadingParts) {
-        return new ComparableVersion(
-                parts.stream()
-                .limit(leadingParts)
-                .collect(Collectors.toList()));
+        return new ComparableVersion(parts.subList(0, leadingParts));
     }
 
     @JsonValue
@@ -87,10 +117,6 @@ public class ComparableVersion implements Comparable<ComparableVersion> {
         return parts.stream()
                 .map(Object::toString)
                 .collect(Collectors.joining("."));
-    }
-
-    public ComparableVersion trimTo(int squashToTheseParts) {
-        return new ComparableVersion(parts.subList(0, squashToTheseParts));
     }
 
     private static Object promote(String s) {

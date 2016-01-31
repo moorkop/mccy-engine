@@ -68,11 +68,13 @@ public class VersionsServiceTest {
     public void testForgeVersions() throws Exception {
         final List<ComparableVersion> versions = versionsService.getVersions(ServerType.FORGE);
 
-        assertEquals(6, versions.size());
+        assertEquals(8, versions.size());
 
-        assertEquals(ComparableVersion.of("1.8"), versions.get(0));
-        assertEquals(ComparableVersion.of("1.7.10"), versions.get(1));
-        assertEquals(ComparableVersion.of("1.7.2"), versions.get(5));
+        assertEquals(ComparableVersion.of("1.8.9"), versions.get(0));
+        assertEquals(ComparableVersion.of("1.8.8"), versions.get(1));
+        assertEquals(ComparableVersion.of("1.8"), versions.get(2));
+        assertEquals(ComparableVersion.of("1.7.10"), versions.get(3));
+        assertEquals(ComparableVersion.of("1.7.2"), versions.get(7));
     }
 
     @Test

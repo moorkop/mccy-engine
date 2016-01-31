@@ -64,13 +64,23 @@ public class VersionsService {
                     new ComparableVersion(mccyVersionSettings.getForgeMinimumVersion());
 
             return getOfficialVersionsCached(true).stream()
-                    .map(v -> squashAbove(v, MccyConstants.FORGE_VERSION_CUTOFF, 2))
+                    .map(v -> squashForgeVersions(v))
                     .filter(v -> v.compareTo(minForgeVersion) >= 0)
                     .distinct()
                     .sorted(Collections.reverseOrder())
                     .collect(Collectors.toList());
         }
 
+    }
+
+    private ComparableVersion squashForgeVersions(ComparableVersion v) {
+        final ComparableVersion[] squashRanges = MccyConstants.FORGE_VERSIONS_SQUASHED;
+        for (int i = 0; i+1 < squashRanges.length; i += 2) {
+            if (v.ge(squashRanges[i]) && v.lt(squashRanges[i+1])) {
+                return v.trim(MccyConstants.FORGE_VERSIONS_SQUASHED_SIZE);
+            }
+        }
+        return v;
     }
 
     private List<ComparableVersion> getOfficialVersionsCached(boolean isVanilla) throws IOException {
@@ -86,7 +96,7 @@ public class VersionsService {
             return givenVersion;
         }
         else {
-            return givenVersion.trimTo(squashToTheseParts);
+            return givenVersion.trim(squashToTheseParts);
         }
     }
 
