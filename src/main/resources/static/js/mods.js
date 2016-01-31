@@ -34,7 +34,8 @@ angular.module('Mccy.mods',[
             restrict: 'A',
             scope: {
                 mod: '=mccyModPanel',
-                showDelete: '=mccyModPanelShowDelete'
+                showDelete: '=mccyModPanelShowDelete',
+                versions: '@'
             },
             controller: controller
         }
