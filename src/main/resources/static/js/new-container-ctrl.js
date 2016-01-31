@@ -82,6 +82,9 @@ angular.module('Mccy.NewContainerCtrl', [
             if (this.enableWorld) {
                 request.world = this.worldUrl;
             }
+            if (this.enablePublic) {
+                request.isVisibleToPublic = this.enablePublic;
+            }
             if (this.chooseMods && !_.isEmpty(this.selectedMods)) {
                 ModPacks.save(_.map(this.selectedMods, function(m){
                     return {
@@ -176,6 +179,7 @@ angular.module('Mccy.NewContainerCtrl', [
             $scope.enableIcon = false;
             $scope.iconUrl = undefined;
             $scope.enableWorld = false;
+            $scope.enablePublic = false;
             $scope.worldUrl = undefined;
             $scope.ackEula = false;
             $scope.worldUploaded = false;

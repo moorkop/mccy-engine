@@ -92,7 +92,6 @@
                             <img ng-src="{{iconUrl}}" class="icon-preview"/>
                         </div>
                     </div>
-
                 </div>
 
                 <div class="checkbox" ng-hide="enableWorld">
@@ -120,8 +119,9 @@
                                 </div>
                         </div>
                     </div>
-
                 </div>
+
+                <input type="checkbox" ng-model="enablePublic">List Container Publicly</input>
 
                 <div class="btn-group" ng-show="!ackEula" role="group" aria-label="Eula buttons">
                     <button ng-click="ackEula=true" class="btn btn-primary">Accept Minecraft EULA</button>
