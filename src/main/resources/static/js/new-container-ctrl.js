@@ -83,7 +83,7 @@ angular.module('Mccy.NewContainerCtrl', [
                 request.world = this.worldUrl;
             }
             if (this.enablePublic) {
-                request.isVisibleToPublic = this.enablePublic;
+                request.visibleToPublic = this.enablePublic;
             }
             if (this.chooseMods && !_.isEmpty(this.selectedMods)) {
                 ModPacks.save(_.map(this.selectedMods, function(m){

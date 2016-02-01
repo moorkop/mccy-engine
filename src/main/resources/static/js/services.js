@@ -12,6 +12,10 @@ angular.module('Mccy.services',[
             start: {
                 url: '/api/containers/:id/_start',
                 method: 'POST'
+            },
+            getStatus: {
+                url: '/api/containers/:id/_status',
+                method: 'GET'
             }
         });
     })

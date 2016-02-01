@@ -11,9 +11,11 @@ import me.itzg.mccy.config.MccySettings;
 import me.itzg.mccy.model.ContainerDetails;
 import me.itzg.mccy.model.ContainerRequest;
 import me.itzg.mccy.model.ContainerSummary;
+import me.itzg.mccy.model.ServerStatus;
 import me.itzg.mccy.model.ServerType;
 import me.itzg.mccy.types.MccyConstants;
 import me.itzg.mccy.types.MccyException;
+import me.itzg.mccy.types.MccyUnexpectedServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.*;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 import static com.spotify.docker.client.DockerClient.ListContainersParam.allContainers;
@@ -42,6 +45,9 @@ public class ContainersService {
     //TODO replace this approach with some AOP magic
     @Autowired
     private DockerClientProxy proxy;
+
+    @Autowired
+    private ServerStatusService serverStatusService;
 
     @Autowired
     private MccySettings mccySettings;
@@ -97,6 +103,18 @@ public class ContainersService {
 
             return containerId;
         });
+    }
+
+    public ServerStatus getContainerStatus(String containerId, String authUsername) throws DockerException, InterruptedException, TimeoutException, MccyUnexpectedServerException {
+        final ContainerDetails containerDetails = get(containerId, authUsername);
+
+        if (containerDetails != null) {
+            final ContainerSummary summary = containerDetails.getSummary();
+            return serverStatusService.queryStatus(summary.getHostIp(), summary.getHostPort());
+        }
+        else {
+            return null;
+        }
     }
 
     private boolean needsLink(ContainerRequest request) {

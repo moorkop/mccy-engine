@@ -61,6 +61,12 @@ public class MccySettings {
     @Valid
     private DeploymentPoweredBy deploymentPoweredBy = null;
 
+    /**
+     * The number of seconds to wait for a response from a Minecraft server for user count, icon, etc status
+     * information.
+     */
+    private long serverStatusTimeout = 2;
+
     public String getDockerCertPath() {
         return dockerCertPath;
     }
@@ -131,6 +137,14 @@ public class MccySettings {
 
     public void setUsingLinkForContent(boolean usingLinkForContent) {
         this.usingLinkForContent = usingLinkForContent;
+    }
+
+    public long getServerStatusTimeout() {
+        return serverStatusTimeout;
+    }
+
+    public void setServerStatusTimeout(long serverStatusTimeout) {
+        this.serverStatusTimeout = serverStatusTimeout;
     }
 
     public static class DeploymentPoweredBy {

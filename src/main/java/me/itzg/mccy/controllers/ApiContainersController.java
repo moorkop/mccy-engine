@@ -4,9 +4,11 @@ import com.spotify.docker.client.DockerException;
 import me.itzg.mccy.model.ContainerDetails;
 import me.itzg.mccy.model.ContainerRequest;
 import me.itzg.mccy.model.ContainerSummary;
+import me.itzg.mccy.model.ServerStatus;
 import me.itzg.mccy.model.SingleValue;
 import me.itzg.mccy.services.ContainersService;
 import me.itzg.mccy.types.MccyException;
+import me.itzg.mccy.types.MccyUnexpectedServerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 /**
  * @author Geoff Bourne
@@ -54,6 +57,12 @@ public class ApiContainersController {
     public ContainerDetails getContainer(@PathVariable("containerId") String containerId,
                                          Authentication auth) throws DockerException, InterruptedException {
         return containers.get(containerId, getAuthUsername(auth));
+    }
+
+    @RequestMapping(value = "/{containerId}/_status", method = RequestMethod.GET)
+    public ServerStatus getContainerStatus(@PathVariable("containerId") String containerId,
+                                           Authentication auth) throws DockerException, InterruptedException, TimeoutException, MccyUnexpectedServerException {
+        return containers.getContainerStatus(containerId, getAuthUsername(auth));
     }
 
     @RequestMapping(value = "/{containerId}", method = RequestMethod.DELETE)

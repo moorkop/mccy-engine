@@ -16,10 +16,12 @@ import org.springframework.core.convert.support.ConfigurableConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
 
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
+import java.util.concurrent.Executors;
 
 /**
  * @author Geoff Bourne
@@ -71,5 +73,13 @@ public class GeneralConfig {
         }
 
         return ours;
+    }
+
+    @Bean
+    public ConcurrentTaskExecutor remoteInvocationExecutor() {
+        final ConcurrentTaskExecutor executor =
+                new ConcurrentTaskExecutor(Executors.newCachedThreadPool());
+
+        return executor;
     }
 }
