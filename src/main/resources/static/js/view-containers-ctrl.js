@@ -6,7 +6,7 @@ angular.module('Mccy.ViewContainersCtrl', [
         'template/modal/window.html'
     ])
 
-    .controller('ViewContainersCtrl', function ($scope, $timeout, $uibModal, Containers, Alerts, cTimeouts) {
+    .controller('ViewContainersCtrl', function ($scope, $timeout, $uibModal, Containers, Alerts) {
 
         $scope.reload = function () {
             reload();
@@ -20,17 +20,6 @@ angular.module('Mccy.ViewContainersCtrl', [
 
         $scope.hasConnectInfo = function(c) {
             return !_.isUndefined(c.hostIp);
-        };
-
-        $scope.serverAddress = function(c) {
-            return c.hostIp+':'+c.hostPort;
-        };
-
-        $scope.showCopied = function(c) {
-            c.showCopied = true;
-            $timeout(function () {
-                c.showCopied = false;
-            }, cTimeouts.copiedTooltipHide);
         };
 
         $scope.isRunning = function (container) {

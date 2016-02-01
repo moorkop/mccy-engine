@@ -1,0 +1,12 @@
+<span class="server-connection">
+    <span class="address">
+        {{serverAddress}}
+    </span>
+
+    <button class="btn btn-default btn-sm" clipboard text="serverAddress" on-copied="triggerShowCopied()"
+            uib-tooltip="Copied! Now paste in Server Address"
+            tooltip-trigger="none" tooltip-is-open="showCopied"
+            tooltip-class="copied">
+        <i class="fa fa-clipboard fa-lg"></i> Copy
+    </button>
+</span>

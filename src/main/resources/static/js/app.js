@@ -2,6 +2,7 @@ angular.module('MccyApp', [
     'Mccy.controllers',
     'Mccy.routes',
     'Mccy.services',
+    'Mccy.directives',
     'Mccy.mods',
     'Mccy.constants',
     'ngAnimate',
@@ -63,29 +64,6 @@ angular.module('MccyApp', [
             $scope.goto($scope.views[0]);
         });
 
-    })
-
-    .controller('LoginCtrl', function($scope, Containers, Alerts) {
-
-        reload();
-
-        // Need to refactor this and the same code in ViewContainersCtrl
-        function fetchContainerDetails(containers) {
-            _.each(containers, function (container) {
-                Containers.get({id:container.id}, function(details){
-                    _.assign(container, details.summary);
-                    container.info = details.info;
-                }, Alerts.handleRequestError);
-            });
-        }
-
-        function reload() {
-            $scope.containers = Containers.query(function (response) {
-                fetchContainerDetails(response);
-            }, Alerts.handleRequestError);
-        }
-
-        //TODO
     })
 
     .factory('sessionTimeoutInterceptor', function($log, $window) {

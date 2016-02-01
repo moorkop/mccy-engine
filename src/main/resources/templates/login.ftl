@@ -12,8 +12,8 @@
 <div id="myCarousel" class="carousel slide">
     <!-- Indicators -->
     <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li id="indicator-gateway" data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li id="indicator-login" data-target="#myCarousel" data-slide-to="1"></li>
     </ol>
 
     <!-- Wrapper for slides -->
