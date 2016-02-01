@@ -10,13 +10,6 @@
 
 <body class="theme login-page" ng-controller="LoginCtrl">
 <div id="myCarousel" class="carousel slide">
-    <!-- Indicators -->
-    <ol class="carousel-indicators">
-        <li id="indicator-gateway" data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li id="indicator-login" data-target="#myCarousel" data-slide-to="1"></li>
-    </ol>
-
-    <!-- Wrapper for slides -->
     <div class="carousel-inner" role="listbox">
         <div class="item active">
             <#include "frames/gateway.ftl">
@@ -25,6 +18,16 @@
             <#include "frames/login-form.ftl">
         </div>
     </div>
+
+    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+        <span class="fa fa-caret-left fa-3x icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+
+    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+        <span class="fa fa-caret-right fa-3x icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
 </div>
 
 <#include "includes/ext-js.ftl">

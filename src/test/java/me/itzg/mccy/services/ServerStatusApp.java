@@ -18,7 +18,7 @@ public class ServerStatusApp {
             throw new IllegalArgumentException("Missing required parameters: host port");
         }
 
-        final ServerStatusService service = new ServerStatusService();
+        final ServerStatusService service = new ServerStatusServiceImpl();
         ReflectionTestUtils.setField(service, "mccySettings", new MccySettings());
         ReflectionTestUtils.setField(service, "remoteInvocationExecutor", new GeneralConfig().remoteInvocationExecutor());
 

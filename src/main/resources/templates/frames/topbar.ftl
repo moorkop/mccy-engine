@@ -5,7 +5,7 @@
                 <i class="fa fa-bars icon"></i>
             </button>
             <button type="button" class="navbar-right-expand-toggle pull-right" ng-click="logout()">
-                <i class="fa fa-sign-out icon"></i>
+                Logout <i class="fa fa-sign-out icon"></i>
             </button>
         </div>
     </div>
