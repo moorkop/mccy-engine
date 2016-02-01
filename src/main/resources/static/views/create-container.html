@@ -86,10 +86,11 @@
                     <div class="row">
                         <div class="col-xs-8">
                             <label>Server Icon</label>
-                            <input class="form-control" type="url" ng-model="iconUrl">
+                            <input class="form-control" type="url" ng-model="iconUrl"
+                                placeholder="Insert Server Icon URL here">
                         </div>
                         <div class="col-xs-4" ng-show="iconUrl">
-                            <img ng-src="{{iconUrl}}" class="icon-preview"/>
+                            <img ng-src="{{iconUrl}}" class="thumbnail"/>
                         </div>
                     </div>
                 </div>
