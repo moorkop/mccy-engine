@@ -938,16 +938,30 @@ body.login-page {
     .item {
       background-color: transparent;
     }
+
+    .icon {
+      position: absolute;
+      top: 40%;
+    }
   }
 
-  .login-box {
-    width: 100%;
-    max-width: 320px;
+  .box {
     position:absolute;
+    width: 100%;
     top:50%;
     left:50%;
     transform: translate(-50%, -50%);
     padding: 0;
+  }
+
+  .game-box {
+    @extend .box;
+    max-width: 460px;
+  }
+
+  .login-box {
+    @extend .box;
+    max-width: 320px;
 
     & > .title {
       margin-bottom: 1em;
@@ -968,12 +982,13 @@ body.login-page {
       padding: 8px 0px;
       background-color: #000000;
       margin-bottom: 0px;
-      border-top-left-radius: 5px;
-      border-top-right-radius: 5px;
+      border-top-left-radius: 1px;
+      border-top-right-radius: 1px;
     }
 
     .login-title {
       font-size: 18px;
+      color: #ffffff;
     }
 
     .login-body {
@@ -1005,8 +1020,8 @@ body.login-page {
     padding-bottom: 8px;
     width: 100%;
     text-align: center;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 1px;
+    border-bottom-right-radius: 1px;
     font-size: 14px;
   }
 
@@ -1834,6 +1849,7 @@ body.login-page {
   height: 500px;
   background-color: #777;
 }
+
 .carousel-inner > .item > img {
   position: absolute;
   top: 0;

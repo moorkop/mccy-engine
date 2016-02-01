@@ -935,21 +935,20 @@ $theme-danger-color: $color-red;
       .login-body {
         background-color: $color-white;
       }
+      .login-footer {
+        a {
+          color: $color-white;
+        }
+        a:hover {
+          color: $color-white;
+          text-decoration: underline;
+        }
+      }
     }
 
     input {
       background-color: $color-light-grey;
       border: 1px solid $color-light-grey;
-    }
-
-    .login-footer {
-      a {
-        color: $color-white;
-      }
-      a:hover {
-        color: $color-white;
-        text-decoration: underline;
-      }
     }
   }
 
