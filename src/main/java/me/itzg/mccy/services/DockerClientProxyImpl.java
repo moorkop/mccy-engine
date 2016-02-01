@@ -8,6 +8,7 @@ import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.DockerException;
 import me.itzg.mccy.config.MccySettings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Paths;
@@ -16,7 +17,7 @@ import java.nio.file.Paths;
  * @author Geoff Bourne
  * @since 0.1
  */
-@Service
+@Service @Primary
 public class DockerClientProxyImpl implements DockerClientProxy {
     private MccySettings mccySettings;
     private DockerClient dockerClient;

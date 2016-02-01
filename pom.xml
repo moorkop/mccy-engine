@@ -53,6 +53,11 @@
         <sass-maven-plugin.version>2.15</sass-maven-plugin.version>
         <build.branch></build.branch>
         <build.job></build.job>
+        <netty.version>4.0.34.Final</netty.version>
+        <spotify.docker-client.version>3.3.5</spotify.docker-client.version>
+        <flow-nbt.version>1.0.0</flow-nbt.version>
+        <jackson-dataformat-yaml.version>2.6.4</jackson-dataformat-yaml.version>
+        <protobuf.version>2.6.1</protobuf.version>
     </properties>
 
 	<dependencies>
@@ -94,19 +99,24 @@
         <dependency>
             <groupId>com.spotify</groupId>
             <artifactId>docker-client</artifactId>
-            <version>3.3.5</version>
+            <version>${spotify.docker-client.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-yaml</artifactId>
-            <version>2.6.4</version>
+            <version>${jackson-dataformat-yaml.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.flowpowered</groupId>
             <artifactId>flow-nbt</artifactId>
-            <version>1.0.0</version>
+            <version>${flow-nbt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.spacehq</groupId>
+            <artifactId>mcprotocollib</artifactId>
+            <version>1.8.8-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -269,6 +279,12 @@
                 </executions>
             </plugin>
 
+            <plugin>
+                <groupId>com.github.igor-petruk.protobuf</groupId>
+                <artifactId>protobuf-maven-plugin</artifactId>
+                <version>0.6.5</version>
+            </plugin>
+
         </plugins>
 	</build>
 
@@ -280,6 +296,19 @@
             <snapshots><enabled>true</enabled></snapshots>
             <releases><enabled>false</enabled></releases>
         </repository>
+
+        <repository>
+            <id>spacehq</id>
+            <name>spacehq-releases</name>
+            <url>https://repo.spacehq.org/content/repositories/releases/</url>
+        </repository>
+        <repository>
+            <id>spacehq-snapshots</id>
+            <url>https://repo.spacehq.org/content/repositories/snapshots/</url>
+            <snapshots><enabled>true</enabled></snapshots>
+            <releases><enabled>false</enabled></releases>
+        </repository>
+
     </repositories>
 
 </project>

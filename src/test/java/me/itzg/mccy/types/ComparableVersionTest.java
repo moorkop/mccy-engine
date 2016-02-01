@@ -36,4 +36,25 @@ public class ComparableVersionTest {
     public void testTrim() throws Exception {
         assertEquals("1.8", new ComparableVersion("1.8.1").trim(2).toString());
     }
+
+    @Test
+    public void testShortcutComparisons() throws Exception {
+
+        assertTrue(ComparableVersion.of("1.8").lt(ComparableVersion.of("1.8.1")));
+        assertTrue(ComparableVersion.of("1.8").le(ComparableVersion.of("1.8.1")));
+        assertTrue(ComparableVersion.of("1.8").le(ComparableVersion.of("1.8")));
+        assertTrue(ComparableVersion.of("1.8").eq(ComparableVersion.of("1.8")));
+        assertTrue(ComparableVersion.of("1.8.1").gt(ComparableVersion.of("1.8")));
+        assertTrue(ComparableVersion.of("1.8.1").ge(ComparableVersion.of("1.8")));
+        assertTrue(ComparableVersion.of("1.8.1").ge(ComparableVersion.of("1.8.1")));
+
+        assertFalse(ComparableVersion.of("1.8.1").lt(ComparableVersion.of("1.8")));
+        assertFalse(ComparableVersion.of("1.8.1").le(ComparableVersion.of("1.8")));
+        assertFalse(ComparableVersion.of("1.8").le(ComparableVersion.of("1.7")));
+        assertFalse(ComparableVersion.of("1.8.1").eq(ComparableVersion.of("1.8")));
+        assertFalse(ComparableVersion.of("1.8").gt(ComparableVersion.of("1.8.1")));
+        assertFalse(ComparableVersion.of("1.8").ge(ComparableVersion.of("1.8.1")));
+        assertFalse(ComparableVersion.of("1.8.1").ge(ComparableVersion.of("1.9.2")));
+
+    }
 }

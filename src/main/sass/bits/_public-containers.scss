@@ -1,0 +1,80 @@
+
+.public-containers {
+  max-height: 300px;
+  overflow-y: auto;
+
+  .row > [class*="col-"] {
+    margin: 0;
+  }
+
+  .public-container {
+    padding: 5px;
+    background-color: #17110C;
+    text-align: left;
+    margin: 0;
+    color: #c8c8c8;
+    border-radius: 10px;
+
+    %field {
+      margin-right: 15px;
+      display: inline-block;
+    }
+
+    .name {
+      font-size: 1.5em;
+      color: #fff;
+    }
+
+    .type {
+      @extend %field;
+    }
+
+    .type:before {
+      @extend %label;
+      content: 'Type';
+    }
+
+    .modpack {
+      @extend %field;
+    }
+
+    .version {
+      @extend %field;
+    }
+
+    %label-color {
+      color: #808080;
+    }
+
+    %label {
+      @extend %label-color;
+      margin-right: 2px;
+      font-size: 0.9em;
+    }
+
+    .version:before {
+      @extend %label;
+      content: 'Version';
+    }
+
+    .connection:before {
+      @extend %label;
+      content: 'Server Address';
+      vertical-align: middle;
+    }
+
+    .users {
+      float: right;
+    }
+    .users:after {
+      content: 'users';
+      @extend %label-color;
+      margin-left: 2px;
+    }
+  }
+
+  .public-container+.public-container {
+    margin-top: 5px;
+  }
+
+}

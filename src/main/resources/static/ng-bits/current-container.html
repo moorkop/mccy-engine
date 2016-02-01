@@ -10,14 +10,7 @@
         <div class="field col-xs-6"><label>Version</label> <span>{{c.version}}</span></div>
         <div class="field col-xs-6" ng-show="hasConnectInfo(c)">
             <label>Connect using</label>
-            <span>{{serverAddress(c)}}
-                <button class="btn btn-default btn-sm" clipboard text="serverAddress(c)" on-copied="showCopied(c)"
-                        uib-tooltip="Copied! Now paste in Server Address"
-                        tooltip-trigger="none" tooltip-is-open="c.showCopied"
-                        tooltip-class="copied">
-                    <i class="fa fa-clipboard fa-lg"></i> Copy
-                </button>
-            </span>
+            <span mccy-server-connection host-ip="c.hostIp" host-port="c.hostPort"/>
         </div>
         <div class="field col-xs-6" ng-show="c.modpack"><label>Download client-side mods</label>
             <a ng-href="{{c.modpack}}"><i class="fa fa-download fa-2x"></i></a></div>
