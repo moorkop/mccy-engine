@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.HashMap;
@@ -89,6 +88,12 @@ public class ContainersServiceTest {
         @Qualifier("mock")
         public DockerClient dockerClient() {
             return mock(DockerClient.class);
+        }
+
+        @Bean
+        @Qualifier("mock")
+        public ServerStatusService serverStatusService() {
+            return mock(ServerStatusService.class);
         }
 
     }
