@@ -15,7 +15,7 @@ import java.util.Date;
  * A lightweight document is created for each combination of selected mod.
  *
  * @author Geoff Bourne
- * @since 1/1/2016
+ * @since 0.1
  */
 @Document(indexName = "mccy")
 public class ModPack {

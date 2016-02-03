@@ -4,7 +4,7 @@ import com.spotify.docker.client.messages.ContainerInfo;
 
 /**
  * @author Geoff Bourne
- * @since 12/21/2015
+ * @since 0.1
  */
 public class ContainerDetails {
     private ContainerSummary summary;

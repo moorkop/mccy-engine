@@ -4,7 +4,7 @@ import java.net.URI;
 
 /**
  * @author Geoff Bourne
- * @since 12/23/2015
+ * @since 0.1
  */
 public class WorldVerification {
     private boolean valid;

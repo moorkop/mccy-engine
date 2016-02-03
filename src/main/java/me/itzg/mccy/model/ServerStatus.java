@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 
 /**
  * @author Geoff Bourne
- * @since 1/31/2016
+ * @since 0.1
  */
 public class ServerStatus {
 

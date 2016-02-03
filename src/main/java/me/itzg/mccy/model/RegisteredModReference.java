@@ -5,7 +5,7 @@ import javax.validation.constraints.Size;
 
 /**
  * @author Geoff Bourne
- * @since 1/1/2016
+ * @since 0.1
  */
 public class RegisteredModReference {
     @NotNull @Size(min = 1)

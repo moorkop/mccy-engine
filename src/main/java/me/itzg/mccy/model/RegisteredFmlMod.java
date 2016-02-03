@@ -6,7 +6,7 @@ import org.springframework.data.elasticsearch.annotations.NestedField;
 
 /**
  * @author Geoff Bourne
- * @since 12/29/2015
+ * @since 0.1
  */
 public class RegisteredFmlMod extends RegisteredMod {
 

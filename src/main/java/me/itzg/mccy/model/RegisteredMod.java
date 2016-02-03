@@ -9,7 +9,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * @author Geoff Bourne
- * @since 12/30/2015
+ * @since 0.1
  */
 @Document(indexName = "mccy")
 @JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS, property = "type")

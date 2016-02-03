@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  * Declares that a field corresponds to an environment variable of the container.
  *
  * @author Geoff Bourne
- * @since 1/22/2016
+ * @since 0.1
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

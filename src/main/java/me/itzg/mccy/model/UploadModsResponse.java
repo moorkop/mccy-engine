@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * @author Geoff Bourne
- * @since 12/31/2015
+ * @since 0.1
  */
 public class UploadModsResponse {
     private List<RegisteredMod> mods = new ArrayList<>();

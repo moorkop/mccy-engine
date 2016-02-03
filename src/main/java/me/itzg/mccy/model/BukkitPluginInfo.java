@@ -7,7 +7,7 @@ import java.util.Collection;
 /**
  * A partial POJO compliance of http://wiki.bukkit.org/Plugin_YAML
  * @author Geoff Bourne
- * @since 1/2/2016
+ * @since 0.1
  */
 @JsonIgnoreProperties({"commands", "permissions"})
 public class BukkitPluginInfo {

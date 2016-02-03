@@ -13,7 +13,7 @@ import java.util.List;
  * </p>
  *
  * @author Geoff Bourne
- * @since 12/29/2015
+ * @since 0.1
  */
 public class FmlModInfo {
     private int modListVersion;

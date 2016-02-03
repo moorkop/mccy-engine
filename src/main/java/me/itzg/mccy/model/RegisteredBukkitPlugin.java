@@ -2,7 +2,7 @@ package me.itzg.mccy.model;
 
 /**
  * @author Geoff Bourne
- * @since 1/2/2016
+ * @since 0.1
  */
 public class RegisteredBukkitPlugin extends RegisteredMod {
     private BukkitPluginInfo info;
