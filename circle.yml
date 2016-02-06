@@ -21,7 +21,7 @@ deployment:
          environment:
            LETSENCRYPT_DOMAIN: mccy-staging.itzg.me
   production:
-    branch: production
+    branch: release/0.1
     commands:
       - ./build-deploy-carina.sh $TARGET_CLUSTER $PRODUCTION_PINNED_NODE:
          environment:
