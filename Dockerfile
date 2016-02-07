@@ -7,7 +7,7 @@ ARG BUILD_JOB=
 
 COPY . /build
 RUN cd /build && ./mvnw -B package -Dbuild.branch=${BUILD_BRANCH} -Dbuild.job=${BUILD_JOB} \
-  && cp /build/target/mccy-swarm-*.jar /usr/local/bin/mccy-swarm.jar \
+  && cp /build/target/mccy-engine-*.jar /usr/local/bin/mccy-engine.jar \
   && rm -rf /build $HOME/.m2 
 
 COPY certs /certs
@@ -18,4 +18,4 @@ WORKDIR /data
 
 ENV SPRING_PROFILES_ACTIVE docker
 
-ENTRYPOINT ["/usr/bin/java", "-jar", "/usr/local/bin/mccy-swarm.jar"]
+ENTRYPOINT ["/usr/bin/java", "-jar", "/usr/local/bin/mccy-engine.jar"]
