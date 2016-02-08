@@ -81,13 +81,13 @@ docker build --build-arg=constraint:node==$PINNED_NODE \
     --build-arg BUILD_BRANCH=$CIRCLE_BRANCH \
     --build-arg BUILD_JOB=$CIRCLE_BUILD_NUM \
     -t ${COMPOSE_PROJECT_NAME}_mccy .
+docker pull itzgeoff-docker-images.bintray.io/moorkop/mccy-lets-nginx
 
 # At this point (v1.5.2) docker compose seems to get confused by volumes created with
 # 'docker volume' and goes to convoluted lengths to carry over the volume from the previous
 # container instance. So...we'll brute force tear them down and create them again.
 docker-compose stop
 docker-compose rm -f
-docker-compose pull
 docker-compose up -d
 
 echo "
