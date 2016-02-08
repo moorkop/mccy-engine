@@ -87,6 +87,7 @@ docker build --build-arg=constraint:node==$PINNED_NODE \
 # container instance. So...we'll brute force tear them down and create them again.
 docker-compose stop
 docker-compose rm -f
+docker-compose pull
 docker-compose up -d
 
 echo "
