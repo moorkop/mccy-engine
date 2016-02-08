@@ -81,7 +81,6 @@ docker build --build-arg=constraint:node==$PINNED_NODE \
     --build-arg BUILD_BRANCH=$CIRCLE_BRANCH \
     --build-arg BUILD_JOB=$CIRCLE_BUILD_NUM \
     -t ${COMPOSE_PROJECT_NAME}_mccy .
-docker build --build-arg=constraint:node==$PINNED_NODE -t ${COMPOSE_PROJECT_NAME}_letsencrypt https://github.com/itzg/lets-nginx.git
 
 # At this point (v1.5.2) docker compose seems to get confused by volumes created with
 # 'docker volume' and goes to convoluted lengths to carry over the volume from the previous

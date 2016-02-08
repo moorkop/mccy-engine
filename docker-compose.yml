@@ -15,7 +15,7 @@ mccy:
     --spring.active-profiles=docker
 
 proxy:
-  image: ${COMPOSE_PROJECT_NAME}_letsencrypt
+  image: itzgeoff-docker-images.bintray.io/moorkop/mccy-lets-nginx
   restart: always
   links:
     - mccy
