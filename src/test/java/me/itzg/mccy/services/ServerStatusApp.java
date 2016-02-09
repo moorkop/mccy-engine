@@ -3,6 +3,7 @@ package me.itzg.mccy.services;
 import me.itzg.mccy.config.GeneralConfig;
 import me.itzg.mccy.config.MccySettings;
 import me.itzg.mccy.model.ServerStatus;
+import me.itzg.mccy.services.impl.ServerStatusServiceImpl;
 import me.itzg.mccy.types.MccyUnexpectedServerException;
 import org.springframework.test.util.ReflectionTestUtils;
 

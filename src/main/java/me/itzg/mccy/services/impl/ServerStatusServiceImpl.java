@@ -1,7 +1,8 @@
-package me.itzg.mccy.services;
+package me.itzg.mccy.services.impl;
 
 import me.itzg.mccy.config.MccySettings;
 import me.itzg.mccy.model.ServerStatus;
+import me.itzg.mccy.services.ServerStatusService;
 import me.itzg.mccy.types.MccyUnexpectedServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -2,8 +2,11 @@ package me.itzg.mccy.types;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -14,18 +17,47 @@ import java.util.stream.Stream;
 public class ComparableVersion implements Comparable<ComparableVersion> {
     private final List<Object> parts;
 
+    private final boolean dotted;
+    private final String originalVersion;
+
     public ComparableVersion(String rawVersion) {
+        dotted = true;
+        originalVersion = rawVersion;
         parts = Stream.of(rawVersion.split("\\."))
                 .map(ComparableVersion::promote)
                 .collect(Collectors.toList());
+    }
+
+    public ComparableVersion(String rawVersion, String pattern) {
+        dotted = false;
+        this.originalVersion = rawVersion;
+
+        final Pattern compiled = Pattern.compile(pattern);
+        final Matcher matcher = compiled.matcher(rawVersion);
+        if (matcher.matches()) {
+            final int partCount = matcher.groupCount();
+            parts = new ArrayList<>(partCount);
+            for (int i = 0; i < partCount; i++) {
+                parts.add(matcher.group(i+1));
+            }
+        }
+        else {
+            throw new IllegalArgumentException("The given raw version " + rawVersion + " does not match the given pattern, " + pattern);
+        }
+    }
+
+    private ComparableVersion(List<Object> parts) {
+        dotted = true;
+        originalVersion = null;
+        this.parts = parts;
     }
 
     public static ComparableVersion of(String rawVersion) {
         return new ComparableVersion(rawVersion);
     }
 
-    private ComparableVersion(List<Object> parts) {
-        this.parts = parts;
+    public static ComparableVersion of(String rawVersion, String pattern) {
+        return new ComparableVersion(rawVersion, pattern);
     }
 
     @Override
@@ -92,6 +124,9 @@ public class ComparableVersion implements Comparable<ComparableVersion> {
      * @see #trim(int)
      */
     public String trimToString(int leadingParts) {
+        if (!dotted) {
+            throw new IllegalStateException("Non-dotted versions cannot be trimmed");
+        }
         return parts.stream()
                 .limit(leadingParts)
                 .map(Object::toString)
@@ -108,13 +143,17 @@ public class ComparableVersion implements Comparable<ComparableVersion> {
      * <code>leadingParts</code>
      */
     public ComparableVersion trim(int leadingParts) {
+        if (!dotted) {
+            throw new IllegalStateException("Non-dotted versions cannot be trimmed");
+        }
         return new ComparableVersion(parts.subList(0, leadingParts));
     }
 
     @JsonValue
     @Override
     public String toString() {
-        return parts.stream()
+        return !dotted ? originalVersion :
+                parts.stream()
                 .map(Object::toString)
                 .collect(Collectors.joining("."));
     }

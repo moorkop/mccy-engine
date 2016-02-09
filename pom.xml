@@ -31,7 +31,6 @@
         <spotify.docker-client.version>3.3.5</spotify.docker-client.version>
         <flow-nbt.version>1.0.0</flow-nbt.version>
         <jackson-dataformat-yaml.version>2.6.4</jackson-dataformat-yaml.version>
-        <protobuf.version>2.6.1</protobuf.version>
     </properties>
 
 
@@ -225,7 +224,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <enunciateArtifactId></enunciateArtifactId>
+                    <enunciateArtifactId>docs</enunciateArtifactId>
                     <docsDir>${project.build.directory}/classes/static</docsDir>
                     <excludes>
                         <exclude>me.itzg.mccy.controllers.ViewController</exclude>
@@ -315,6 +314,14 @@
             <id>bintray-itzgeoff-artifacts</id>
             <name>bintray</name>
             <url>http://dl.bintray.com/itzgeoff/artifacts</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>spacehq-releases</id>
+            <url>https://repo.spacehq.org/content/repositories/releases/</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>

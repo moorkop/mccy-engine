@@ -57,4 +57,20 @@ public class ComparableVersionTest {
         assertFalse(ComparableVersion.of("1.8.1").ge(ComparableVersion.of("1.9.2")));
 
     }
+
+    @Test
+    public void testPatterned() throws Exception {
+
+        final String pattern = "(?<nYear>\\d+)w(?<nWeek>\\d+)(?<sRel>[a-z]+)";
+
+        final ComparableVersion snapshotVer = ComparableVersion.of("15w51b", pattern);
+
+        assertEquals("15w51b", snapshotVer.toString());
+
+        assertTrue(ComparableVersion.of("15w51b", pattern).eq(ComparableVersion.of("15w51b", pattern)));
+        assertTrue(ComparableVersion.of("15w51a", pattern).lt(ComparableVersion.of("15w51b", pattern)));
+        assertTrue(ComparableVersion.of("15w50b", pattern).lt(ComparableVersion.of("15w51b", pattern)));
+        assertTrue(ComparableVersion.of("14w51b", pattern).lt(ComparableVersion.of("15w51b", pattern)));
+
+    }
 }

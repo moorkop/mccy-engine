@@ -1,4 +1,4 @@
-package me.itzg.mccy.services;
+package me.itzg.mccy.services.impl;
 
 import com.google.common.base.Optional;
 import com.spotify.docker.client.DefaultDockerClient;
@@ -7,6 +7,8 @@ import com.spotify.docker.client.DockerCertificates;
 import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.DockerException;
 import me.itzg.mccy.config.MccySettings;
+import me.itzg.mccy.services.DockerClientConsumer;
+import me.itzg.mccy.services.DockerClientProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
