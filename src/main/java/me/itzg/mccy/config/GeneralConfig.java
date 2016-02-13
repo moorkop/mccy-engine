@@ -9,14 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.core.convert.converter.ConverterFactory;
 import org.springframework.core.convert.support.ConfigurableConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
-import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
+import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 
 import java.net.InetAddress;
 import java.net.URI;
@@ -77,8 +75,9 @@ public class GeneralConfig {
 
     @Bean
     public ConcurrentTaskExecutor remoteInvocationExecutor() {
+        final CustomizableThreadFactory threadFactory = new CustomizableThreadFactory("remoteInv-");
         final ConcurrentTaskExecutor executor =
-                new ConcurrentTaskExecutor(Executors.newCachedThreadPool());
+                new ConcurrentTaskExecutor(Executors.newCachedThreadPool(threadFactory));
 
         return executor;
     }

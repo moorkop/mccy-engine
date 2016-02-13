@@ -69,10 +69,12 @@ public class ServerStatusServiceImpl implements ServerStatusService {
                         LOG.warn("Failed to write image bytes of server icon {} from {}:{}", e, info.getIcon(), host, port);
                     }
 
+                    LOG.debug("Received server info {} from {}:{}", status, session.getHost(), session.getPort());
                     completableFuture.complete(status);
                 }
             });
 
+            LOG.debug("Connecting to {}:{} for status", client.getHost(), client.getPort());
             client.getSession().connect();
 
             while(client.getSession().isConnected()) {
@@ -89,6 +91,9 @@ public class ServerStatusServiceImpl implements ServerStatusService {
             return completableFuture.get(mccySettings.getServerStatusTimeout(), TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException e) {
             throw new MccyUnexpectedServerException(e);
+        } catch (TimeoutException e) {
+            LOG.debug("Getting status from {}:{} timed out", host, port);
+            throw e;
         }
     }
 
