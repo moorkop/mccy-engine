@@ -22,9 +22,8 @@ public class LevelDatServiceTest {
 
         assertNotNull(levelDescriptor);
         assertEquals("Herobrine's Mansion by Hypixel", levelDescriptor.getName());
+        assertEquals(ServerType.VANILLA, levelDescriptor.getServerType());
         assertEquals("1.7", levelDescriptor.getMinecraftVersion().toString());
-
-
     }
 
     @Test
@@ -33,6 +32,7 @@ public class LevelDatServiceTest {
 
         assertNotNull(levelDescriptor);
         assertEquals("world", levelDescriptor.getName());
+        assertEquals(ServerType.VANILLA, levelDescriptor.getServerType());
         assertEquals("1.8", levelDescriptor.getMinecraftVersion().toString());
     }
 
@@ -44,6 +44,16 @@ public class LevelDatServiceTest {
         assertEquals("MC Container Yard", levelDescriptor.getName());
         assertEquals(ServerType.SNAPSHOT, levelDescriptor.getServerType());
         assertEquals("15w51b", levelDescriptor.getMinecraftVersion().toString());
+    }
+
+    @Test
+    public void test_1_7_forge() throws Exception, MccyException {
+        final LevelDescriptor levelDescriptor = loadLevelDescriptor("1.7.10-with-forge-mods.nbt");
+
+        assertNotNull(levelDescriptor);
+        assertEquals("Alan Lightning World", levelDescriptor.getName());
+        assertEquals(ServerType.VANILLA, levelDescriptor.getServerType());
+        assertEquals("1.7", levelDescriptor.getMinecraftVersion().toString());
     }
 
     private LevelDescriptor loadLevelDescriptor(String levelFile) throws IOException, MccyException {

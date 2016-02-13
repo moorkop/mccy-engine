@@ -9,7 +9,6 @@ import com.flowpowered.nbt.stream.NBTInputStream;
 import me.itzg.mccy.model.LevelDescriptor;
 import me.itzg.mccy.model.ServerType;
 import me.itzg.mccy.types.ComparableVersion;
-import me.itzg.mccy.types.MccyConstants;
 import me.itzg.mccy.types.MccyException;
 import me.itzg.mccy.types.MccyInvalidFormatException;
 import org.slf4j.Logger;
@@ -52,6 +51,8 @@ public class LevelDatService {
 
                 extractVersionInfo(dataMap, levelDescriptor);
 
+                resolveServerType(dataMap, levelDescriptor);
+
                 return levelDescriptor;
 
             }
@@ -62,6 +63,14 @@ public class LevelDatService {
         }
         else {
             throw new MccyInvalidFormatException("Expected root tag to be compound");
+        }
+    }
+
+    private void resolveServerType(@SuppressWarnings("UnusedParameters") CompoundMap dataMap,
+                                   LevelDescriptor levelDescriptor) {
+        // for now, just fallback/assume a vanilla server type
+        if (levelDescriptor.getServerType() == null) {
+            levelDescriptor.setServerType(ServerType.VANILLA);
         }
     }
 
