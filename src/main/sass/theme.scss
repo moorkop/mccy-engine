@@ -930,14 +930,16 @@ $theme-danger-color: $color-red;
     }
   }
 
+  .game-box, .login-box {
+    .login-body {
+      background-color: $color-white;
+    }
+  }
   // Login page
   .login-box {
     .login-form {
       .login-header  {
         color: $color-white;
-      }
-      .login-body {
-        background-color: $color-white;
       }
       .login-footer {
         a {
