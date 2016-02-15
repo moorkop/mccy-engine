@@ -1,13 +1,17 @@
 package me.itzg.mccy.services;
 
+import me.itzg.mccy.model.FmlModRef;
 import me.itzg.mccy.model.LevelDescriptor;
+import me.itzg.mccy.model.ModRef;
 import me.itzg.mccy.model.ServerType;
 import me.itzg.mccy.types.MccyException;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -52,8 +56,17 @@ public class LevelDatServiceTest {
 
         assertNotNull(levelDescriptor);
         assertEquals("Alan Lightning World", levelDescriptor.getName());
-        assertEquals(ServerType.VANILLA, levelDescriptor.getServerType());
+        assertEquals(ServerType.FORGE, levelDescriptor.getServerType());
         assertEquals("1.7", levelDescriptor.getMinecraftVersion().toString());
+        assertThat(levelDescriptor.getRequiredMods(), Matchers.hasSize(7));
+
+        final List<ModRef> requiredMods = levelDescriptor.getRequiredMods();
+        final ModRef modRef = requiredMods.get(0);
+        assertThat(modRef, Matchers.instanceOf(FmlModRef.class));
+        final FmlModRef fmlModRef = (FmlModRef) modRef;
+        assertEquals("mcp", fmlModRef.getId());
+        assertEquals("9.5", fmlModRef.getVersion().toString());
+
     }
 
     private LevelDescriptor loadLevelDescriptor(String levelFile) throws IOException, MccyException {

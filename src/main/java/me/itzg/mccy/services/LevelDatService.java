@@ -3,9 +3,11 @@ package me.itzg.mccy.services;
 import com.flowpowered.nbt.ByteTag;
 import com.flowpowered.nbt.CompoundMap;
 import com.flowpowered.nbt.CompoundTag;
+import com.flowpowered.nbt.ListTag;
 import com.flowpowered.nbt.StringTag;
 import com.flowpowered.nbt.Tag;
 import com.flowpowered.nbt.stream.NBTInputStream;
+import me.itzg.mccy.model.FmlModRef;
 import me.itzg.mccy.model.LevelDescriptor;
 import me.itzg.mccy.model.ServerType;
 import me.itzg.mccy.types.ComparableVersion;
@@ -17,6 +19,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static me.itzg.mccy.types.MccyConstants.SNAPSHOT_VER_PATTERN;
 
@@ -31,6 +35,12 @@ public class LevelDatService {
 
     private static final String TAG_DATA = "Data";
 
+    private static final String TAG_FML = "FML";
+    private static final String TAG_FORGE = "Forge";
+    private static final String TAG_FML_MODLIST = "ModList";
+    private static final String TAG_FML_MOD_ID = "ModId";
+    private static final String TAG_FML_MOD_VERSION = "ModVersion";
+
     public LevelDescriptor interpret(InputStream levelDatIn) throws IOException, MccyException {
 
         final NBTInputStream nbtIn = new NBTInputStream(levelDatIn);
@@ -38,20 +48,21 @@ public class LevelDatService {
         final Tag rootTag = nbtIn.readTag();
         if (rootTag instanceof CompoundTag) {
             final CompoundTag rootCTag = (CompoundTag) rootTag;
+            LOG.debug("Loaded root tag: {}", rootCTag);
+
             final Tag<?> tag = rootCTag.getValue().get(TAG_DATA);
             if (tag instanceof CompoundTag) {
                 final CompoundTag dataCTag = (CompoundTag) tag;
-                LOG.debug("Loaded data tag: {}", dataCTag);
 
                 LevelDescriptor levelDescriptor = new LevelDescriptor();
 
                 final CompoundMap dataMap = dataCTag.getValue();
 
-                levelDescriptor.setName(((StringTag) dataMap.get("LevelName")).getValue());
+                levelDescriptor.setName(getStringTagValue(dataMap, "LevelName"));
 
                 extractVersionInfo(dataMap, levelDescriptor);
 
-                resolveServerType(dataMap, levelDescriptor);
+                resolveServerTypeDetails(rootCTag, levelDescriptor);
 
                 return levelDescriptor;
 
@@ -66,11 +77,43 @@ public class LevelDatService {
         }
     }
 
-    private void resolveServerType(@SuppressWarnings("UnusedParameters") CompoundMap dataMap,
-                                   LevelDescriptor levelDescriptor) {
-        // for now, just fallback/assume a vanilla server type
-        if (levelDescriptor.getServerType() == null) {
+    private String getStringTagValue(CompoundMap dataMap, String tagName) {
+        return ((StringTag) dataMap.get(tagName)).getValue();
+    }
+
+    private void resolveServerTypeDetails(CompoundTag rootTag,
+                                          LevelDescriptor levelDescriptor) {
+        if (levelDescriptor.getServerType() != null) {
+            return;
+        }
+
+        final CompoundMap rootMap = rootTag.getValue();
+        if (rootMap.containsKey(TAG_FML) && rootMap.containsKey(TAG_FORGE)) {
+            levelDescriptor.setServerType(ServerType.FORGE);
+            final Tag<?> fmlTag = rootMap.get(TAG_FML);
+            if (fmlTag instanceof CompoundTag) {
+                final CompoundMap fmlMap = (CompoundMap) fmlTag.getValue();
+                final Tag<?> modListTag = fmlMap.get(TAG_FML_MODLIST);
+                if (modListTag instanceof ListTag) {
+                    final List<?> modList = ((ListTag) modListTag).getValue();
+
+                    levelDescriptor.setRequiredMods(
+                            modList.stream()
+                                    .filter(o -> o instanceof CompoundTag)
+                                    .map(o -> {
+                                        final CompoundMap modMap = ((CompoundTag) o).getValue();
+                                        final FmlModRef modRef = new FmlModRef();
+                                        modRef.setId(getStringTagValue(modMap, TAG_FML_MOD_ID));
+                                        modRef.setVersion(ComparableVersion.of(getStringTagValue(modMap, TAG_FML_MOD_VERSION)));
+                                        return modRef;
+                                    })
+                                    .collect(Collectors.toList()));
+                }
+            }
+        }
+        else {
             levelDescriptor.setServerType(ServerType.VANILLA);
+
         }
     }
 
