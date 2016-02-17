@@ -31,8 +31,8 @@ public class FileStorageServiceTest {
         org.springframework.test.util.ReflectionTestUtils.setField(service, "repoPath", repoPath);
 
         MultipartFile src;
-        try (InputStream in = new ClassPathResource("TestWorld.zip").getInputStream()) {
-            src = new MockMultipartFile("TestWorld.zip", in);
+        try (InputStream in = new ClassPathResource("SkyGrid.zip").getInputStream()) {
+            src = new MockMultipartFile("SkyGrid.zip", in);
         }
 
         final String filename = service.saveNeedsName(MccyConstants.CATEGORY_WORLDS, ".zip", true, src);
