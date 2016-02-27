@@ -9,7 +9,6 @@ machine:
 test:
   override:
     - mvn integration-test -Dbuild.branch=$CIRCLE_BRANCH -Dbuild.job=$CIRCLE_BUILD_NUM
-    - pwd ; ls -R
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/ $CIRCLE_TEST_REPORTS/jacoco/
     - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
@@ -19,6 +18,7 @@ deployment:
   staging:
     branch: master
     commands:
+      - pwd ; ls -R
       - docker build -t mccy-engine .
       - ./push-bintray.sh
       - ./deploy-carina.sh $TEST_CLUSTER $TEST_PINNED_NODE:
