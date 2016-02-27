@@ -1,7 +1,6 @@
 machine:
   pre:
-    - sudo curl -L -o /usr/bin/docker 'https://s3-external-1.amazonaws.com/circle-downloads/docker-1.9.1-circleci'
-    - sudo chmod 0755 /usr/bin/docker
+    - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
   java:
     version: oraclejdk8
   services:
@@ -17,7 +16,9 @@ deployment:
   staging:
     branch: master
     commands:
-      - ./build-deploy-carina.sh $TEST_CLUSTER $TEST_PINNED_NODE:
+      - docker build -t mccy-engine .
+      - ./push-bintray.sh
+      - ./deploy-carina.sh $TEST_CLUSTER $TEST_PINNED_NODE:
          environment:
            LETSENCRYPT_DOMAIN: mccy-staging.itzg.me
   production:

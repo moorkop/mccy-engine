@@ -1,0 +1,46 @@
+
+version: '2'
+
+services:
+  mccy:
+    image: itzgeoff-docker-images.bintray.io/moorkop/mccy-engine:$CIRCLE_BRANCH
+    restart: always
+    volumes-from:
+      - mccy-data
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - mccy-backend
+    command: >
+      --security.user.password=$MCCY_PASSWORD
+      --mccy.docker-cert-path=/carina/clusters/$CARINA_USERNAME/$TARGET_CLUSTER
+      --mccy.deployment-powered-by.image-src=img/powered-by/powered-by-carina-wide.png
+      --mccy.deployment-powered-by.href=https://getcarina.com/
+
+  mccy-data:
+    image: alpine
+    volumes:
+      - /data
+
+  proxy:
+    image: itzgeoff-docker-images.bintray.io/moorkop/mccy-lets-nginx
+    restart: always
+    networks:
+      - mccy-backend
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - "constraint:node==$PINNED_NODE"
+      - "UPSTREAM=mccy:8080"
+      - "EMAIL=$LETSENCRYPT_EMAIL"
+      - "DOMAIN=$LETSENCRYPT_DOMAIN"
+      - "STAGING=1"
+    volumes:
+      - dhparam-cache:/cache
+      - letsencrypt:/etc/letsencrypt
+      - letsencrypt-backups:/var/lib/letsencrypt
+
+networks:
+  mccy-backend:
+    driver: overlay
