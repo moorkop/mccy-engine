@@ -18,7 +18,6 @@ deployment:
   staging:
     branch: master
     commands:
-      - pwd ; ls -R
       - docker build -t mccy-engine .
       - ./push-bintray.sh
       - ./deploy-carina.sh $TEST_CLUSTER $TEST_PINNED_NODE:

@@ -43,10 +43,10 @@ set -e
 
 #### SETUP credentials
 
-mkdir carina
+mkdir $HOME/carina
 docker pull itzg/carina-cli
-docker run --rm -v $(pwd)/carina:/carina -e CARINA_USERNAME -e CARINA_APIKEY itzg/carina-cli credentials $DEPLOY_CLUSTER
-source carina/clusters/$CARINA_USERNAME/$DEPLOY_CLUSTER/docker.env
+docker run --rm -v $HOME/carina:/carina -e CARINA_USERNAME -e CARINA_APIKEY itzg/carina-cli credentials $DEPLOY_CLUSTER
+source $HOME/carina/clusters/$CARINA_USERNAME/$DEPLOY_CLUSTER/docker.env
 
 #### DEPLOY
 
@@ -54,9 +54,11 @@ check_volume dhparam-cache
 check_volume letsencrypt
 check_volume letsencrypt-backups
 
+COMPOSE_FILE=docker-compose-carina.yml
+
 export COMPOSE_PROJECT_NAME="${CIRCLE_BRANCH}_mccy"
-docker-compose -f docker-compose-carina.yml pull
-docker-compose -f docker-compose-carina.yml up -d
+docker-compose -f $COMPOSE_FILE pull
+docker-compose -f $COMPOSE_FILE up -d
 
 echo "
 READY for use on the cluster $DEPLOY_CLUSTER

@@ -1,6 +1,8 @@
 .idea
 .git
+src
 target
+!target/*.jar
 *.iml
 repo
 assetts
