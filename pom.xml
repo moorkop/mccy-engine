@@ -20,13 +20,13 @@
     </parent>
 
     <properties>
+        <build.branch></build.branch>
+        <build.job></build.job>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <angularjs.version>1.5.0</angularjs.version>
         <enunciate.version>2.2.0</enunciate.version>
         <sass-maven-plugin.version>2.15</sass-maven-plugin.version>
-        <build.branch></build.branch>
-        <build.job></build.job>
         <netty.version>4.0.34.Final</netty.version>
         <spotify.docker-client.version>3.5.12</spotify.docker-client.version>
         <flow-nbt.version>1.0.0</flow-nbt.version>
