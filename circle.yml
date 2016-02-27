@@ -8,6 +8,8 @@ machine:
 
 test:
   override:
+    - ls -R
+    - pwd
     - mvn integration-test -Dbuild.branch=$CIRCLE_BRANCH -Dbuild.job=$CIRCLE_BUILD_NUM
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/ $CIRCLE_TEST_REPORTS/jacoco/
@@ -18,7 +20,8 @@ deployment:
   staging:
     branch: master
     commands:
-      - docker build -t mccy-engine .
+      - docker build -t mccy-engine .:
+        pwd: mccy-engine
       - ./push-bintray.sh
       - ./deploy-carina.sh $TEST_CLUSTER $TEST_PINNED_NODE:
          environment:
