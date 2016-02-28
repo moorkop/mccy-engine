@@ -36,7 +36,6 @@ services:
       - "UPSTREAM=mccy:8080"
       - "EMAIL=$LETSENCRYPT_EMAIL"
       - "DOMAIN=$LETSENCRYPT_DOMAIN"
-      - "STAGING=1"
     volumes:
       - dhparam-cache:/cache
       - letsencrypt:/etc/letsencrypt
