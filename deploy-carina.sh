@@ -43,7 +43,7 @@ docker pull itzg/carina-cli
 docker run --name $$ -e CARINA_USERNAME -e CARINA_APIKEY itzg/carina-cli credentials $DEPLOY_CLUSTER
 docker cp $$:/carina/clusters/$CARINA_USERNAME/$DEPLOY_CLUSTER/. $HOME/carina
 if [[ $CIRCLECI != true ]]; then
-  docker rm $$
+  docker rm $$ > /dev/null
 fi
 . $HOME/carina/docker.env
 

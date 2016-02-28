@@ -32,20 +32,23 @@ services:
       - "80:80"
       - "443:443"
     environment:
-      - "constraint:node==$PINNED_NODE"
       - "UPSTREAM=mccy:8080"
       - "EMAIL=$LETSENCRYPT_EMAIL"
       - "DOMAIN=$LETSENCRYPT_DOMAIN"
+    volumes_from:
+      - proxy-data
+
+  proxy-data:
+    image: alpine
+    environment:
+      - "constraint:node==$PINNED_NODE"
     volumes:
-      - dhparam-cache:/cache
-      - letsencrypt:/etc/letsencrypt
-      - letsencrypt-backups:/var/lib/letsencrypt
+      - /cache
+      - /etc/letsencrypt
+      - /var/lib/letsencrypt
+    command: /bin/true
 
 networks:
   mccy-backend:
     driver: overlay
 
-volumes:
-  dhparam-cache:
-  letsencrypt:
-  letsencrypt-backups:
