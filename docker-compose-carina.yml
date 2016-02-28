@@ -7,12 +7,14 @@ services:
     restart: always
     volumes_from:
       - mccy-data
+      - mccy-docker-auth
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - mccy-backend
     command: >
       --security.user.password=$MCCY_PASSWORD
+      --mccy.docker-host-uri=$DOCKER_HOST_URI
       --mccy.docker-cert-path=/carina/clusters/$CARINA_USERNAME/$TARGET_CLUSTER
       --mccy.deployment-powered-by.image-src=img/powered-by/powered-by-carina-wide.png
       --mccy.deployment-powered-by.href=https://getcarina.com/
@@ -22,6 +24,15 @@ services:
     volumes:
       - /data
     command: /bin/true
+
+  mccy-docker-auth:
+    image: itzg/carina-cli
+    links:
+      - mccy-data
+    environment:
+      - CARINA_USERNAME
+      - CARINA_APIKEY
+    command: credentials $TARGET_CLUSTER
 
   proxy:
     image: itzgeoff-docker-images.bintray.io/moorkop/mccy-lets-nginx

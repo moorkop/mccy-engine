@@ -47,11 +47,9 @@ if [[ $CIRCLECI != true ]]; then
 fi
 . $HOME/carina/docker.env
 
-#### DEPLOY
+export DOCKER_HOST_URI=${DOCKER_HOST/tcp:/https:}
 
-#check_volume dhparam-cache
-#check_volume letsencrypt
-#check_volume letsencrypt-backups
+#### DEPLOY
 
 COMPOSE_FILE=docker-compose-carina.yml
 
