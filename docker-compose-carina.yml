@@ -5,7 +5,7 @@ services:
   mccy:
     image: itzgeoff-docker-images.bintray.io/moorkop/mccy-engine:$CIRCLE_BRANCH
     restart: always
-    volumes-from:
+    volumes_from:
       - mccy-data
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -21,6 +21,7 @@ services:
     image: alpine
     volumes:
       - /data
+    command: /bin/true
 
   proxy:
     image: itzgeoff-docker-images.bintray.io/moorkop/mccy-lets-nginx
@@ -44,3 +45,8 @@ services:
 networks:
   mccy-backend:
     driver: overlay
+
+volumes:
+  dhparam-cache:
+  letsencrypt:
+  letsencrypt-backups:

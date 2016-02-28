@@ -1,14 +1,9 @@
 #!/bin/bash
 
+. build-common.sh
+
 usage() {
   echo "Usage: $0 DEPLOY_CLUSTER PINNED_NODE"
-}
-
-check_var() {
-  if [[ ! -v $1 || -z $1 ]]; then
-    echo "Missing environment variable $1"
-    exit 1
-  fi
 }
 
 check_volume() {
@@ -43,16 +38,19 @@ set -e
 
 #### SETUP credentials
 
-mkdir $HOME/carina
+mkdir -p $HOME/carina
 docker pull itzg/carina-cli
-docker run --rm -v $HOME/carina:/carina -e CARINA_USERNAME -e CARINA_APIKEY itzg/carina-cli credentials $DEPLOY_CLUSTER
-source $HOME/carina/clusters/$CARINA_USERNAME/$DEPLOY_CLUSTER/docker.env
+docker run --name $$ -e CARINA_USERNAME -e CARINA_APIKEY itzg/carina-cli credentials $DEPLOY_CLUSTER
+docker cp $$:/carina/clusters/$CARINA_USERNAME/$DEPLOY_CLUSTER/. $HOME/carina
+docker rm $$
+ls -l $HOME/carina
+. $HOME/carina/docker.env
 
 #### DEPLOY
 
-check_volume dhparam-cache
-check_volume letsencrypt
-check_volume letsencrypt-backups
+#check_volume dhparam-cache
+#check_volume letsencrypt
+#check_volume letsencrypt-backups
 
 COMPOSE_FILE=docker-compose-carina.yml
 
