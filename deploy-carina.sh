@@ -23,10 +23,9 @@ if [[ $* < 2 ]]; then
   usage
   exit 1
 fi
-DEPLOY_CLUSTER=$1
+export DEPLOY_CLUSTER=$1
 export PINNED_NODE=$2
 
-check_var TARGET_CLUSTER
 check_var CARINA_USERNAME
 check_var CARINA_APIKEY
 check_var MCCY_PASSWORD

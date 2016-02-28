@@ -15,7 +15,7 @@ services:
     command: >
       --security.user.password=$MCCY_PASSWORD
       --mccy.docker-host-uri=$DOCKER_HOST_URI
-      --mccy.docker-cert-path=/carina/clusters/$CARINA_USERNAME/$TARGET_CLUSTER
+      --mccy.docker-cert-path=/carina/clusters/$CARINA_USERNAME/$DEPLOY_CLUSTER
       --mccy.deployment-powered-by.image-src=img/powered-by/powered-by-carina-wide.png
       --mccy.deployment-powered-by.href=https://getcarina.com/
 
@@ -32,7 +32,7 @@ services:
     environment:
       - CARINA_USERNAME
       - CARINA_APIKEY
-    command: credentials $TARGET_CLUSTER
+    command: credentials $DEPLOY_CLUSTER
 
   proxy:
     image: itzgeoff-docker-images.bintray.io/moorkop/mccy-lets-nginx
