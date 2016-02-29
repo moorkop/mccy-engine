@@ -11,7 +11,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
  * @author Geoff Bourne
  * @since 0.1
  */
-@Document(indexName = "mccy")
+@Document(indexName = DocumentCommon.INDEX)
 @JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS, property = "type")
 public abstract class RegisteredMod {
 

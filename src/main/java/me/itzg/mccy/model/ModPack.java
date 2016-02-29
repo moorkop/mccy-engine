@@ -17,7 +17,7 @@ import java.util.Date;
  * @author Geoff Bourne
  * @since 0.1
  */
-@Document(indexName = "mccy")
+@Document(indexName = DocumentCommon.INDEX)
 public class ModPack {
 
     @Id @NotNull

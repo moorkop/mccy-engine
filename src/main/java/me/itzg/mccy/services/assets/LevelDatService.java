@@ -1,4 +1,4 @@
-package me.itzg.mccy.services;
+package me.itzg.mccy.services.assets;
 
 import com.flowpowered.nbt.ByteTag;
 import com.flowpowered.nbt.CompoundMap;
@@ -8,7 +8,7 @@ import com.flowpowered.nbt.StringTag;
 import com.flowpowered.nbt.Tag;
 import com.flowpowered.nbt.stream.NBTInputStream;
 import me.itzg.mccy.model.FmlModRef;
-import me.itzg.mccy.model.LevelDescriptor;
+import me.itzg.mccy.model.WorldDescriptor;
 import me.itzg.mccy.model.ServerType;
 import me.itzg.mccy.types.ComparableVersion;
 import me.itzg.mccy.types.MccyException;
@@ -41,7 +41,7 @@ public class LevelDatService {
     private static final String TAG_FML_MOD_ID = "ModId";
     private static final String TAG_FML_MOD_VERSION = "ModVersion";
 
-    public LevelDescriptor interpret(InputStream levelDatIn) throws IOException, MccyException {
+    public WorldDescriptor interpret(InputStream levelDatIn) throws IOException, MccyException {
 
         final NBTInputStream nbtIn = new NBTInputStream(levelDatIn);
 
@@ -54,17 +54,17 @@ public class LevelDatService {
             if (tag instanceof CompoundTag) {
                 final CompoundTag dataCTag = (CompoundTag) tag;
 
-                LevelDescriptor levelDescriptor = new LevelDescriptor();
+                WorldDescriptor worldDescriptor = new WorldDescriptor();
 
                 final CompoundMap dataMap = dataCTag.getValue();
 
-                levelDescriptor.setName(getStringTagValue(dataMap, "LevelName"));
+                worldDescriptor.setName(getStringTagValue(dataMap, "LevelName"));
 
-                extractVersionInfo(dataMap, levelDescriptor);
+                extractVersionInfo(dataMap, worldDescriptor);
 
-                resolveServerTypeDetails(rootCTag, levelDescriptor);
+                resolveServerTypeDetails(rootCTag, worldDescriptor);
 
-                return levelDescriptor;
+                return worldDescriptor;
 
             }
             else {
@@ -82,14 +82,14 @@ public class LevelDatService {
     }
 
     private void resolveServerTypeDetails(CompoundTag rootTag,
-                                          LevelDescriptor levelDescriptor) {
-        if (levelDescriptor.getServerType() != null) {
+                                          WorldDescriptor worldDescriptor) {
+        if (worldDescriptor.getServerType() != null) {
             return;
         }
 
         final CompoundMap rootMap = rootTag.getValue();
         if (rootMap.containsKey(TAG_FML) && rootMap.containsKey(TAG_FORGE)) {
-            levelDescriptor.setServerType(ServerType.FORGE);
+            worldDescriptor.setServerType(ServerType.FORGE);
             final Tag<?> fmlTag = rootMap.get(TAG_FML);
             if (fmlTag instanceof CompoundTag) {
                 final CompoundMap fmlMap = (CompoundMap) fmlTag.getValue();
@@ -97,7 +97,7 @@ public class LevelDatService {
                 if (modListTag instanceof ListTag) {
                     final List<?> modList = ((ListTag) modListTag).getValue();
 
-                    levelDescriptor.setRequiredMods(
+                    worldDescriptor.setRequiredMods(
                             modList.stream()
                                     .filter(o -> o instanceof CompoundTag)
                                     .map(o -> {
@@ -112,12 +112,12 @@ public class LevelDatService {
             }
         }
         else {
-            levelDescriptor.setServerType(ServerType.VANILLA);
+            worldDescriptor.setServerType(ServerType.VANILLA);
 
         }
     }
 
-    protected void extractVersionInfo(CompoundMap dataMap, LevelDescriptor levelDescriptor) {
+    protected void extractVersionInfo(CompoundMap dataMap, WorldDescriptor worldDescriptor) {
         if (dataMap.containsKey("BorderSize")) {
             // ge 1.8
             if (dataMap.containsKey("Version")) {
@@ -127,20 +127,20 @@ public class LevelDatService {
                 final ByteTag snapshot = (ByteTag) versionData.get("Snapshot");
                 final StringTag versionName = (StringTag) versionData.get("Name");
                 if (snapshot.getValue().intValue() == 1) {
-                    levelDescriptor.setServerType(ServerType.SNAPSHOT);
-                    levelDescriptor.setMinecraftVersion(ComparableVersion.of(versionName.getValue(),
+                    worldDescriptor.setServerType(ServerType.SNAPSHOT);
+                    worldDescriptor.setMinecraftVersion(ComparableVersion.of(versionName.getValue(),
                             SNAPSHOT_VER_PATTERN));
                 }
                 else {
-                    levelDescriptor.setMinecraftVersion(ComparableVersion.of(versionName.getValue()));
+                    worldDescriptor.setMinecraftVersion(ComparableVersion.of(versionName.getValue()));
                 }
             }
             else {
-                levelDescriptor.setMinecraftVersion(ComparableVersion.of("1.8"));
+                worldDescriptor.setMinecraftVersion(ComparableVersion.of("1.8"));
             }
         }
         else {
-            levelDescriptor.setMinecraftVersion(ComparableVersion.of("1.7"));
+            worldDescriptor.setMinecraftVersion(ComparableVersion.of("1.7"));
         }
     }
 }

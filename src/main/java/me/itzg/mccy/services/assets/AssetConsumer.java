@@ -1,0 +1,12 @@
+package me.itzg.mccy.services.assets;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.web.multipart.MultipartFile;
+
+/**
+ * @author Geoff Bourne
+ * @since 0.2
+ */
+public interface AssetConsumer {
+    String consume(MultipartFile assetFile, Authentication auth);
+}
