@@ -122,4 +122,12 @@ public abstract class Asset<DT> {
     public void setAuthors(List<String> authors) {
         this.authors = authors;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

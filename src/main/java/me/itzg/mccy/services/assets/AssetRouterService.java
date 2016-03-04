@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -32,7 +33,7 @@ public class AssetRouterService {
         });
     }
 
-    public String upload(MultipartFile assetFile, AssetCategory category, Authentication auth) {
+    public String upload(MultipartFile assetFile, AssetCategory category, Authentication auth) throws IOException {
 
         final AssetConsumer assetConsumer = consumers.get(category);
 

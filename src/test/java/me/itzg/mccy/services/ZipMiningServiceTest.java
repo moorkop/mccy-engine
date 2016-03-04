@@ -2,6 +2,7 @@ package me.itzg.mccy.services;
 
 import com.google.common.hash.Hashing;
 import com.google.common.hash.HashingInputStream;
+import me.itzg.mccy.services.impl.ZipMiningServiceImpl;
 import me.itzg.mccy.types.ZipMiningHandler;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -26,7 +27,7 @@ public class ZipMiningServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        service = new ZipMiningService();
+        service = new ZipMiningServiceImpl();
         ReflectionTestUtils.setField(service, "fileIdHash", Hashing.md5());
     }
 

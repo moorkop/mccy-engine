@@ -5,6 +5,7 @@ import me.itzg.mccy.model.WorldDescriptor;
 import me.itzg.mccy.model.ModRef;
 import me.itzg.mccy.model.ServerType;
 import me.itzg.mccy.services.assets.LevelDatService;
+import me.itzg.mccy.services.assets.impl.LevelDatServiceImpl;
 import me.itzg.mccy.types.MccyException;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -71,7 +72,7 @@ public class LevelDatServiceTest {
     }
 
     private WorldDescriptor loadLevelDescriptor(String levelFile) throws IOException, MccyException {
-        final LevelDatService service = new LevelDatService();
+        final LevelDatService service = new LevelDatServiceImpl();
 
         final ClassPathResource levelDatResource = new ClassPathResource("level.dat/" + levelFile);
 
