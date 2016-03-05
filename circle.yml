@@ -8,6 +8,11 @@ machine:
   services:
     - docker
 
+checkout:
+  post:
+    - git submodule sync
+    - git submodule update --init
+
 dependencies:
   pre:
     - docker --version
@@ -27,7 +32,7 @@ deployment:
     branch: master
     commands:
       - docker build -t mccy-engine .
-      - ./push-bintray.sh
+      - build-support/push-image.sh
       - ./deploy-carina.sh $TEST_CLUSTER $TEST_PINNED_NODE:
          environment:
            LETSENCRYPT_DOMAIN: mccy-staging.itzg.me
