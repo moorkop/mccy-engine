@@ -54,7 +54,7 @@ COMPOSE_FILE=docker-compose-carina.yml
 
 export COMPOSE_PROJECT_NAME="${CIRCLE_BRANCH}_mccy"
 docker-compose -f $COMPOSE_FILE pull
-docker-compose -f $COMPOSE_FILE up -d
+docker-compose --verbose -f $COMPOSE_FILE up -d
 
 echo "
 READY for use on the cluster $DEPLOY_CLUSTER
