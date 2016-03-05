@@ -55,6 +55,9 @@ COMPOSE_FILE=docker-compose-carina.yml
 
 export COMPOSE_PROJECT_NAME="${CIRCLE_BRANCH}_mccy"
 docker-compose -f $COMPOSE_FILE pull
+# TEMP: remove proxy container to avoid Compose/Swarm confusion:
+# Unable to find a node fulfilling all dependencies: --volumes-from=...
+docker-compose -f $COMPOSE_FILE rm -f proxy
 docker-compose --verbose -f $COMPOSE_FILE up -d
 
 echo "
