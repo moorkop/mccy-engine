@@ -342,14 +342,20 @@
             </snapshots>
         </repository>
 
-        <repository>
-            <id>spacehq-releases</id>
-            <url>https://repo.spacehq.org/content/repositories/releases/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-
     </repositories>
 
+    <profiles>
+        <profile>
+            <id>spacehq-repo</id>
+            <repositories>
+                <repository>
+                    <id>spacehq-releases</id>
+                    <url>https://repo.spacehq.org/content/repositories/releases/</url>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
 </project>
