@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. build-common.sh
+. build-support/build-common.sh
 
 usage() {
   echo "Usage: $0 DEPLOY_CLUSTER PINNED_NODE"
@@ -32,6 +32,7 @@ check_var MCCY_PASSWORD
 check_var CIRCLE_BRANCH
 check_var LETSENCRYPT_EMAIL
 check_var LETSENCRYPT_DOMAIN
+resolve_vars
 
 set -e
 
