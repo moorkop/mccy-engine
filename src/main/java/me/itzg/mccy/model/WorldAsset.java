@@ -9,11 +9,6 @@ public class WorldAsset extends Asset<WorldDescriptor> {
     private WorldDescriptor worldDetails;
 
     @Override
-    public AssetCategory getCategory() {
-        return AssetCategory.WORLD;
-    }
-
-    @Override
     public WorldDescriptor getDetails() {
         return worldDetails;
     }

@@ -1,9 +1,13 @@
 package me.itzg.mccy.services.assets;
 
 import me.itzg.mccy.model.AssetCategory;
+import me.itzg.mccy.repos.AssetRepo;
+import me.itzg.mccy.types.MccyInvalidFormatException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +37,16 @@ public class AssetRouterServiceTest {
         public TestConsumer consumer() {
             return new TestConsumer();
         }
+
+        @Bean @Qualifier("mock")
+        public AssetObjectService assetObjectService() {
+            return Mockito.mock(AssetObjectService.class);
+        }
+
+        @Bean @Qualifier("mock")
+        public AssetRepo assetRepo() {
+            return Mockito.mock(AssetRepo.class);
+        }
     }
 
     @AssetConsumerSpec(category = AssetCategory.WORLD)
@@ -59,7 +73,7 @@ public class AssetRouterServiceTest {
 
 
     @Test
-    public void testUpload() throws Exception {
+    public void testUpload() throws Exception, MccyInvalidFormatException {
 
         MultipartFile multipartFile = new MockMultipartFile("world.zip", new byte[0]);
         final String id = service.upload(multipartFile, AssetCategory.WORLD, null);

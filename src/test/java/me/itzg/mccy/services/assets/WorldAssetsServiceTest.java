@@ -8,6 +8,7 @@ import me.itzg.mccy.repos.AssetRepo;
 import me.itzg.mccy.services.ZipMiningService;
 import me.itzg.mccy.types.ComparableVersion;
 import me.itzg.mccy.types.MccyException;
+import me.itzg.mccy.types.SimpleUUIDGenerator;
 import me.itzg.mccy.types.ZipMiningHandler;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -33,9 +34,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.same;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -65,6 +64,7 @@ public class WorldAssetsServiceTest {
         ReflectionTestUtils.setField(worldAssetsService, "levelDatService", levelDatService);
         ReflectionTestUtils.setField(worldAssetsService, "assetRepo", assetRepo);
         ReflectionTestUtils.setField(worldAssetsService, "assetObjectService", assetObjectService);
+        ReflectionTestUtils.setField(worldAssetsService, "uuidGenerator", new SimpleUUIDGenerator());
 
     }
 
@@ -90,7 +90,7 @@ public class WorldAssetsServiceTest {
                         }
                     });
 
-                    return "id-1";
+                    return "md5-1";
                 });
 
         WorldDescriptor descriptor = new WorldDescriptor();
@@ -103,17 +103,17 @@ public class WorldAssetsServiceTest {
 
         final String id = worldAssetsService.consume(assetFile, auth);
 
-        assertEquals("id-1", id);
+        assertThat(id, Matchers.startsWith(SimpleUUIDGenerator.PREFIX));
 
         final ArgumentCaptor<Asset> assetArgumentCaptor = ArgumentCaptor.forClass(Asset.class);
         verify(assetRepo).save(assetArgumentCaptor.capture());
 
         final Asset actualAsset = assetArgumentCaptor.getValue();
-        assertEquals("id-1", actualAsset.getId());
+        assertEquals(id, actualAsset.getId());
         assertEquals("world-name", actualAsset.getName());
         assertEquals(ComparableVersion.of("1.9"), actualAsset.getCompatibleMcVersion());
         assertEquals(ServerType.VANILLA, actualAsset.getCompatibleMcType());
 
-        verify(assetObjectService).save(same(assetFile), eq("id-1"), eq(AssetObjectPurpose.SOURCE));
+        verify(assetObjectService).save(same(assetFile), anyString(), eq(AssetObjectPurpose.SOURCE));
     }
 }

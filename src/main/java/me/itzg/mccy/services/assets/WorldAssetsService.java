@@ -7,6 +7,8 @@ import me.itzg.mccy.model.WorldDescriptor;
 import me.itzg.mccy.repos.AssetRepo;
 import me.itzg.mccy.services.ZipMiningService;
 import me.itzg.mccy.types.MccyException;
+import me.itzg.mccy.types.MccyInvalidFormatException;
+import me.itzg.mccy.types.UUIDGenerator;
 import me.itzg.mccy.types.ZipMiningHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -36,26 +38,33 @@ public class WorldAssetsService implements AssetConsumer {
     @Autowired
     private AssetObjectService assetObjectService;
 
+    @Autowired
+    private UUIDGenerator uuidGenerator;
+
     @Override
-    public String consume(MultipartFile assetFile, Authentication auth) throws IOException {
+    public String consume(MultipartFile assetFile, Authentication auth) throws IOException, MccyInvalidFormatException {
         final Consumption consumption = new Consumption();
 
-        String outerFileId = zipMiningService.interrogate(assetFile.getInputStream(), ZipMiningHandler.listBuilder()
+        zipMiningService.interrogate(assetFile.getInputStream(), ZipMiningHandler.listBuilder()
                 .add(".*/level.dat", consumption::consumeLevelDat)
                 .build());
 
         if (consumption.worldDescriptor != null) {
             final WorldAsset asset = new WorldAsset();
-            fillFromDescriptor(asset, consumption.worldDescriptor);
+            asset.setCategory(AssetCategory.WORLD);
+            final String id = uuidGenerator.generate().toString();
+            asset.setId(id);
 
-            asset.setId(outerFileId);
+            fillFromDescriptor(asset, consumption.worldDescriptor);
 
             assetRepo.save(asset);
 
-            assetObjectService.save(assetFile, outerFileId, AssetObjectPurpose.SOURCE);
+            assetObjectService.save(assetFile, id, AssetObjectPurpose.SOURCE);
+
+            return id;
         }
 
-        return outerFileId;
+        throw new MccyInvalidFormatException("The given file was not a world save");
     }
 
     private void fillFromDescriptor(WorldAsset asset, WorldDescriptor worldDescriptor) {

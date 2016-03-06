@@ -8,7 +8,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldIndex;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
+import javax.annotation.Generated;
 import java.net.URL;
 import java.util.List;
 
@@ -24,21 +26,21 @@ public abstract class Asset<DT> {
     @Id
     private String id;
 
-    @Field(index = FieldIndex.not_analyzed)
+    private AssetCategory category;
+
+    @Field(type = FieldType.String, index = FieldIndex.not_analyzed)
     private String nativeId;
     private String name;
     private String description;
     private URL homepage;
     private boolean visibleToPublic;
-    @Field(index = FieldIndex.not_analyzed)
+    @Field(type = FieldType.String, index = FieldIndex.not_analyzed)
     private String owner;
     private ComparableVersion version;
     private ComparableVersion compatibleMcVersion;
     private ServerType compatibleMcType;
-    @Field(index = FieldIndex.not_analyzed)
+    @Field(type = FieldType.String, index = FieldIndex.not_analyzed)
     private List<String> authors;
-
-    public abstract AssetCategory getCategory();
 
     @JsonIgnore // so that mapping of 'details' doesn't collide
     public abstract DT getDetails();
@@ -129,5 +131,13 @@ public abstract class Asset<DT> {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public AssetCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(AssetCategory category) {
+        this.category = category;
     }
 }

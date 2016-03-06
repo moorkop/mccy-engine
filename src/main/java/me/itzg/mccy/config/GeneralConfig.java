@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
+import me.itzg.mccy.types.UUIDGenerator;
 import me.itzg.mccy.types.YamlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -19,6 +20,7 @@ import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 
 /**
@@ -80,5 +82,10 @@ public class GeneralConfig {
                 new ConcurrentTaskExecutor(Executors.newCachedThreadPool(threadFactory));
 
         return executor;
+    }
+
+    @Bean
+    public UUIDGenerator uuidGenerator() {
+        return UUID::randomUUID;
     }
 }
