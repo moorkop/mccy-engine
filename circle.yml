@@ -18,6 +18,7 @@ dependencies:
     - docker --version
     - docker-compose --version
     - mvn --version
+    - pip install --user codecov
 
 test:
   override:
@@ -26,6 +27,7 @@ test:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/ $CIRCLE_TEST_REPORTS/jacoco/
     - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
     - cp -r target/site/jacoco/* $CIRCLE_TEST_REPORTS/jacoco/
+    - codecov
 
 deployment:
   staging:
