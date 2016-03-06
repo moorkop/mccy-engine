@@ -9,6 +9,6 @@
 <!-- Controllers -->
 <script type="text/javascript" src="js/new-container-ctrl.js"></script>
 <script type="text/javascript" src="js/view-containers-ctrl.js"></script>
-<script type="text/javascript" src="js/upload-mod-ctrl.js"></script>
 <script type="text/javascript" src="js/manage-mods-ctrl.js"></script>
+<script type="text/javascript" src="js/manage-assets-ctrl.js"></script>
 <script type="text/javascript" src="js/login-gateway-ctrl.js"></script>

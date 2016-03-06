@@ -1,5 +1,6 @@
 package me.itzg.mccy.services.assets;
 
+import me.itzg.mccy.model.Asset;
 import me.itzg.mccy.model.AssetCategory;
 import me.itzg.mccy.model.AssetObjectPurpose;
 import me.itzg.mccy.model.WorldAsset;
@@ -42,7 +43,7 @@ public class WorldAssetsService implements AssetConsumer {
     private UUIDGenerator uuidGenerator;
 
     @Override
-    public String consume(MultipartFile assetFile, Authentication auth) throws IOException, MccyInvalidFormatException {
+    public Asset consume(MultipartFile assetFile, Authentication auth) throws IOException, MccyInvalidFormatException {
         final Consumption consumption = new Consumption();
 
         zipMiningService.interrogate(assetFile.getInputStream(), ZipMiningHandler.listBuilder()
@@ -61,7 +62,7 @@ public class WorldAssetsService implements AssetConsumer {
 
             assetObjectService.save(assetFile, id, AssetObjectPurpose.SOURCE);
 
-            return id;
+            return asset;
         }
 
         throw new MccyInvalidFormatException("The given file was not a world save");

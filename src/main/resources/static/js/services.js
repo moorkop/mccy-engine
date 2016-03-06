@@ -39,6 +39,13 @@ angular.module('Mccy.services',[
         return $resource('/api/mods/:id', {id:"@id"});
     })
 
+    .service('Assets', function($resource){
+        return $resource('/assets/:category/:id', {
+            category:"@category",
+            id:"@id"
+        });
+    })
+
     .service('ModPacks', function($resource){
         return $resource('/api/modpacks');
     })

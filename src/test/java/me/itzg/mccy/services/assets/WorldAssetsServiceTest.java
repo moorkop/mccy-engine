@@ -101,18 +101,19 @@ public class WorldAssetsServiceTest {
         when(levelDatService.interpret(any()))
                 .thenReturn(descriptor);
 
-        final String id = worldAssetsService.consume(assetFile, auth);
+        final Asset retAsset = worldAssetsService.consume(assetFile, auth);
 
-        assertThat(id, Matchers.startsWith(SimpleUUIDGenerator.PREFIX));
+        assertNotNull(retAsset);
+        assertThat(retAsset.getId(), Matchers.startsWith(SimpleUUIDGenerator.PREFIX));
 
         final ArgumentCaptor<Asset> assetArgumentCaptor = ArgumentCaptor.forClass(Asset.class);
         verify(assetRepo).save(assetArgumentCaptor.capture());
 
-        final Asset actualAsset = assetArgumentCaptor.getValue();
-        assertEquals(id, actualAsset.getId());
-        assertEquals("world-name", actualAsset.getName());
-        assertEquals(ComparableVersion.of("1.9"), actualAsset.getCompatibleMcVersion());
-        assertEquals(ServerType.VANILLA, actualAsset.getCompatibleMcType());
+        final Asset savedAsset = assetArgumentCaptor.getValue();
+        assertEquals(retAsset.getId(), savedAsset.getId());
+        assertEquals("world-name", savedAsset.getName());
+        assertEquals(ComparableVersion.of("1.9"), savedAsset.getCompatibleMcVersion());
+        assertEquals(ServerType.VANILLA, savedAsset.getCompatibleMcType());
 
         verify(assetObjectService).save(same(assetFile), anyString(), eq(AssetObjectPurpose.SOURCE));
     }

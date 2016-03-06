@@ -24,7 +24,7 @@ angular.module('Mccy.mods',[
                 });
             };
 
-            $scope.compatibleServerTypes = $scope.mod.serverTypes.map(function(envType){
+            $scope.compatibleServerTypes = _.map($scope.mod.serverTypes, function(envType){
                 return $filter('serverTypeLabel')(envType);
             }).join(', ');
 

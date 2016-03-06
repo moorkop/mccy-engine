@@ -1,6 +1,8 @@
 package me.itzg.mccy.services.assets;
 
+import me.itzg.mccy.model.Asset;
 import me.itzg.mccy.model.AssetCategory;
+import me.itzg.mccy.model.WorldAsset;
 import me.itzg.mccy.repos.AssetRepo;
 import me.itzg.mccy.types.MccyInvalidFormatException;
 import org.junit.Test;
@@ -55,9 +57,11 @@ public class AssetRouterServiceTest {
         private MultipartFile captor;
 
         @Override
-        public String consume(MultipartFile assetFile, Authentication auth) {
+        public Asset consume(MultipartFile assetFile, Authentication auth) {
             captor = assetFile;
-            return captor.getName();
+            final WorldAsset worldAsset = new WorldAsset();
+            worldAsset.setId("id-"+assetFile.getName());
+            return worldAsset;
         }
 
         public MultipartFile getCaptor() {
@@ -76,9 +80,9 @@ public class AssetRouterServiceTest {
     public void testUpload() throws Exception, MccyInvalidFormatException {
 
         MultipartFile multipartFile = new MockMultipartFile("world.zip", new byte[0]);
-        final String id = service.upload(multipartFile, AssetCategory.WORLD, null);
+        final Asset asset = service.upload(multipartFile, AssetCategory.WORLD, null);
 
-        assertEquals("world.zip", id);
+        assertEquals("id-world.zip", asset.getId());
         assertNotNull(consumer.getCaptor());
         assertEquals("world.zip", consumer.getCaptor().getName());
     }

@@ -46,7 +46,7 @@ public class AssetRouterService {
         });
     }
 
-    public String upload(MultipartFile assetFile, AssetCategory category, Authentication auth) throws IOException, MccyInvalidFormatException {
+    public Asset upload(MultipartFile assetFile, AssetCategory category, Authentication auth) throws IOException, MccyInvalidFormatException {
 
         final AssetConsumer assetConsumer = consumers.get(category);
 

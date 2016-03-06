@@ -37,4 +37,14 @@ angular.module('Mccy.constants', [])
     .constant('cModdedTypes',[
         'FORGE', 'BUKKIT', 'SPIGOT'
     ])
+
+    .constant('cAssetSpecs', {
+        WORLD: {
+            fileInstructions: 'World save files should end in .zip',
+            accept: 'application/zip',
+            allowedPatterns: '.zip',
+            label: 'world',
+            labelPlural: 'worlds'
+        }
+    })
 ;

@@ -16,6 +16,10 @@ angular.module('Mccy.routes', [
         templateUrl: 'views/manage-mods.html',
         controller: 'ManageModsCtrl'
     })
+    .when('/manage-assets/:assetCategory', {
+        templateUrl: 'views/manage-assets.html',
+        controller: 'ManageAssetsCtrl'
+    })
     .otherwise('/view')
 })
 
@@ -39,6 +43,13 @@ angular.module('Mccy.routes', [
         settings: {
             label: 'Manage Mods',
             icon: 'icon fa fa-flask'
+        }
+    },
+    {
+        view: '/manage-assets/WORLD',
+        settings: {
+            label: 'Manage Worlds',
+            icon: 'icon fa fa-globe'
         }
     }
 ])

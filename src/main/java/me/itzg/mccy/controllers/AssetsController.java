@@ -18,7 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * @author Geoff Bourne
@@ -40,7 +42,7 @@ public class AssetsController {
      * @return an id of the asset
      */
     @RequestMapping(method = RequestMethod.POST)
-    public String uploadAsset(@RequestParam("file") MultipartFile assetFile,
+    public Asset uploadAsset(@RequestParam("file") MultipartFile assetFile,
                             @RequestParam("category") AssetCategory category,
                             Authentication auth) throws IOException, MccyInvalidFormatException {
 
