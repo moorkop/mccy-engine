@@ -12,10 +12,6 @@ angular.module('Mccy.routes', [
         templateUrl: 'views/create-container.html',
         controller: 'NewContainerCtrl'
     })
-    .when('/upload-mod', {
-        templateUrl: 'views/upload-mod.html',
-        controller: 'UploadModCtrl'
-    })
     .when('/manage-mods', {
         templateUrl: 'views/manage-mods.html',
         controller: 'ManageModsCtrl'
@@ -36,13 +32,6 @@ angular.module('Mccy.routes', [
         settings: {
             label: 'Create Container',
             icon: 'icon fa fa-magic'
-        }
-    },
-    {
-        view: '/upload-mod',
-        settings: {
-            label: 'Upload Mods',
-            icon: 'icon fa fa-upload'
         }
     },
     {
