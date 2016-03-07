@@ -12,7 +12,9 @@ import java.io.IOException;
  * @since 0.2
  */
 public interface AssetObjectService {
-    void save(MultipartFile objectFile, String parentAssetId, AssetObjectPurpose purpose) throws IOException;
+    void store(MultipartFile objectFile, String parentAssetId, AssetObjectPurpose purpose) throws IOException;
 
-    Resource retrieve(String assetId, AssetObjectPurpose assetObjectPurpose) throws FileNotFoundException;
+    Resource retrieve(String assetId) throws FileNotFoundException;
+
+    void deleteObjectsOfAsset(String assetId);
 }

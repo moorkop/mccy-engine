@@ -9,6 +9,7 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldIndex;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+import javax.validation.constraints.NotNull;
 import java.net.URL;
 import java.util.List;
 
@@ -22,12 +23,15 @@ public abstract class Asset<DT> {
     public static final String TYPE = "asset";
 
     @Id
+    @NotNull
     private String id;
 
+    @NotNull
     private AssetCategory category;
 
     @Field(type = FieldType.String, index = FieldIndex.not_analyzed)
     private String nativeId;
+    @NotNull
     private String name;
     private String description;
     private URL homepage;

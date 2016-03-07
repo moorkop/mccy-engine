@@ -40,7 +40,7 @@ angular.module('Mccy.services',[
     })
 
     .service('Assets', function($resource){
-        return $resource('/assets/:category/:id', {
+        return $resource('/api/assets/:category/:id', {
             category:"@category",
             id:"@id"
         });

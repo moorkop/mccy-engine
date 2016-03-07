@@ -61,7 +61,7 @@ public class WorldAssetsService implements AssetConsumer {
 
             assetRepo.save(asset);
 
-            assetObjectService.save(assetFile, id, AssetObjectPurpose.SOURCE);
+            assetObjectService.store(assetFile, id, AssetObjectPurpose.SOURCE);
 
             return asset;
         }

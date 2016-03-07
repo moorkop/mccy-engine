@@ -110,6 +110,6 @@ public class WorldAssetsServiceTest {
         assertEquals(ComparableVersion.of("1.9"), savedAsset.getCompatibleMcVersion());
         assertEquals(ServerType.VANILLA, savedAsset.getCompatibleMcTypes());
 
-        verify(assetObjectService).save(same(assetFile), anyString(), eq(AssetObjectPurpose.SOURCE));
+        verify(assetObjectService).store(same(assetFile), anyString(), eq(AssetObjectPurpose.SOURCE));
     }
 }

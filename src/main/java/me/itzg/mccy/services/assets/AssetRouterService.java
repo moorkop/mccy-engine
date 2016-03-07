@@ -2,7 +2,6 @@ package me.itzg.mccy.services.assets;
 
 import me.itzg.mccy.model.Asset;
 import me.itzg.mccy.model.AssetCategory;
-import me.itzg.mccy.model.AssetObjectPurpose;
 import me.itzg.mccy.repos.AssetRepo;
 import me.itzg.mccy.types.MccyInvalidFormatException;
 import org.springframework.beans.factory.ListableBeanFactory;
@@ -59,9 +58,9 @@ public class AssetRouterService {
     }
 
     public Resource downloadObject(AssetCategory category,
-                                   AssetObjectPurpose assetObjectPurpose, String assetId) throws FileNotFoundException {
+                                   String assetId) throws FileNotFoundException {
 
-        return assetObjectService.retrieve(assetId, assetObjectPurpose);
+        return assetObjectService.retrieve(assetId);
     }
 
     public List<Asset> queryByCategory(AssetCategory category) {
