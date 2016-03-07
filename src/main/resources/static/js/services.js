@@ -40,10 +40,19 @@ angular.module('Mccy.services',[
     })
 
     .service('Assets', function($resource){
-        return $resource('/api/assets/:category/:id', {
-            category:"@category",
-            id:"@id"
-        });
+        return $resource('/api/assets/:category/:id/:action',
+            {
+                category:"@category",
+                id:"@id"
+            },
+            {
+                suggest: {
+                    params: {
+                        action: '_suggest'
+                    },
+                    isArray: true
+                }
+            });
     })
 
     .service('ModPacks', function($resource){

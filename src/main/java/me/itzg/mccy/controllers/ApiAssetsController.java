@@ -75,4 +75,10 @@ public class ApiAssetsController {
                              @PathVariable("id")String assetId) {
         assetManagementService.delete(category, assetId);
     }
+
+    @RequestMapping(value = "/{category}/_suggest", method = RequestMethod.GET)
+    public List<Asset> suggestAssets(@PathVariable("category")AssetCategory category,
+                                     @RequestParam("q") String query) {
+        return assetManagementService.suggest(category, query);
+    }
 }

@@ -6,7 +6,7 @@ angular.module('Mccy.NewContainerCtrl', [
         editableOptions.theme = 'bs3';
     })
     .controller('NewContainerCtrl', function ($scope, $log, Upload,
-                                              Containers, Alerts, Versions, Mods, ModPacks,
+                                              Containers, Alerts, Versions, Mods, ModPacks, Assets,
                                               cServerTypes, cModdedTypes) {
 
         // Start with master list...
@@ -140,6 +140,22 @@ angular.module('Mccy.NewContainerCtrl', [
                 mcversion: $scope.version,
                 type: $scope.type,
                 input: input}).$promise;
+        };
+
+        $scope.suggestWorlds = function(input) {
+            return Assets.suggest({
+                q: input,
+                category: 'WORLD'
+            }).$promise;
+        };
+
+        $scope.chooseWorld = function(worldAsset) {
+            $scope.selectedWorld = worldAsset;
+        };
+
+        $scope.pickWorldAgain = function() {
+            $scope.worldQueryText = $scope.selectedWorld.name;
+            $scope.selectedWorld = null;
         };
 
         $scope.cancelNewContainer = function () {

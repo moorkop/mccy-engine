@@ -97,27 +97,33 @@
 
                 <div class="checkbox" ng-hide="enableWorld">
                     <label>
-                        <input type="checkbox" ng-model="enableWorld">World Save/Map
+                        <input type="checkbox" ng-model="enableWorld">Use World Save/Map
                     </label>
                 </div>
                 <div class="form-group" ng-show="enableWorld">
-                    <div class="row">
-                        <div class="col-xs-8" ng-hide="worldFile">
-                            <label>Download from
-                                <input class="form-control" type="url" ng-model="worldUrl">
-                            </label>
-                        </div>
-                        <div class="col-xs-4">
-                            <label>...or upload one</label>
-                            <div>
-                                <div class="btn btn-default upload" ngf-select ngf-drop ng-model="worldFile"
-                                     ng-class="{dropped:worldFile}" name="worldFile"
-                                     ngf-pattern="'.zip'" ngf-accept="'application/zip'">
-                                    <span ng-hide="worldFile" class="select">Select...</span>
-                                    <span class="target">Drop Here</span>
-                                    <span ng-show="worldFile" class="select">Got it</span>
-                                </div>
-                            </div>
+                    <label>Choose world to load</label>
+
+                    <div ng-show="selectedWorld">
+                        <span>{{selectedWorld.name}}</span>
+                        <a class="btn btn-sm btn-default" ng-click="pickWorldAgain()">Pick Again</a>
+                    </div>
+                    <div ng-hide="selectedWorld">
+                        <input type="text"
+                               ng-model="worldQueryText"
+                               placeholder="Start typing to search for a world to use"
+                               uib-typeahead="asset for asset in suggestWorlds($viewValue)"
+                               ng-focus="worldChooserOpen = true"
+                               typeahead-is-open="worldChooserOpen"
+                               typeahead-min-length="0"
+                               typeahead-loading="loadingWorlds"
+                               typeahead-no-results="noWorldResults"
+                               typeahead-template-url="ng-bits/asset-suggestion.html"
+                               typeahead-on-select="chooseWorld($item)"
+                               typeahead-wait-ms="100"
+                               class="form-control">
+                        <i ng-show="loadingWorlds" class="fa fa-spinner fa-pulse"></i>
+                        <div ng-show="noWorldResults">
+                            No Results Found
                         </div>
                     </div>
                 </div>
