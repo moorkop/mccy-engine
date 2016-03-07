@@ -1,4 +1,4 @@
-<div class="game-box">
+<div class="game-box" ng-cloak>
     <div class="login-form row">
         <div class="login-header text-center">
             <div class="login-title">Public servers on this MCCY system</div>

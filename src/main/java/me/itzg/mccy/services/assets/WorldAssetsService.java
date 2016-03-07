@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 
 /**
  * @author Geoff Bourne
@@ -72,7 +73,7 @@ public class WorldAssetsService implements AssetConsumer {
         asset.setWorldDetails(worldDescriptor);
         asset.setName(worldDescriptor.getName());
         asset.setCompatibleMcVersion(worldDescriptor.getMinecraftVersion());
-        asset.setCompatibleMcType(worldDescriptor.getServerType());
+        asset.setCompatibleMcTypes(Collections.singletonList(worldDescriptor.getServerType()));
     }
 
 

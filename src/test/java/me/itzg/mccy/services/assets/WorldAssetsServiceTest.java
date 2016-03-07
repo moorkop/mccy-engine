@@ -14,10 +14,6 @@ import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,7 +28,6 @@ import java.util.Optional;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.mock;
@@ -113,7 +108,7 @@ public class WorldAssetsServiceTest {
         assertEquals(retAsset.getId(), savedAsset.getId());
         assertEquals("world-name", savedAsset.getName());
         assertEquals(ComparableVersion.of("1.9"), savedAsset.getCompatibleMcVersion());
-        assertEquals(ServerType.VANILLA, savedAsset.getCompatibleMcType());
+        assertEquals(ServerType.VANILLA, savedAsset.getCompatibleMcTypes());
 
         verify(assetObjectService).save(same(assetFile), anyString(), eq(AssetObjectPurpose.SOURCE));
     }

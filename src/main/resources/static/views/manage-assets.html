@@ -30,7 +30,7 @@
             </div>
 
             <div ng-show="registeredAssets" class="registered-mods">
-                <div mccy-mod-panel="asset" ng-repeat="asset in registeredAssets"></div>
+                <div mccy-asset-panel="asset" ng-repeat="asset in registeredAssets"></div>
             </div>
         </div>
     </div>
@@ -47,7 +47,8 @@
         <div class="card-body">
             <div ng-switch="registeredAssets.length > 0">
                 <div ng-switch-when="true"
-                     mccy-mod-panel="asset" mccy-mod-panel-show-delete="true" ng-repeat="asset in registeredAssets">
+                     ng-repeat="asset in registeredAssets"
+                     mccy-asset-panel="asset" mccy-asset-panel-show-delete="true" >
                 </div>
 
                 <div ng-switch-when="false" class="big">

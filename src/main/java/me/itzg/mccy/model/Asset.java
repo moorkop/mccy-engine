@@ -1,7 +1,6 @@
 package me.itzg.mccy.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import me.itzg.mccy.types.ComparableVersion;
 import org.springframework.data.annotation.Id;
@@ -10,7 +9,6 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldIndex;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import javax.annotation.Generated;
 import java.net.URL;
 import java.util.List;
 
@@ -33,12 +31,12 @@ public abstract class Asset<DT> {
     private String name;
     private String description;
     private URL homepage;
-    private boolean visibleToPublic;
+    private boolean visibleToAll;
     @Field(type = FieldType.String, index = FieldIndex.not_analyzed)
     private String owner;
     private ComparableVersion version;
     private ComparableVersion compatibleMcVersion;
-    private ServerType compatibleMcType;
+    private List<ServerType> compatibleMcTypes;
     @Field(type = FieldType.String, index = FieldIndex.not_analyzed)
     private List<String> authors;
 
@@ -77,12 +75,12 @@ public abstract class Asset<DT> {
         this.homepage = homepage;
     }
 
-    public boolean isVisibleToPublic() {
-        return visibleToPublic;
+    public boolean isVisibleToAll() {
+        return visibleToAll;
     }
 
-    public void setVisibleToPublic(boolean visibleToPublic) {
-        this.visibleToPublic = visibleToPublic;
+    public void setVisibleToAll(boolean visibleToAll) {
+        this.visibleToAll = visibleToAll;
     }
 
     public String getOwner() {
@@ -109,12 +107,12 @@ public abstract class Asset<DT> {
         this.compatibleMcVersion = compatibleMcVersion;
     }
 
-    public ServerType getCompatibleMcType() {
-        return compatibleMcType;
+    public List<ServerType> getCompatibleMcTypes() {
+        return compatibleMcTypes;
     }
 
-    public void setCompatibleMcType(ServerType compatibleMcType) {
-        this.compatibleMcType = compatibleMcType;
+    public void setCompatibleMcTypes(List<ServerType> compatibleMcTypes) {
+        this.compatibleMcTypes = compatibleMcTypes;
     }
 
     public List<String> getAuthors() {

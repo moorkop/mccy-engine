@@ -1,4 +1,5 @@
 angular.module('Mccy.ManageAssets', [
+        'Mccy.directive.assets',
         'Mccy.services',
         'ngFileUpload'
     ])
