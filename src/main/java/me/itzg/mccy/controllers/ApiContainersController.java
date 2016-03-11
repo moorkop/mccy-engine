@@ -37,12 +37,12 @@ public class ApiContainersController {
     public List<ContainerSummary> getAllMccyContainers(Authentication auth)
             throws DockerException, InterruptedException {
 
-        if (auth != null) {
-            return containers.getAll(getAuthUsername(auth));
-        }
-        else {
-            return containers.getAllPublic();
-        }
+        return containers.getAll(getAuthUsername(auth));
+    }
+
+    @RequestMapping(value = "/_public", method = RequestMethod.GET)
+    public List<ContainerSummary> getAllPublicMccyContainers() throws DockerException, InterruptedException {
+        return containers.getAllPublic();
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -59,10 +59,20 @@ public class ApiContainersController {
         return containers.get(containerId, getAuthUsername(auth));
     }
 
+    @RequestMapping(value = "/_public/{containerId}", method = RequestMethod.GET)
+    public ContainerDetails getPublicContainer(@PathVariable("containerId") String containerId) throws DockerException, InterruptedException {
+        return containers.get(containerId, null);
+    }
+
     @RequestMapping(value = "/{containerId}/_status", method = RequestMethod.GET)
     public ServerStatus getContainerStatus(@PathVariable("containerId") String containerId,
                                            Authentication auth) throws DockerException, InterruptedException, TimeoutException, MccyUnexpectedServerException {
         return containers.getContainerStatus(containerId, getAuthUsername(auth));
+    }
+
+    @RequestMapping(value = "/_public/{containerId}/_status", method = RequestMethod.GET)
+    public ServerStatus getPublicContainerStatus(@PathVariable("containerId") String containerId) throws DockerException, InterruptedException, TimeoutException, MccyUnexpectedServerException {
+        return containers.getContainerStatus(containerId, null);
     }
 
     @RequestMapping(value = "/{containerId}", method = RequestMethod.DELETE)

@@ -1,7 +1,10 @@
 
+@import "bits/variables";
+
 @import "bits/public-containers";
 @import "bits/server-connection";
 @import "bits/ng-helper";
+@import "bits/new-container";
 
 // Global Elements
 html {
@@ -18,17 +21,6 @@ body {
 // Bootstrap Wrap
 * {
   outline: none;
-}
-.row {
-  & > [class*="col-"] {
-    margin-bottom: 25px;
-  }
-}
-
-.row.no-margin-bottom {
-  & > [class*="col-"] {
-    margin-bottom: 10px;
-  }
 }
 
 .row.no-gap {
@@ -666,7 +658,7 @@ a:hover {
   .card-header {
     .card-title {
       padding: 1.2em 25px;
-      float: left;
+      width: 100%;
 
       .title {
         font-family: 'Roboto Condensed', sans-serif;

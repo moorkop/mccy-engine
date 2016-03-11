@@ -2,16 +2,23 @@
     <div class="card">
         <div class="card-header">
             <div class="card-title">
-                <div class="title">Current containers</div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="title">Current containers</div>
+                    </div>
+                    <div class="col-md-4 ">
+                        <button class="btn btn-primary pull-right" ng-click="reload()">Reload</button>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="card-body">
             <div class="current-containers">
-                <div ng-repeat="c in containers" class="panel panel-default" ng-include="'ng-bits/current-container.html'">
+                <div ng-repeat="c in containers" class="panel panel-default"
+                     ng-include="'ng-bits/current-container.html'">
                 </div>
             </div>
-            <button class="btn btn-primary" ng-click="reload()">Reload</button>
         </div>
     </div>
 </div>

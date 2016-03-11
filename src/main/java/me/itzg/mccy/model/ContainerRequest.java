@@ -42,6 +42,8 @@ public class ContainerRequest {
 
     private boolean visibleToPublic;
 
+    private List<AssetRef> assets;
+
     public boolean isAckEula() {
         return ackEula;
     }
@@ -153,5 +155,17 @@ public class ContainerRequest {
 
     public void setVisibleToPublic(boolean visibleToPublic) {
         this.visibleToPublic = visibleToPublic;
+    }
+
+    /**
+     * Specifies the assets to be used by this container.
+     * @return the assets
+     */
+    public List<AssetRef> getAssets() {
+        return assets;
+    }
+
+    public void setAssets(List<AssetRef> assets) {
+        this.assets = assets;
     }
 }

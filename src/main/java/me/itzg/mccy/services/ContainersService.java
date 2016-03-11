@@ -160,6 +160,16 @@ public class ContainersService {
         return URI.create(mccySettings.getDockerHostUri()).getHost();
     }
 
+    /**
+     * Obtains the details of a running container.
+     *
+     * @param containerId the Docker container ID
+     * @param authUsername if null, only accesses public containers, otherwise this is used to narrow
+     *                     access to only those containers owned by this given user
+     * @return the details of the container
+     * @throws DockerException
+     * @throws InterruptedException
+     */
     public ContainerDetails get(String containerId, String authUsername) throws DockerException, InterruptedException {
         return proxy.access(dockerClient -> {
             final ContainerInfo containerInfo = dockerClient.inspectContainer(containerId);

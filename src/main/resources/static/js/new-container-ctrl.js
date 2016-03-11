@@ -1,6 +1,8 @@
 angular.module('Mccy.NewContainerCtrl', [
         'Mccy.services',
-        'ngFileUpload'
+        'ngFileUpload',
+        'ui.select',
+        'ngSanitize'
     ])
     .run(function(editableOptions) {
         editableOptions.theme = 'bs3';
@@ -11,6 +13,9 @@ angular.module('Mccy.NewContainerCtrl', [
 
         // Start with master list...
         $scope.applicableVersions = $scope.versions;
+
+        // An explicit location to place some model bindings, such as the ui-select
+        $scope.choices = {};
 
         $scope.types = _.map(cServerTypes, function(value, key){
             return {
@@ -67,7 +72,8 @@ angular.module('Mccy.NewContainerCtrl', [
                 name: this.name,
                 port: this.choosePort ? this.port : 0,
                 type: this.type,
-                version: this.version
+                version: this.version,
+                assets: []
             };
 
             if (this.enableOperators) {
@@ -79,11 +85,14 @@ angular.module('Mccy.NewContainerCtrl', [
             if (this.enableIcon) {
                 request.icon = this.iconUrl;
             }
-            if (this.enableWorld) {
-                request.world = this.worldUrl;
-            }
             if (this.enablePublic) {
                 request.visibleToPublic = this.enablePublic;
+            }
+            if (this.enableWorld) {
+                request.assets.push({
+                    category: 'WORLD',
+                    id: $scope.choices.selectedWorld.id
+                });
             }
             if (this.chooseMods && !_.isEmpty(this.selectedMods)) {
                 ModPacks.save(_.map(this.selectedMods, function(m){
@@ -102,35 +111,6 @@ angular.module('Mccy.NewContainerCtrl', [
         };
 
         function proceedAfterMods(request) {
-            if ($scope.worldFile) {
-                Upload.upload({
-                    url: '/api/uploads/worlds',
-                    data: {file: $scope.worldFile}
-                }).then(function (response) {
-                    // success
-                    Alerts.info('World Uploaded', 'World file was uploaded successfully');
-
-                    request.world = response.data.value;
-                    $log.debug("Upload available at", request.world);
-                    proceedAfterWorld(request);
-                }, function (resp) {
-                    var msg = resp.statusText;
-
-                    if (!msg) {
-                        msg = 'Failed to upload world file. Make sure it is smaller than ' +
-                            $scope.settings.mccy.maxUploadSize;
-                    }
-
-                    $log.warn(resp);
-                    Alerts.error(msg);
-                });
-            }
-            else {
-                proceedAfterWorld(request);
-            }
-        }
-
-        function proceedAfterWorld(request) {
             Containers.save(request, handleSuccess, handleRequestError);
         }
 
@@ -143,19 +123,10 @@ angular.module('Mccy.NewContainerCtrl', [
         };
 
         $scope.suggestWorlds = function(input) {
-            return Assets.suggest({
+            $scope.worlds = Assets.suggest({
                 q: input,
                 category: 'WORLD'
-            }).$promise;
-        };
-
-        $scope.chooseWorld = function(worldAsset) {
-            $scope.selectedWorld = worldAsset;
-        };
-
-        $scope.pickWorldAgain = function() {
-            $scope.worldQueryText = $scope.selectedWorld.name;
-            $scope.selectedWorld = null;
+            });
         };
 
         $scope.cancelNewContainer = function () {
@@ -195,11 +166,11 @@ angular.module('Mccy.NewContainerCtrl', [
             $scope.enableIcon = false;
             $scope.iconUrl = undefined;
             $scope.enableWorld = false;
+            $scope.selectedWorld = undefined;
             $scope.enablePublic = false;
-            $scope.worldUrl = undefined;
             $scope.ackEula = false;
-            $scope.worldUploaded = false;
-            $scope.worldFile = undefined;
+            $scope.worlds = [];
+
         }
 
     })

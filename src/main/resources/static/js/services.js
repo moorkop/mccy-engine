@@ -20,6 +20,15 @@ angular.module('Mccy.services',[
         });
     })
 
+    .service('PublicContainers', function($resource){
+        return $resource('/api/containers/_public/:id', {}, {
+            getStatus: {
+                url: '/api/containers/:id/_status',
+                method: 'GET'
+            }
+        });
+    })
+
     .service('MccyApi', function($resource){
         return $resource('/api/:category', {}, {
             appInfo: {

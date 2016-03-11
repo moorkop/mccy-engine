@@ -1,4 +1,4 @@
-<div class="col-xs-12">
+<div class="col-xs-12 new-container">
     <div class="card">
         <div class="card-header">
             <div class="card-title">
@@ -103,29 +103,16 @@
                 <div class="form-group" ng-show="enableWorld">
                     <label>Choose world to load</label>
 
-                    <div ng-show="selectedWorld">
-                        <span>{{selectedWorld.name}}</span>
-                        <a class="btn btn-sm btn-default" ng-click="pickWorldAgain()">Pick Again</a>
-                    </div>
-                    <div ng-hide="selectedWorld">
-                        <input type="text"
-                               ng-model="worldQueryText"
-                               placeholder="Start typing to search for a world to use"
-                               uib-typeahead="asset for asset in suggestWorlds($viewValue)"
-                               ng-focus="worldChooserOpen = true"
-                               typeahead-is-open="worldChooserOpen"
-                               typeahead-min-length="0"
-                               typeahead-loading="loadingWorlds"
-                               typeahead-no-results="noWorldResults"
-                               typeahead-template-url="ng-bits/asset-suggestion.html"
-                               typeahead-on-select="chooseWorld($item)"
-                               typeahead-wait-ms="100"
-                               class="form-control">
-                        <i ng-show="loadingWorlds" class="fa fa-spinner fa-pulse"></i>
-                        <div ng-show="noWorldResults">
-                            No Results Found
-                        </div>
-                    </div>
+                    <ui-select ng-model="choices.selectedWorld">
+                        <ui-select-match placeholder="Click here and then enter a filter...">
+                            {{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices repeat="world in worlds"
+                                           refresh="suggestWorlds($select.search)"
+                                           refresh-delay="100">
+                            <div ng-bind-html="world.name | highlight: $select.search"></div>
+                            <div ng-bind-html="world.description | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
 
                 <div class="form-group">
