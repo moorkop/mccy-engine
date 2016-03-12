@@ -87,9 +87,9 @@ public class ContainerBuilderServiceImplTest {
     public void testWorldAssetViaOverlay() throws Exception, MccyException {
         ContainerRequest request = createRequestWithWorldAsset();
 
-        mccyAssetSettings.setVia(MccyAssetSettings.Via.OVERLAY);
-        mccyAssetSettings.setOverlayNetwork("mccy-assets");
-        mccyAssetSettings.setMyOverlayName("mccy-engine");
+        mccyAssetSettings.setVia(MccyAssetSettings.Via.NETWORK);
+        mccyAssetSettings.setNetwork("mccy-assets");
+        mccyAssetSettings.setMyNameOnNetwork("mccy-engine");
 
         final ContainerConfig containerConfig = containerBuilderService.buildContainerConfig(
                 request, "user1", UriComponentsBuilder.fromUriString("http://localhost"));

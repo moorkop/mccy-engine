@@ -20,7 +20,7 @@ import java.util.function.Predicate;
 {@literal @}Retention(RetentionPolicy.RUNTIME)
 {@literal @}Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
 {@literal @}Constraint(validatedBy = YourImplOfValidator.class)
-public @interface ValidFixedUriSettings {
+public @interface ValidViaFixedUriSettings {
     String message() default "invalid fixedUri settings";
 
     Class<?>[] groups() default {};
@@ -33,17 +33,17 @@ public @interface ValidFixedUriSettings {
  *     And then extend this class:
  *     <pre>
 {@literal @}Component
-public class YourImplOfValidator extends AbstractContraintsValidator<ValidOverlaySettings, MccyAssetSettings> {
+public class YourImplOfValidator extends AbstractContraintsValidator<ValidViaNetworkSettings, MccyAssetSettings> {
 
     public YourImplOfValidator() {
         addValidation((mccyAssetSettings, violationsHolder) ->
-            !Strings.isNullOrEmpty(mccyAssetSettings.getOverlayNetwork()) ||
+            !Strings.isNullOrEmpty(mccyAssetSettings.getNetwork()) ||
             violationsHolder.addPropertyViolation(MESSAGE, "overlayNetwork"));
 
     }
    {@literal @}Override
     protected boolean applicable(MccyAssetSettings obj) {
-        return obj.getVia() == MccyAssetSettings.Via.OVERLAY;
+        return obj.getVia() == MccyAssetSettings.Via.NETWORK;
     }
 }
  *     </pre>

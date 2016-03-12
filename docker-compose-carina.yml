@@ -18,6 +18,9 @@ services:
       --mccy.docker-cert-path=/carina/clusters/$CARINA_USERNAME/$DEPLOY_CLUSTER
       --mccy.deployment-powered-by.image-src=img/powered-by/powered-by-carina-wide.png
       --mccy.deployment-powered-by.href=https://getcarina.com/
+      --mccy.assets.via=network
+      --mccy.assets.network=mccy-assets
+      --mccy.assets.my-name-on-network=mccy
 
   mccy-data:
     image: alpine
@@ -61,5 +64,7 @@ services:
 
 networks:
   mccy-backend:
+    driver: overlay
+  mccy-assets:
     driver: overlay
 

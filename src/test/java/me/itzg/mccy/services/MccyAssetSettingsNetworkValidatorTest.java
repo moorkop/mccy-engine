@@ -12,7 +12,6 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
-import java.io.File;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -21,7 +20,7 @@ import static org.junit.Assert.*;
  * @author Geoff Bourne
  * @since 0.2
  */
-public class MccyAssetSettingsOverlayValidatorTest {
+public class MccyAssetSettingsNetworkValidatorTest {
 
     private LocalValidatorFactoryBean validatorFactoryBean;
 
@@ -42,9 +41,9 @@ public class MccyAssetSettingsOverlayValidatorTest {
 
         final MccyAssetSettings settings = new MccyAssetSettings();
         settings.setStorageDir(temporaryFolder.newFolder());
-        settings.setVia(MccyAssetSettings.Via.OVERLAY);
-        settings.setMyOverlayName("mccy-engine");
-        settings.setOverlayNetwork("mccy-overlay");
+        settings.setVia(MccyAssetSettings.Via.NETWORK);
+        settings.setMyNameOnNetwork("mccy-engine");
+        settings.setNetwork("mccy-overlay");
 
         final Set<ConstraintViolation<MccyAssetSettings>> violations = validator.validate(settings);
         assertThat(violations, Matchers.empty());
@@ -69,8 +68,8 @@ public class MccyAssetSettingsOverlayValidatorTest {
 
         final MccyAssetSettings settings = new MccyAssetSettings();
         settings.setStorageDir(temporaryFolder.newFolder());
-        settings.setVia(MccyAssetSettings.Via.OVERLAY);
-        settings.setOverlayNetwork("mccy-overlay");
+        settings.setVia(MccyAssetSettings.Via.NETWORK);
+        settings.setNetwork("mccy-overlay");
 
         final Set<ConstraintViolation<MccyAssetSettings>> violations = validator.validate(settings);
         assertThat(violations, Matchers.hasSize(1));
@@ -82,7 +81,7 @@ public class MccyAssetSettingsOverlayValidatorTest {
         final Validator validator = validatorFactoryBean.getValidator();
 
         final MccyAssetSettings settings = new MccyAssetSettings();
-        settings.setVia(MccyAssetSettings.Via.OVERLAY);
+        settings.setVia(MccyAssetSettings.Via.NETWORK);
 
         final Set<ConstraintViolation<MccyAssetSettings>> violations = validator.validate(settings);
 

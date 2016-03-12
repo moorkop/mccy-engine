@@ -33,8 +33,8 @@ import java.util.concurrent.Executors;
 public class GeneralConfig {
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
-    @Autowired
-    private Optional<EmbeddedWebApplicationContext> embeddedWebApplicationContext;
+    @Autowired(required = false)
+    private EmbeddedWebApplicationContext embeddedWebApplicationContext;
 
     @Bean
     public HashFunction fileIdHash() {
@@ -91,16 +91,5 @@ public class GeneralConfig {
     @Bean
     public UUIDGenerator uuidGenerator() {
         return UUID::randomUUID;
-    }
-
-    @Bean
-    public WebServerPortProvider webServerPortProvider() {
-        return () -> {
-            if (embeddedWebApplicationContext.isPresent()) {
-                return embeddedWebApplicationContext.get().getEmbeddedServletContainer().getPort();
-            } else {
-                return 8080;
-            }
-        };
     }
 }

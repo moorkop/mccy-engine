@@ -1,7 +1,7 @@
 package me.itzg.mccy.config;
 
-import me.itzg.mccy.types.ValidFixedUriSettings;
-import me.itzg.mccy.types.ValidOverlaySettings;
+import me.itzg.mccy.types.ValidViaFixedUriSettings;
+import me.itzg.mccy.types.ValidViaNetworkSettings;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +15,8 @@ import java.net.URI;
  */
 @ConfigurationProperties("mccy.assets")
 @Component
-@ValidOverlaySettings
-@ValidFixedUriSettings
+@ValidViaNetworkSettings
+@ValidViaFixedUriSettings
 public class MccyAssetSettings {
 
     @NotNull
@@ -25,9 +25,9 @@ public class MccyAssetSettings {
     @NotNull
     private Via via = Via.REQUEST_URL;
 
-    private String overlayNetwork;
+    private String network;
 
-    private String myOverlayName;
+    private String myNameOnNetwork;
 
     private URI fixedUri;
 
@@ -47,12 +47,12 @@ public class MccyAssetSettings {
         this.storageDir = storageDir;
     }
 
-    public String getOverlayNetwork() {
-        return overlayNetwork;
+    public String getNetwork() {
+        return network;
     }
 
-    public void setOverlayNetwork(String overlayNetwork) {
-        this.overlayNetwork = overlayNetwork;
+    public void setNetwork(String network) {
+        this.network = network;
     }
 
     public URI getFixedUri() {
@@ -64,16 +64,16 @@ public class MccyAssetSettings {
         this.fixedUri = fixedUri;
     }
 
-    public String getMyOverlayName() {
-        return myOverlayName;
+    public String getMyNameOnNetwork() {
+        return myNameOnNetwork;
     }
 
-    public void setMyOverlayName(String myOverlayName) {
-        this.myOverlayName = myOverlayName;
+    public void setMyNameOnNetwork(String myNameOnNetwork) {
+        this.myNameOnNetwork = myNameOnNetwork;
     }
 
     public enum Via {
-        OVERLAY,
+        NETWORK,
         LINK,
         FIXED_URI,
         REQUEST_URL

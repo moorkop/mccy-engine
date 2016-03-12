@@ -174,15 +174,15 @@ public class ContainerBuilderServiceImpl implements ContainerBuilderService {
         if (worldAssetRef.isPresent()) {
             final UriComponents builtUri;
             switch (mccyAssetSettings.getVia()) {
-                case OVERLAY:
+                case NETWORK:
                     builtUri = UriComponentsBuilder.newInstance()
                             .scheme("http")
-                            .host(mccyAssetSettings.getMyOverlayName())
+                            .host(mccyAssetSettings.getMyNameOnNetwork())
                             .port(getOurPort())
                             .path(ApiAssetsController.ASSET_DOWNLOAD_PATH)
                             .path(WORLD_ZIP_NAME)
                             .build();
-                    hostConfig.networkMode(mccyAssetSettings.getOverlayNetwork());
+                    hostConfig.networkMode(mccyAssetSettings.getNetwork());
                     break;
 
                 case FIXED_URI:
