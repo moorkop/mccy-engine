@@ -1,7 +1,9 @@
 # Minecraft Container Yard
 
 [![Join the chat at https://gitter.im/moorkop](https://badges.gitter.im/moorkop.svg)](https://gitter.im/itzg/minecraft-container-yard?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-Build: [![Circle CI](https://circleci.com/gh/moorkop/mccy-engine.svg?style=svg)](https://circleci.com/gh/mccy-universe/minecraft-container-yard)
+[![Circle CI](https://circleci.com/gh/moorkop/mccy-engine.svg?style=svg)](https://circleci.com/gh/mccy-universe/minecraft-container-yard)
+[![codecov.io](https://codecov.io/github/moorkop/mccy-engine/coverage.svg?branch=master)](https://codecov.io/github/moorkop/mccy-engine?branch=master)
+
 
 Provides a web based "Minecraft Server as a Service" (MCaaS?) to deploy Minecraft server containers on any 
 Docker Swarm cluster or standalone Engine instance.

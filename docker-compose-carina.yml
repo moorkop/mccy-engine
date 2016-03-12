@@ -3,7 +3,7 @@ version: '2'
 
 services:
   mccy:
-    image: itzgeoff-docker-images.bintray.io/moorkop/mccy-engine:$CIRCLE_BRANCH
+    image: moorkop/mccy-engine:$CIRCLE_BRANCH
     restart: always
     volumes_from:
       - mccy-data
@@ -35,7 +35,7 @@ services:
     command: credentials $DEPLOY_CLUSTER
 
   proxy:
-    image: itzgeoff-docker-images.bintray.io/moorkop/mccy-lets-nginx
+    image: moorkop/mccy-lets-nginx:master
     restart: always
     networks:
       - mccy-backend

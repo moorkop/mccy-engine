@@ -25,7 +25,7 @@ angular.module('Mccy.NewContainerCtrl', [
         });
 
         Versions.query({type:'VANILLA'}, function(response){
-            $scope.versions = $scope.versions.concat(response.map(function(v){
+            $scope.applicableVersions = $scope.versions.concat(response.map(function(v){
                 return {
                     value: v,
                     label: v

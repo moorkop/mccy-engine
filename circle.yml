@@ -8,11 +8,17 @@ machine:
   services:
     - docker
 
+checkout:
+  post:
+    - git submodule sync
+    - git submodule update --init
+
 dependencies:
   pre:
     - docker --version
     - docker-compose --version
     - mvn --version
+    - pip install --user codecov
 
 test:
   override:
@@ -21,13 +27,14 @@ test:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/ $CIRCLE_TEST_REPORTS/jacoco/
     - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
     - cp -r target/site/jacoco/* $CIRCLE_TEST_REPORTS/jacoco/
+    - codecov
 
 deployment:
   staging:
     branch: master
     commands:
       - docker build -t mccy-engine .
-      - ./push-bintray.sh
+      - build-support/push-image.sh
       - ./deploy-carina.sh $TEST_CLUSTER $TEST_PINNED_NODE:
          environment:
            LETSENCRYPT_DOMAIN: mccy-staging.itzg.me
