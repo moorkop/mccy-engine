@@ -12,6 +12,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - mccy-backend
+      - mccy-assets
     command: >
       --security.user.password=$MCCY_PASSWORD
       --mccy.docker-host-uri=$DOCKER_HOST_URI
