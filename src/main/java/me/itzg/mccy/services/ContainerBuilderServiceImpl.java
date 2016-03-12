@@ -36,6 +36,7 @@ import static java.util.Collections.singletonMap;
 @Service
 public class ContainerBuilderServiceImpl implements ContainerBuilderService {
 
+    private static final String WORLD_ZIP_NAME = "/world.zip";
     @Autowired
     private MccyAssetSettings mccyAssetSettings;
 
@@ -179,6 +180,7 @@ public class ContainerBuilderServiceImpl implements ContainerBuilderService {
                             .host(mccyAssetSettings.getMyOverlayName())
                             .port(getOurPort())
                             .path(ApiAssetsController.ASSET_DOWNLOAD_PATH)
+                            .path(WORLD_ZIP_NAME)
                             .build();
                     hostConfig.networkMode(mccyAssetSettings.getOverlayNetwork());
                     break;
@@ -187,6 +189,7 @@ public class ContainerBuilderServiceImpl implements ContainerBuilderService {
                     builtUri = UriComponentsBuilder
                             .fromUri(mccyAssetSettings.getFixedUri())
                             .path(ApiAssetsController.ASSET_DOWNLOAD_PATH)
+                            .path(WORLD_ZIP_NAME)
                             .build();
                     break;
 
@@ -196,6 +199,7 @@ public class ContainerBuilderServiceImpl implements ContainerBuilderService {
                             .host(MccyConstants.LINK_MCCY)
                             .port(getOurPort())
                             .path(ApiAssetsController.ASSET_DOWNLOAD_PATH)
+                            .path(WORLD_ZIP_NAME)
                             .build();
                     if (!builtLink) {
                         hostConfig.links(ourContainerId + ":" + MccyConstants.LINK_MCCY);
@@ -206,6 +210,7 @@ public class ContainerBuilderServiceImpl implements ContainerBuilderService {
                 case REQUEST_URL:
                     builtUri = ((UriComponentsBuilder) requestUri.clone())
                             .replacePath(ApiAssetsController.ASSET_DOWNLOAD_PATH)
+                            .path(WORLD_ZIP_NAME)
                             .build();
                     break;
             }

@@ -78,7 +78,7 @@ public class ContainerBuilderServiceImplTest {
                 request, "user1", UriComponentsBuilder.fromUriString("http://localhost"));
 
         assertThat(containerConfig.env(), contains(
-                String.format("WORLD=http://%s:%d/a/WORLD/asset-1", MccyConstants.LINK_MCCY, 9090),
+                String.format("WORLD=http://%s:%d/a/WORLD/asset-1/world.zip", MccyConstants.LINK_MCCY, 9090),
                 "EULA=TRUE"
         ));
     }
@@ -95,7 +95,7 @@ public class ContainerBuilderServiceImplTest {
                 request, "user1", UriComponentsBuilder.fromUriString("http://localhost"));
 
         assertThat(containerConfig.env(), contains(
-                String.format("WORLD=http://%s:%d/a/WORLD/asset-1", "mccy-engine", 9090),
+                String.format("WORLD=http://%s:%d/a/WORLD/asset-1/world.zip", "mccy-engine", 9090),
                 "EULA=TRUE"
         ));
 
@@ -113,7 +113,7 @@ public class ContainerBuilderServiceImplTest {
                 request, "user1", UriComponentsBuilder.fromUriString("http://localhost"));
 
         assertThat(containerConfig.env(), contains(
-                "WORLD=https://proxy/app/a/WORLD/asset-1",
+                "WORLD=https://proxy/app/a/WORLD/asset-1/world.zip",
                 "EULA=TRUE"
         ));
     }
@@ -128,7 +128,7 @@ public class ContainerBuilderServiceImplTest {
                 request, "user1", UriComponentsBuilder.fromUriString("https://server"));
 
         assertThat(containerConfig.env(), contains(
-                "WORLD=https://server/a/WORLD/asset-1",
+                "WORLD=https://server/a/WORLD/asset-1/world.zip",
                 "EULA=TRUE"
         ));
     }
@@ -143,7 +143,4 @@ public class ContainerBuilderServiceImplTest {
                 new AssetRef().setCategory(AssetCategory.WORLD).setId("asset-1")));
         return request;
     }
-    //TODO add tests for various asset link scenarios
-    //fixed uri
-    //request uri
 }

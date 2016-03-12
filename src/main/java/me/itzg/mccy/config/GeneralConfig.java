@@ -95,11 +95,12 @@ public class GeneralConfig {
 
     @Bean
     public WebServerPortProvider webServerPortProvider() {
-        if (embeddedWebApplicationContext.isPresent()) {
-            return () -> embeddedWebApplicationContext.get().getEmbeddedServletContainer().getPort();
-        }
-        else {
-            return () -> 8080;
-        }
+        return () -> {
+            if (embeddedWebApplicationContext.isPresent()) {
+                return embeddedWebApplicationContext.get().getEmbeddedServletContainer().getPort();
+            } else {
+                return 8080;
+            }
+        };
     }
 }

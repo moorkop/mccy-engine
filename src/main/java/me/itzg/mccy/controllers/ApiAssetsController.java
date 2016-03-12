@@ -57,7 +57,7 @@ public class ApiAssetsController {
         return assetRouterService.queryByCategory(category);
     }
 
-    @RequestMapping(value = "/{category}/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{category}/{id}/{downloadAs}", method = RequestMethod.GET)
     public Resource download(@PathVariable("category")AssetCategory category,
                              @PathVariable("id")String assetId) throws FileNotFoundException {
 
