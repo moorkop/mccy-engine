@@ -33,9 +33,6 @@ public class ContainerRequest {
     private String icon;
 
     @Pattern(regexp = "https?://.+", message = "needs to be a valid http or https URL")
-    private String world;
-
-    @Pattern(regexp = "https?://.+", message = "needs to be a valid http or https URL")
     private String modpack;
 
     private boolean startOnCreate = true;
@@ -122,14 +119,6 @@ public class ContainerRequest {
 
     public void setIcon(String icon) {
         this.icon = icon;
-    }
-
-    public String getWorld() {
-        return world;
-    }
-
-    public void setWorld(String world) {
-        this.world = world;
     }
 
     /**

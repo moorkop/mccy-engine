@@ -7,6 +7,7 @@ import com.spotify.docker.client.messages.ContainerCreation;
 import com.spotify.docker.client.messages.ContainerInfo;
 import com.spotify.docker.client.messages.ContainerState;
 import com.spotify.docker.client.messages.NetworkSettings;
+import me.itzg.mccy.config.MccyAssetSettings;
 import me.itzg.mccy.config.MccySettings;
 import me.itzg.mccy.model.ContainerDetails;
 import me.itzg.mccy.model.ContainerRequest;
@@ -23,7 +24,10 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.validation.Validator;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.ValidatorFactory;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,6 +78,13 @@ public class ContainersServiceTest {
         }
 
         @Bean
+        public MccyAssetSettings mccyAssetSettings() {
+            final MccyAssetSettings mccyAssetSettings = new MccyAssetSettings();
+            mccyAssetSettings.setVia(null);
+            return mccyAssetSettings;
+        }
+
+        @Bean
         public String ourContainerId() {
             return "container-1";
         }
@@ -96,6 +107,10 @@ public class ContainersServiceTest {
             return mock(ServerStatusService.class);
         }
 
+        @Bean @Qualifier("mock")
+        public ContainerBuilderService containerBuilderService() {
+            return Mockito.mock(ContainerBuilderService.class);
+        }
     }
 
     @Autowired
@@ -103,6 +118,9 @@ public class ContainersServiceTest {
 
     @Autowired
     private DockerClient dockerClient;
+
+    @Autowired
+    private ContainerBuilderService containerBuilderService;
 
     @After
     public void tearDown() throws Exception {
@@ -116,17 +134,21 @@ public class ContainersServiceTest {
     }
 
     @Test
-    public void testCreatePublicContainer() throws Exception, MccyException {
+    public void testCreateContainer() throws Exception, MccyException {
         ContainerRequest request = new ContainerRequest();
         request.setName("server-1");
-        request.setVisibleToPublic(true);
         request.setStartOnCreate(true);
         request.setAckEula(true);
 
         when(dockerClient.createContainer(any(ContainerConfig.class), anyString()))
                 .thenReturn(new ContainerCreation("id-1"));
 
-        final String id = containersService.create(request, "user1");
+        ContainerConfig stubbedConfig = ContainerConfig.builder().build();
+        when(containerBuilderService.buildContainerConfig(any(), any(), any()))
+                .thenReturn(stubbedConfig);
+
+        final String id = containersService.create(request, "user1",
+                UriComponentsBuilder.fromUriString("http://localhost:8080"));
 
         verify(dockerClient).pull(anyString());
 
@@ -135,12 +157,6 @@ public class ContainersServiceTest {
         verify(dockerClient).createContainer(containerConfigCaptor.capture(), eq("server_1"));
 
         verify(dockerClient).startContainer(eq(id));
-
-        final Map<String, String> labels = containerConfigCaptor.getValue().labels();
-        final String labelValue = labels.get(MccyConstants.MCCY_LABEL_PUBLIC);
-        assertEquals("true", labelValue);
-
-        assertThat(containerConfigCaptor.getValue().env(), contains("EULA=TRUE"));
 
         Mockito.verifyNoMoreInteractions(dockerClient);
 

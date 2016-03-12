@@ -16,15 +16,17 @@ public class AssetRef {
         return category;
     }
 
-    public void setCategory(AssetCategory category) {
+    public AssetRef setCategory(AssetCategory category) {
         this.category = category;
+        return this;
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public AssetRef setId(String id) {
         this.id = id;
+        return this;
     }
 }

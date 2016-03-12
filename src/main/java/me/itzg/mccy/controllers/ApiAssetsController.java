@@ -29,6 +29,7 @@ import java.util.List;
 @RequestMapping({"/api/assets","/a"})
 public class ApiAssetsController {
 
+    public static final String ASSET_DOWNLOAD_PATH = "/a/{category}/{id}";
     @Autowired
     private AssetRouterService assetRouterService;
 

@@ -28,7 +28,7 @@
         <enunciate.version>2.2.0</enunciate.version>
         <sass-maven-plugin.version>2.15</sass-maven-plugin.version>
         <netty.version>4.0.34.Final</netty.version>
-        <spotify.docker-client.version>3.5.12</spotify.docker-client.version>
+        <spotify.docker-client.version>3.6.3</spotify.docker-client.version>
         <flow-nbt.version>1.0.0</flow-nbt.version>
         <jackson-dataformat-yaml.version>2.6.4</jackson-dataformat-yaml.version>
         <bootstrap.version>3.3.6</bootstrap.version>

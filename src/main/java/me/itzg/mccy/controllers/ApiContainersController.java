@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -47,9 +48,10 @@ public class ApiContainersController {
 
     @RequestMapping(method = RequestMethod.POST)
     public SingleValue<String> createContainer(@RequestBody @Valid ContainerRequest request,
-                                               Authentication auth) throws MccyException, DockerException, InterruptedException {
+                                               Authentication auth, UriComponentsBuilder requestUri)
+            throws MccyException, DockerException, InterruptedException {
 
-        return SingleValue.of(containers.create(request, getAuthUsername(auth)));
+        return SingleValue.of(containers.create(request, getAuthUsername(auth), requestUri));
 
     }
 
