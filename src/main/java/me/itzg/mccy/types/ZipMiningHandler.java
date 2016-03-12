@@ -1,5 +1,6 @@
 package me.itzg.mccy.types;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.regex.Pattern;
  * @since 0.2
  */
 public interface ZipMiningHandler {
-    void handleZipContentFile(String path, InputStream in);
+    void handleZipContentFile(String path, InputStream in) throws IOException, MccyException;
 
     static ListBuilder listBuilder() {
         return new ListBuilder();

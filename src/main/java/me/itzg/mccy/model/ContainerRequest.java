@@ -33,14 +33,13 @@ public class ContainerRequest {
     private String icon;
 
     @Pattern(regexp = "https?://.+", message = "needs to be a valid http or https URL")
-    private String world;
-
-    @Pattern(regexp = "https?://.+", message = "needs to be a valid http or https URL")
     private String modpack;
 
     private boolean startOnCreate = true;
 
     private boolean visibleToPublic;
+
+    private List<AssetRef> assets;
 
     public boolean isAckEula() {
         return ackEula;
@@ -122,14 +121,6 @@ public class ContainerRequest {
         this.icon = icon;
     }
 
-    public String getWorld() {
-        return world;
-    }
-
-    public void setWorld(String world) {
-        this.world = world;
-    }
-
     /**
      * Refers to either a zip of Forge mods or a zip of Bukkit/Spigot plugins, but generalizes
      * on the term "mod pack"
@@ -153,5 +144,17 @@ public class ContainerRequest {
 
     public void setVisibleToPublic(boolean visibleToPublic) {
         this.visibleToPublic = visibleToPublic;
+    }
+
+    /**
+     * Specifies the assets to be used by this container.
+     * @return the assets
+     */
+    public List<AssetRef> getAssets() {
+        return assets;
+    }
+
+    public void setAssets(List<AssetRef> assets) {
+        this.assets = assets;
     }
 }

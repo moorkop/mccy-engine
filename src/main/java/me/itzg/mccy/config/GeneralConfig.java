@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
+import me.itzg.mccy.services.WebServerPortProvider;
+import me.itzg.mccy.types.UUIDGenerator;
 import me.itzg.mccy.types.YamlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.boot.context.embedded.EmbeddedWebApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -19,6 +21,8 @@ import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 
 /**
@@ -27,6 +31,10 @@ import java.util.concurrent.Executors;
  */
 @Configuration
 public class GeneralConfig {
+
+    @SuppressWarnings("SpringJavaAutowiringInspection")
+    @Autowired(required = false)
+    private EmbeddedWebApplicationContext embeddedWebApplicationContext;
 
     @Bean
     public HashFunction fileIdHash() {
@@ -50,6 +58,7 @@ public class GeneralConfig {
                 InetAddress.getLocalHost().getHostName() : null;
     }
 
+    @SuppressWarnings({"Convert2Lambda", "Anonymous2MethodRef"})
     @Bean
     public Converter<String, URI> uriConverterFactory() {
         return new Converter<String, URI>() {
@@ -62,8 +71,7 @@ public class GeneralConfig {
 
     @Bean
     @Autowired
-    public ConfigurableConversionService conversionService(ConfigurableBeanFactory beanFactory,
-                                                           Converter[] converters) {
+    public ConfigurableConversionService conversionService(Converter[] converters) {
         final ConfigurableConversionService ours = new DefaultConversionService();
 
         for (Converter converter : converters) {
@@ -76,9 +84,12 @@ public class GeneralConfig {
     @Bean
     public ConcurrentTaskExecutor remoteInvocationExecutor() {
         final CustomizableThreadFactory threadFactory = new CustomizableThreadFactory("remoteInv-");
-        final ConcurrentTaskExecutor executor =
-                new ConcurrentTaskExecutor(Executors.newCachedThreadPool(threadFactory));
 
-        return executor;
+        return new ConcurrentTaskExecutor(Executors.newCachedThreadPool(threadFactory));
+    }
+
+    @Bean
+    public UUIDGenerator uuidGenerator() {
+        return UUID::randomUUID;
     }
 }

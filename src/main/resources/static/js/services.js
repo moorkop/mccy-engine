@@ -20,6 +20,15 @@ angular.module('Mccy.services',[
         });
     })
 
+    .service('PublicContainers', function($resource){
+        return $resource('/api/containers/_public/:id', {}, {
+            getStatus: {
+                url: '/api/containers/:id/_status',
+                method: 'GET'
+            }
+        });
+    })
+
     .service('MccyApi', function($resource){
         return $resource('/api/:category', {}, {
             appInfo: {
@@ -37,6 +46,22 @@ angular.module('Mccy.services',[
 
     .service('Mods', function($resource){
         return $resource('/api/mods/:id', {id:"@id"});
+    })
+
+    .service('Assets', function($resource){
+        return $resource('/api/assets/:category/:id/:action',
+            {
+                category:"@category",
+                id:"@id"
+            },
+            {
+                suggest: {
+                    params: {
+                        action: '_suggest'
+                    },
+                    isArray: true
+                }
+            });
     })
 
     .service('ModPacks', function($resource){

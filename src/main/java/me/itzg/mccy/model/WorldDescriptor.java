@@ -14,7 +14,7 @@ import java.util.List;
  * @author Geoff Bourne
  * @since 0.2
  */
-public class LevelDescriptor {
+public class WorldDescriptor {
     private String name;
 
     private ComparableVersion minecraftVersion;

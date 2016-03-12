@@ -58,6 +58,8 @@ public class MccyConstants {
     public static final String ENV_LEVEL = "LEVEL";
 
     public static final String LINK_MCCY = "mccy";
-    public static final String PROFILE_BASIC_AUTH = "basicAuth";
     public static final String SNAPSHOT_VER_PATTERN = "(?<nYear>\\d+)w(?<nWeek>\\d+)(?<sRel>[a-z]+)";
+
+    public static final String PROFILE_BASIC_AUTH = "basicAuth";
+    public static final String PROFILE_DEV = "dev";
 }

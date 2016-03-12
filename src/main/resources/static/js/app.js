@@ -5,6 +5,7 @@ angular.module('MccyApp', [
     'Mccy.directives',
     'Mccy.mods',
     'Mccy.constants',
+    'Mccy.filters',
     'ngAnimate',
     'ui.bootstrap',
     'ui.bootstrap.tpls',

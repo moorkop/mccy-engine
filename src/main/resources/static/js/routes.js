@@ -12,13 +12,13 @@ angular.module('Mccy.routes', [
         templateUrl: 'views/create-container.html',
         controller: 'NewContainerCtrl'
     })
-    .when('/upload-mod', {
-        templateUrl: 'views/upload-mod.html',
-        controller: 'UploadModCtrl'
-    })
     .when('/manage-mods', {
         templateUrl: 'views/manage-mods.html',
         controller: 'ManageModsCtrl'
+    })
+    .when('/manage-assets/:assetCategory', {
+        templateUrl: 'views/manage-assets.html',
+        controller: 'ManageAssetsCtrl'
     })
     .otherwise('/view')
 })
@@ -39,17 +39,17 @@ angular.module('Mccy.routes', [
         }
     },
     {
-        view: '/upload-mod',
-        settings: {
-            label: 'Upload Mods',
-            icon: 'icon fa fa-upload'
-        }
-    },
-    {
         view: '/manage-mods',
         settings: {
             label: 'Manage Mods',
             icon: 'icon fa fa-flask'
+        }
+    },
+    {
+        view: '/manage-assets/WORLD',
+        settings: {
+            label: 'Manage Worlds',
+            icon: 'icon fa fa-globe'
         }
     }
 ])

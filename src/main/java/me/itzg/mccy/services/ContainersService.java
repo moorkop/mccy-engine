@@ -1,37 +1,29 @@
 package me.itzg.mccy.services;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
 import com.spotify.docker.client.DockerException;
 import com.spotify.docker.client.messages.ContainerConfig;
 import com.spotify.docker.client.messages.ContainerInfo;
-import com.spotify.docker.client.messages.HostConfig;
-import com.spotify.docker.client.messages.PortBinding;
 import me.itzg.mccy.config.MccySettings;
 import me.itzg.mccy.model.ContainerDetails;
 import me.itzg.mccy.model.ContainerRequest;
 import me.itzg.mccy.model.ContainerSummary;
 import me.itzg.mccy.model.ServerStatus;
-import me.itzg.mccy.model.ServerType;
 import me.itzg.mccy.types.MccyConstants;
 import me.itzg.mccy.types.MccyException;
 import me.itzg.mccy.types.MccyUnexpectedServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.EmbeddedWebApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.*;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 import static com.spotify.docker.client.DockerClient.ListContainersParam.allContainers;
 import static com.spotify.docker.client.DockerClient.ListContainersParam.withLabel;
-import static java.util.Collections.singletonList;
-import static java.util.Collections.singletonMap;
 
 /**
  * @author Geoff Bourne
@@ -39,10 +31,10 @@ import static java.util.Collections.singletonMap;
  */
 @Service
 public class ContainersService {
-    public static final String TRUE_VALUE = String.valueOf(true);
     private static Logger LOG = LoggerFactory.getLogger(ContainersService.class);
 
-    //TODO replace this approach with some AOP magic
+    public static final String TRUE_VALUE = String.valueOf(true);
+
     @Autowired
     private DockerClientProxy proxy;
 
@@ -50,51 +42,27 @@ public class ContainersService {
     private ServerStatusService serverStatusService;
 
     @Autowired
+    private ContainerBuilderService containerBuilderService;
+
+    @Autowired
     private MccySettings mccySettings;
-
-    @Autowired
-    private String ourContainerId;
-
-    @SuppressWarnings("SpringJavaAutowiringInspection")
-    @Autowired
-    private Optional<EmbeddedWebApplicationContext> embeddedWebApplicationContext;
 
     @Autowired
     private MetadataConversionService metadataConversionService;
 
-    public String create(ContainerRequest request, String ownerUsername) throws MccyException, DockerException, InterruptedException {
+    public String create(ContainerRequest request, String ownerUsername, UriComponentsBuilder requestUri)
+            throws MccyException, DockerException, InterruptedException {
 
-        final int requestedPort = request.getPort();
-        PortBinding portBinding = PortBinding.of("",
-                requestedPort != 0 ? String.valueOf(requestedPort) : "");
-        Map<String, List<PortBinding>> portBindings =
-                singletonMap(MccyConstants.SERVER_CONTAINER_PORT, singletonList(portBinding));
+        final ContainerConfig containerConfig = containerBuilderService.buildContainerConfig(request, ownerUsername, requestUri);
 
-        final HostConfig.Builder hostConfig = HostConfig.builder()
-                .portBindings(portBindings);
-
-        if (ourContainerId != null && needsLink(request)) {
-            hostConfig.links(ourContainerId+":"+ MccyConstants.LINK_MCCY);
-        }
-
-        final ContainerConfig config = ContainerConfig.builder()
-                .attachStdin(true)
-                .tty(true)
-                .exposedPorts(MccyConstants.SERVER_CONTAINER_PORT)
-                .env(fillEnv(request))
-                .image(mccySettings.getImage())
-                .hostConfig(hostConfig.build())
-                .labels(buildLabels(request, ownerUsername))
-                .build();
-
-        LOG.debug("Creating the container: {}", config);
+        LOG.debug("Creating the container: {}", containerConfig);
 
         return proxy.access(dockerClient -> {
             // Ensure latest image is always used
             dockerClient.pull(mccySettings.getImage());
 
             final String containerId = dockerClient
-                    .createContainer(config, scrubContainerName(request.getName()))
+                    .createContainer(containerConfig, scrubContainerName(request.getName()))
                     .id();
 
             if (request.isStartOnCreate()) {
@@ -103,6 +71,11 @@ public class ContainersService {
 
             return containerId;
         });
+
+    }
+
+    public static String scrubContainerName(String givenName) {
+        return givenName.replaceAll("[^A-Za-z0-9]", "_");
     }
 
     public ServerStatus getContainerStatus(String containerId, String authUsername) throws DockerException, InterruptedException, TimeoutException, MccyUnexpectedServerException {
@@ -115,15 +88,6 @@ public class ContainersService {
         else {
             return null;
         }
-    }
-
-    private boolean needsLink(ContainerRequest request) {
-        return mccySettings.isUsingLinkForContent() &&
-                (request.getModpack() != null || request.getWorld() != null);
-    }
-
-    public static String scrubContainerName(String givenName) {
-        return givenName.replaceAll("[^A-Za-z0-9]", "_");
     }
 
     public List<ContainerSummary> getAll(String ownedByUsername) throws DockerException, InterruptedException {
@@ -160,6 +124,16 @@ public class ContainersService {
         return URI.create(mccySettings.getDockerHostUri()).getHost();
     }
 
+    /**
+     * Obtains the details of a running container.
+     *
+     * @param containerId the Docker container ID
+     * @param authUsername if null, only accesses public containers, otherwise this is used to narrow
+     *                     access to only those containers owned by this given user
+     * @return the details of the container
+     * @throws DockerException
+     * @throws InterruptedException
+     */
     public ContainerDetails get(String containerId, String authUsername) throws DockerException, InterruptedException {
         return proxy.access(dockerClient -> {
             final ContainerInfo containerInfo = dockerClient.inspectContainer(containerId);
@@ -243,89 +217,7 @@ public class ContainersService {
         });
     }
 
-    protected Map<String, String> buildLabels(ContainerRequest request, String ownerUsername) {
-        Map<String, String> labels = new HashMap<>();
-        labels.put(MccyConstants.MCCY_LABEL, TRUE_VALUE);
-        // store the name as provided by user
-        labels.put(MccyConstants.MCCY_LABEL_NAME, request.getName());
-        labels.put(MccyConstants.MCCY_LABEL_OWNER, ownerUsername);
-        if (request.isVisibleToPublic()) {
-            labels.put(MccyConstants.MCCY_LABEL_PUBLIC, TRUE_VALUE);
-        }
-
-        if (!Strings.isNullOrEmpty(request.getModpack())) {
-            labels.put(MccyConstants.MCCY_LABEL_MODPACK_URL, request.getModpack());
-        }
-
-        return labels;
-    }
-
-    protected List<String> fillEnv(ContainerRequest request) {
-        final ArrayList<String> env = new ArrayList<>();
-
-        if (request.isAckEula()) {
-            addToEnv(env, "EULA", "TRUE");
-        }
-
-        fillStringInEnv(env, request.getVersion(), MccyConstants.ENV_VERSION);
-        fillStringInEnv(env, request.getIcon(), MccyConstants.ENV_ICON);
-
-        if (ourContainerId != null && mccySettings.isUsingLinkForContent()) {
-            fillLinkedUriInEnv(env, request.getWorld(), MccyConstants.ENV_WORLD);
-            fillLinkedUriInEnv(env, request.getModpack(), MccyConstants.ENV_MODPACK);
-        }
-        else {
-            fillStringInEnv(env, request.getWorld(), MccyConstants.ENV_WORLD);
-            fillStringInEnv(env, request.getModpack(), MccyConstants.ENV_MODPACK);
-        }
-
-        final ServerType type = request.getType();
-        if (type != null) {
-            addToEnv(env, "TYPE", type.name());
-        }
-
-        fillPlayerList(env, request.getWhitelist(), "WHITELIST");
-        fillPlayerList(env, request.getOps(), "OPS");
-
-        return env;
-    }
-
-    private void fillLinkedUriInEnv(ArrayList<String> env, String originalUri, String varName) {
-        if (originalUri == null) {
-            return;
-        }
-
-        final String viaLink = UriComponentsBuilder.fromHttpUrl(originalUri)
-                .host(MccyConstants.LINK_MCCY)
-                .port(getOurPort())
-                .build().toUriString();
-        fillStringInEnv(env, viaLink, varName);
-    }
-
-    private int getOurPort() {
-        return embeddedWebApplicationContext.orElseThrow(IllegalStateException::new)
-                .getEmbeddedServletContainer().getPort();
-    }
-
-    protected void addToEnv(ArrayList<String> env, String key, Object value) {
-        if (value != null) {
-            env.add(String.format("%s=%s", key, value.toString()));
-        }
-    }
-
     private boolean isOurs(ContainerInfo containerInfo) {
         return containerInfo.config().labels().containsKey(MccyConstants.MCCY_LABEL);
-    }
-
-    private void fillStringInEnv(ArrayList<String> env, String value, String envKey) {
-        if (!Strings.isNullOrEmpty(value)) {
-            addToEnv(env, envKey, value);
-        }
-    }
-
-    private void fillPlayerList(ArrayList<String> env, List<String> playerList, String envKey) {
-        if (playerList != null && !playerList.isEmpty()) {
-            addToEnv(env, envKey, Joiner.on(",").join(playerList));
-        }
     }
 }

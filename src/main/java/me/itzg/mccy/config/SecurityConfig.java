@@ -57,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
                 .csrf().csrfTokenRepository(csrfTokenRepository());
 
-        if (env.acceptsProfiles(MccyConstants.PROFILE_BASIC_AUTH)) {
+        if (env.acceptsProfiles(MccyConstants.PROFILE_BASIC_AUTH, MccyConstants.PROFILE_DEV)) {
             http
                     .httpBasic()
                     .and().csrf().ignoringAntMatchers("/**");

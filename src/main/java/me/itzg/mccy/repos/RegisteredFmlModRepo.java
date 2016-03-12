@@ -1,4 +1,4 @@
-package me.itzg.mccy.services;
+package me.itzg.mccy.repos;
 
 import me.itzg.mccy.model.RegisteredFmlMod;
 import me.itzg.mccy.model.RegisteredMod;

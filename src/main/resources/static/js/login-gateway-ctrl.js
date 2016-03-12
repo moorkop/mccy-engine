@@ -1,18 +1,18 @@
 angular.module('Mccy.LoginLandingCtrl',[])
 
-    .controller('LoginCtrl', function($scope, Containers, Alerts) {
+    .controller('LoginCtrl', function($scope, PublicContainers, Alerts) {
 
         reload();
 
         // Need to refactor this and the same code in ViewContainersCtrl
         function fetchContainerDetails(containers) {
             _.each(containers, function (container) {
-                Containers.get({id:container.id}, function(details){
+                PublicContainers.get({id:container.id}, function(details){
                     _.assign(container, details.summary);
                     container.info = details.info;
                 }, Alerts.handleRequestError);
 
-                Containers.getStatus({id:container.id}, function(status){
+                PublicContainers.getStatus({id:container.id}, function(status){
                     container.status = _.assign({
                         _resolved: true,
                         iconSrc: 'data:image/png;base64,' + status.icon
@@ -22,7 +22,7 @@ angular.module('Mccy.LoginLandingCtrl',[])
         }
 
         function reload() {
-            $scope.containers = Containers.query(function (response) {
+            $scope.containers = PublicContainers.query(function (response) {
                 fetchContainerDetails(response);
             }, Alerts.handleRequestError);
         }

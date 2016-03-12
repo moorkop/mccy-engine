@@ -1,4 +1,4 @@
-<div class="col-xs-12">
+<div class="col-xs-12 new-container">
     <div class="card">
         <div class="card-header">
             <div class="card-title">
@@ -97,29 +97,22 @@
 
                 <div class="checkbox" ng-hide="enableWorld">
                     <label>
-                        <input type="checkbox" ng-model="enableWorld">World Save/Map
+                        <input type="checkbox" ng-model="enableWorld">Use World Save/Map
                     </label>
                 </div>
                 <div class="form-group" ng-show="enableWorld">
-                    <div class="row">
-                        <div class="col-xs-8" ng-hide="worldFile">
-                            <label>Download from
-                                <input class="form-control" type="url" ng-model="worldUrl">
-                            </label>
-                        </div>
-                        <div class="col-xs-4">
-                            <label>...or upload one</label>
-                            <div>
-                                <div class="btn btn-default upload" ngf-select ngf-drop ng-model="worldFile"
-                                     ng-class="{dropped:worldFile}" name="worldFile"
-                                     ngf-pattern="'.zip'" ngf-accept="'application/zip'">
-                                    <span ng-hide="worldFile" class="select">Select...</span>
-                                    <span class="target">Drop Here</span>
-                                    <span ng-show="worldFile" class="select">Got it</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <label>Choose world to load</label>
+
+                    <ui-select ng-model="choices.selectedWorld">
+                        <ui-select-match placeholder="Click here and then enter a filter...">
+                            {{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices repeat="world in worlds"
+                                           refresh="suggestWorlds($select.search)"
+                                           refresh-delay="100">
+                            <div ng-bind-html="world.name | highlight: $select.search"></div>
+                            <div ng-bind-html="world.description | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
 
                 <div class="form-group">

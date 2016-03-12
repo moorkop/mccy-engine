@@ -1,7 +1,7 @@
 package me.itzg.mccy.types;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.itzg.mccy.model.LevelDescriptor;
+import me.itzg.mccy.model.WorldDescriptor;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -16,15 +16,17 @@ public class MinecraftVersionDeserializerTest {
     public void testDottedVersion() throws Exception {
         final ObjectMapper objectMapper = new ObjectMapper();
 
-        final LevelDescriptor levelDescriptor = objectMapper.readValue("{\"minecraftVersion\":\"1.8.8\"}", LevelDescriptor.class);
-        assertEquals("1.8.8", levelDescriptor.getMinecraftVersion().toString());
+        final WorldDescriptor
+                worldDescriptor = objectMapper.readValue("{\"minecraftVersion\":\"1.8.8\"}", WorldDescriptor.class);
+        assertEquals("1.8.8", worldDescriptor.getMinecraftVersion().toString());
     }
 
     @Test
     public void testSnapshotStyle() throws Exception {
         final ObjectMapper objectMapper = new ObjectMapper();
 
-        final LevelDescriptor levelDescriptor = objectMapper.readValue("{\"minecraftVersion\":\"15w31b\"}", LevelDescriptor.class);
-        assertEquals("15w31b", levelDescriptor.getMinecraftVersion().toString());
+        final WorldDescriptor
+                worldDescriptor = objectMapper.readValue("{\"minecraftVersion\":\"15w31b\"}", WorldDescriptor.class);
+        assertEquals("15w31b", worldDescriptor.getMinecraftVersion().toString());
     }
 }

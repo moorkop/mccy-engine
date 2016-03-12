@@ -1,36 +1,55 @@
-angular.module('Mccy.UploadModCtrl', [
+angular.module('Mccy.ManageAssets', [
+        'Mccy.directive.assets',
         'Mccy.services',
         'ngFileUpload'
     ])
 
-    .controller('UploadModCtrl', function ($scope, $log, $timeout, Upload, Alerts, cTimeouts) {
+    .controller('ManageAssetsCtrl', function ($scope, $routeParams, Assets, cAssetSpecs) {
+        var assetCategory = $routeParams.assetCategory;
 
-        $scope.registeredMods = [];
+        $scope.$on('reload', function () {
+            reload();
+        });
 
-        $scope.allowedPatterns = '.jar,.url';
+        $scope.assetSpec = cAssetSpecs[assetCategory];
+
+        reload();
+
+        function reload() {
+            $scope.registeredAssets = Assets.query({category: assetCategory});
+        }
+    })
+
+    .controller('UploadAssetsCtrl', function ($scope, $log, $timeout, Upload, Alerts, cTimeouts, $routeParams) {
+        var assetCategory = $routeParams.assetCategory;
+
+        $scope.registeredAssets = [];
+
+        $scope.allowedPatterns = '.zip';
 
         $scope.validate = function(file) {
             $log.debug('Request to validate', file);
             return true;
         };
 
-        $scope.uploadModFile = function (files) {
+        $scope.uploadFile = function (file) {
             Upload.upload({
-                url: '/api/uploads/mods',
+                url: '/a',
                 data: {
-                    files: files
+                    file: file,
+                    category: assetCategory
                 },
                 // Spring MVC multi part is expecting each multipart named as 'files'
                 arrayKey: ''
             }).then(
                 function (successResponse) {
-                    $log.debug('Mod upload response', successResponse);
+                    $log.debug('Asset upload response', successResponse);
 
                     //$scope.hideUploadArea = true;
-                    var newMods = successResponse.data.mods;
-                    var combined = $scope.registeredMods.concat(newMods);
-                    $scope.registeredMods = _.uniq(combined, 'id');
-                    $log.debug('Current mod list after de-duping', $scope.registeredMods);
+                    var newAsset = successResponse.data;
+                    var combined = $scope.registeredAssets.concat(newAsset);
+                    $scope.registeredAssets = _.uniq(combined, 'id');
+                    $log.debug('Current mod list after de-duping', $scope.registeredAssets);
 
                     if (successResponse.data.failed) {
                         _.forEach( successResponse.data.failed, function(f) {
@@ -41,7 +60,6 @@ angular.module('Mccy.UploadModCtrl', [
 
                     $timeout(resetProgress, cTimeouts.resetProgress);
 
-                    startVersionCheck(newMods);
                 },
                 function (failureResponse) {
                     $log.warn('Upload failed', failureResponse);
@@ -60,12 +78,6 @@ angular.module('Mccy.UploadModCtrl', [
         function resetProgress() {
             $scope.showProgress = false;
             $scope.progress = 0;
-        }
-
-        function startVersionCheck(registeredMods) {
-            _.forEach(registeredMods, function(registeredMod){
-                registeredMod.otherVersionsOfThis = []; //TODO
-            });
         }
     })
 ;

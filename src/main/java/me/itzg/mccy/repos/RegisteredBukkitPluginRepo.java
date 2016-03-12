@@ -1,4 +1,4 @@
-package me.itzg.mccy.services;
+package me.itzg.mccy.repos;
 
 import me.itzg.mccy.model.RegisteredBukkitPlugin;
 import org.springframework.data.elasticsearch.repository.ElasticsearchCrudRepository;

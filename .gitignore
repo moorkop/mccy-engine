@@ -139,7 +139,5 @@ crashlytics-build.properties
 fabric.properties
 
 ### Custom ###
-assetts/
-repo/
-es/
+data/
 *.log/
