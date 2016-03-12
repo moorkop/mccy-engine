@@ -20,7 +20,7 @@ services:
       --mccy.deployment-powered-by.image-src=img/powered-by/powered-by-carina-wide.png
       --mccy.deployment-powered-by.href=https://getcarina.com/
       --mccy.assets.via=network
-      --mccy.assets.network=mccy-assets
+      --mccy.assets.network=mastermccy_mccy-assets
       --mccy.assets.my-name-on-network=mccy
 
   mccy-data:
