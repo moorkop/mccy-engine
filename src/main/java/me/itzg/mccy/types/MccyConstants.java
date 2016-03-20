@@ -62,4 +62,5 @@ public class MccyConstants {
 
     public static final String PROFILE_BASIC_AUTH = "basicAuth";
     public static final String PROFILE_DEV = "dev";
+    public static final String MF_ATTR_FML_CORE_PLUGIN = "FMLCorePlugin";
 }

@@ -1,5 +1,8 @@
 package me.itzg.mccy.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -15,7 +18,7 @@ public class FmlModListEntry {
     private String mcversion;
     private String url;
     private String updateUrl;
-    private List<String> authorList;
+    private List<String> authors;
     private String credits;
     private String logoFile;
     private List<String> screenshots;
@@ -73,16 +76,20 @@ public class FmlModListEntry {
         this.updateUrl = updateUrl;
     }
 
+    public List<String> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(List<String> authors) {
+        this.authors = authors;
+    }
+
     public List<String> getAuthorList() {
-        return authorList;
+        return authors;
     }
 
-    public void setAuthorList(List<String> authorList) {
-        this.authorList = authorList;
-    }
-
-    public void setAuthors(List<String> authorList) {
-        this.authorList = authorList;
+    public void setAuthorList(List<String> authors) {
+        this.authors = authors;
     }
 
     public String getCredits() {

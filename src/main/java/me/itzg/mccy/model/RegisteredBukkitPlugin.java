@@ -5,17 +5,17 @@ package me.itzg.mccy.model;
  * @since 0.1
  */
 public class RegisteredBukkitPlugin extends RegisteredMod {
-    private BukkitPluginInfo info;
+    private BukkitPluginInfo bukkitPluginInfo;
 
     public RegisteredBukkitPlugin() {
         super(new ServerType[]{ServerType.BUKKIT, ServerType.SPIGOT});
     }
 
-    public BukkitPluginInfo getInfo() {
-        return info;
+    public BukkitPluginInfo getBukkitPluginInfo() {
+        return bukkitPluginInfo;
     }
 
-    public void setInfo(BukkitPluginInfo info) {
-        this.info = info;
+    public void setBukkitPluginInfo(BukkitPluginInfo bukkitPluginInfo) {
+        this.bukkitPluginInfo = bukkitPluginInfo;
     }
 }

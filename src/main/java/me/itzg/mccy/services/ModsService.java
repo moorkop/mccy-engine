@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.google.common.base.Strings;
 import com.google.common.hash.HashFunction;
-import com.google.common.hash.HashingInputStream;
 import me.itzg.mccy.config.MccyFilesSettings;
 import me.itzg.mccy.config.MccyVersionSettings;
 import me.itzg.mccy.model.BukkitPluginInfo;
@@ -21,10 +20,12 @@ import me.itzg.mccy.model.ServerType;
 import me.itzg.mccy.repos.ModPackRepo;
 import me.itzg.mccy.repos.RegisteredBukkitPluginRepo;
 import me.itzg.mccy.repos.RegisteredFmlModRepo;
+import me.itzg.mccy.types.Holder;
 import me.itzg.mccy.types.MccyConstants;
 import me.itzg.mccy.types.MccyException;
 import me.itzg.mccy.types.MccyNotFoundException;
 import me.itzg.mccy.types.YamlMapper;
+import me.itzg.mccy.types.ZipMiningHandler;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.slf4j.Logger;
@@ -46,9 +47,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
-import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import static org.elasticsearch.index.query.FilterBuilders.termFilter;
@@ -64,6 +67,9 @@ public class ModsService {
 
     @Autowired
     private HashFunction fileIdHash;
+
+    @Autowired
+    private ZipMiningService zipMiningService;
 
     @Autowired
     private HashFunction modPackIdHash;
@@ -94,6 +100,7 @@ public class ModsService {
 
     @Autowired
     private ElasticsearchTemplate esTemplate;
+    private Pattern filenameGrok = Pattern.compile("([a-zA-Z]+)_?(.*)\\.jar");
 
     /**
      * Ingests a raw file's input stream, determines first if it's even a valid mod file, and
@@ -103,16 +110,9 @@ public class ModsService {
      */
     public RegisteredMod ingest(MultipartFile fileIn) throws MccyException, IOException {
 
-        final HashingInputStream hashingIn = new HashingInputStream(fileIdHash, fileIn.getInputStream());
-
-        final ZipInputStream zipIn = new ZipInputStream(hashingIn);
-
-        RegisteredMod registeredMod = traverseZip(zipIn);
-
-        zipIn.close();
+        RegisteredMod registeredMod = traverseZip(fileIn);
 
         if (registeredMod != null) {
-            registeredMod.setId(hashingIn.hash().toString());
             registeredMod.setOriginalFilename(fileIn.getOriginalFilename());
 
             final String id = registeredMod.getId();
@@ -153,25 +153,83 @@ public class ModsService {
         }
     }
 
-    private RegisteredMod traverseZip(ZipInputStream zipIn) throws IOException, MccyException {
-        RegisteredMod registeredMod = null;
+    private RegisteredMod traverseZip(MultipartFile fileIn) throws IOException, MccyException {
+        final Holder<RegisteredMod> registeredModHolder = new Holder<>();
 
-        try {
-            ZipEntry nextEntry;
-            while ((nextEntry = zipIn.getNextEntry()) != null) {
-                final String entryName = nextEntry.getName();
+        final String fileHash = zipMiningService.interrogate(fileIn.getInputStream(),
+                ZipMiningHandler.listBuilder()
+                        .add("META-INF/MANIFEST.MF", (path, in) -> {
+                            processManifest(registeredModHolder, in, fileIn.getOriginalFilename());
+                        })
+                        .add(".*"+MccyConstants.FILE_MCMOD_INFO, (path, in) -> {
+                            processFmlModInfo(registeredModHolder, in);
+                        })
+                        .add(".*"+MccyConstants.FILE_PLUGIN_META, (path, in) -> {
+                            processBukkitPluginMeta(registeredModHolder, in);
+                        })
+                .build());
 
-                if (entryName.endsWith(MccyConstants.FILE_MCMOD_INFO)) {
-                    registeredMod = from(extractFmlModInfo(zipIn));
-                } else if (entryName.endsWith(MccyConstants.FILE_PLUGIN_META)) {
-                    registeredMod = from(extractBukkitPluginInfo(zipIn));
+        if (registeredModHolder.isSet()) {
+            registeredModHolder.get().setId(fileHash);
+        }
+        return registeredModHolder.get();
+    }
+
+    void processBukkitPluginMeta(Holder<RegisteredMod> registeredModHolder, InputStream in) throws IOException {
+        final BukkitPluginInfo info = extractBukkitPluginInfo(in);
+
+        final RegisteredBukkitPlugin bukkitPlugin =
+                (RegisteredBukkitPlugin) registeredModHolder.getOrCreate(RegisteredBukkitPlugin::new);
+
+        bukkitPlugin.setBukkitPluginInfo(info);
+        bukkitPlugin.setVersion(info.getVersion());
+        bukkitPlugin.setName(info.getName());
+        bukkitPlugin.setDescription(info.getDescription());
+        bukkitPlugin.setNativeId(info.getMain());
+        bukkitPlugin.setMinecraftVersion(mccyVersionSettings.getDefaultBukkitGameVersion());
+    }
+
+    void processFmlModInfo(Holder<RegisteredMod> registeredModHolder, InputStream in) throws IOException {
+        final FmlModInfo info = extractFmlModInfo(in);
+
+        if (info.getModList().isEmpty()) {
+            throw new IllegalArgumentException("No modList entries were present");
+        } else if (info.getModList().size() > 1) {
+            throw new IllegalArgumentException("One single-entry modLists are supported at this time");
+        }
+
+        RegisteredFmlMod mod = (RegisteredFmlMod) registeredModHolder.getOrCreate(RegisteredFmlMod::new);
+        mod.setModInfo(info);
+
+        final FmlModListEntry entry = info.getModList().get(0);
+        mod.setName(entry.getName());
+        mod.setDescription(entry.getDescription());
+        mod.setVersion(entry.getVersion());
+        mod.setMinecraftVersion(entry.getMcversion());
+        mod.setNativeId(entry.getModid());
+        mod.setUrl(entry.getUrl());
+    }
+
+    void processManifest(Holder<RegisteredMod> registeredModHolder, InputStream in, String originalFilename) throws IOException {
+        final Manifest manifest = new Manifest(in);
+        final Attributes mainAttributes = manifest.getMainAttributes();
+        final String value = mainAttributes.getValue(MccyConstants.MF_ATTR_FML_CORE_PLUGIN);
+        if (value != null) {
+            final RegisteredMod registeredMod = registeredModHolder.getOrCreate(RegisteredFmlMod::new);
+            if (registeredMod instanceof RegisteredFmlMod) {
+                RegisteredFmlMod mod = (RegisteredFmlMod) registeredMod;
+
+                if (mod.getName() == null) {
+                    final Matcher matcher = filenameGrok.matcher(originalFilename);
+                    if (matcher.matches()) {
+                        mod.setName(matcher.group(1));
+                        if (mod.getVersion() == null) {
+                            mod.setVersion(matcher.group(2));
+                        }
+                    }
                 }
             }
-
-        } catch (ZipException e) {
-            throw new MccyException("Given mod file is not a valid zip file", e);
         }
-        return registeredMod;
     }
 
     FmlModInfo extractFmlModInfo(InputStream in) throws IOException {
@@ -198,7 +256,7 @@ public class ModsService {
         }
     }
 
-    BukkitPluginInfo extractBukkitPluginInfo(InputStream in) throws IOException {
+    private BukkitPluginInfo extractBukkitPluginInfo(InputStream in) throws IOException {
         return yamlMapper.getMapper().readValue(StreamUtils.nonClosing(in), BukkitPluginInfo.class);
     }
 
@@ -242,39 +300,6 @@ public class ModsService {
         }
 
         throw new MccyNotFoundException("Unable to locate an FML mod or Bukkit plugin with id " + modId);
-    }
-
-    RegisteredMod from(FmlModInfo info) {
-        if (info.getModList().isEmpty()) {
-            throw new IllegalArgumentException("No modList entries were present");
-        } else if (info.getModList().size() > 1) {
-            throw new IllegalArgumentException("One single-entry modLists are supported at this time");
-        }
-
-        RegisteredFmlMod mod = new RegisteredFmlMod();
-        mod.setModInfo(info);
-
-        final FmlModListEntry entry = info.getModList().get(0);
-        mod.setName(entry.getName());
-        mod.setDescription(entry.getDescription());
-        mod.setVersion(entry.getVersion());
-        mod.setMinecraftVersion(entry.getMcversion());
-        mod.setNativeId(entry.getModid());
-        mod.setUrl(entry.getUrl());
-
-        return mod;
-    }
-
-    RegisteredMod from(BukkitPluginInfo info) {
-        final RegisteredBukkitPlugin bukkitPlugin = new RegisteredBukkitPlugin();
-
-        bukkitPlugin.setVersion(info.getVersion());
-        bukkitPlugin.setName(info.getName());
-        bukkitPlugin.setDescription(info.getDescription());
-        bukkitPlugin.setNativeId(info.getMain());
-        bukkitPlugin.setMinecraftVersion(mccyVersionSettings.getDefaultBukkitGameVersion());
-
-        return bukkitPlugin;
     }
 
     public List<? extends RegisteredMod> queryAll() {
@@ -385,10 +410,6 @@ public class ModsService {
 
     void setObjectMapper(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
-    }
-
-    void setFmlModRepo(RegisteredFmlModRepo fmlModRepo) {
-        this.fmlModRepo = fmlModRepo;
     }
 
     void setFileStorageService(FileStorageService fileStorageService) {
