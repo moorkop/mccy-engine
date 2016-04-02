@@ -46,6 +46,7 @@ if [[ $CIRCLECI != true ]]; then
   docker rm $$ > /dev/null
 fi
 . $HOME/carina/docker.env
+docker info
 
 export DOCKER_HOST_URI=${DOCKER_HOST/tcp:/https:}
 
