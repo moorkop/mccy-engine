@@ -7,3 +7,6 @@ target
 repo
 assetts
 bin
+docker-compose*
+deploy*
+mvnw*
