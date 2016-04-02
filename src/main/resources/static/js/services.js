@@ -21,9 +21,11 @@ angular.module('Mccy.services',[
     })
 
     .service('PublicContainers', function($resource){
-        return $resource('/api/containers/_public/:id', {}, {
+        return $resource('/api/containers/_public/:id/:action', {}, {
             getStatus: {
-                url: '/api/containers/:id/_status',
+                params: {
+                    action: '_status'
+                },
                 method: 'GET'
             }
         });

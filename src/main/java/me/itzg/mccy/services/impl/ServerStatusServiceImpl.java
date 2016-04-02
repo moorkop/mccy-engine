@@ -54,22 +54,28 @@ public class ServerStatusServiceImpl implements ServerStatusService {
             client.getSession().setFlag(MinecraftConstants.SERVER_INFO_HANDLER_KEY, new ServerInfoHandler() {
                 @Override
                 public void handle(Session session, ServerStatusInfo info) {
-
                     final ServerStatus status = new ServerStatus();
                     status.setReportedVersion(info.getVersionInfo().getVersionName());
                     status.setOnlinePlayers(info.getPlayerInfo().getOnlinePlayers());
                     status.setMaxPlayers(info.getPlayerInfo().getMaxPlayers());
                     status.setReportedDescription(info.getDescription().getFullText());
 
+                    LOG.debug("Received server info {} from {}:{}",
+                            status, session.getHost(), session.getPort());
+
                     final ByteArrayOutputStream iconBytesOut = new ByteArrayOutputStream();
-                    try {
-                        ImageIO.write(info.getIcon(), "png", iconBytesOut);
-                        status.setIcon(iconBytesOut.toByteArray());
-                    } catch (IOException e) {
-                        LOG.warn("Failed to write image bytes of server icon {} from {}:{}", e, info.getIcon(), host, port);
+                    if (iconBytesOut.size() > 0) {
+                        try {
+                            ImageIO.write(info.getIcon(), "png", iconBytesOut);
+                            status.setIcon(iconBytesOut.toByteArray());
+                        } catch (IOException e) {
+                            LOG.warn("Failed to write image bytes of server icon {} from {}:{}", e, info.getIcon(), host, port);
+                        }
+                    }
+                    else {
+                        LOG.debug("No server icon for {}", status);
                     }
 
-                    LOG.debug("Received server info {} from {}:{}", status, session.getHost(), session.getPort());
                     completableFuture.complete(status);
                 }
             });
@@ -88,7 +94,7 @@ public class ServerStatusServiceImpl implements ServerStatusService {
         });
 
         try {
-            return completableFuture.get(mccySettings.getServerStatusTimeout(), TimeUnit.SECONDS);
+            return completableFuture.get(mccySettings.getServerStatusTimeout()*100, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException e) {
             throw new MccyUnexpectedServerException(e);
         } catch (TimeoutException e) {

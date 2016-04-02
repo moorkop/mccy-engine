@@ -65,7 +65,7 @@ public class MccySettings {
      * The number of seconds to wait for a response from a Minecraft server for user count, icon, etc status
      * information.
      */
-    private long serverStatusTimeout = 2;
+    private long serverStatusTimeout = 5;
 
     public String getDockerCertPath() {
         return dockerCertPath;
