@@ -25,6 +25,8 @@ services:
 
   mccy-data:
     image: alpine
+    environment:
+      - "constraint:node==$PINNED_NODE"
     volumes:
       - /data
     command: /bin/true
@@ -36,6 +38,7 @@ services:
     environment:
       - CARINA_USERNAME
       - CARINA_APIKEY
+      - "constraint:node==$PINNED_NODE"
     command: credentials $DEPLOY_CLUSTER
 
   proxy:
@@ -68,4 +71,3 @@ networks:
     driver: overlay
   mccy-assets:
     driver: overlay
-
