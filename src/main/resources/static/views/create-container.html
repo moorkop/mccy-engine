@@ -121,12 +121,38 @@
                     </label>
                 </div>
 
-                <div class="btn-group" ng-show="!ackEula" role="group" aria-label="Eula buttons">
-                    <button ng-click="ackEula=true" class="btn btn-primary">Accept Minecraft EULA</button>
-                    <a href="https://account.mojang.com/documents/minecraft_eula" class="btn btn-default" target="_blank">Read</a>
-                </div>
-                <button type="submit" class="btn btn-primary" ng-show="ackEula" ng-disabled="creating">Creating...</button>
+
+                <button type="submit" class="btn btn-primary" ng-bind="createButton()" ng-disabled="creating">
+                </button>
+                <a ng-hide="ackEula" href="https://account.mojang.com/documents/minecraft_eula" class="btn btn-default" target="_blank">Read</a>
                 <button ng-click="cancelNewContainer()" class="btn btn-default">Cancel</button>
+
+                <div ng-show="creating" ng-switch="createStatus.state" class="alert"
+                        ng-class="createStatus.state != 'ERROR' ? 'alert-info' : 'alert-danger'">
+                    <div ng-switch-when="INIT" class="h4">Initializing...</div>
+                    <div ng-switch-when="PULL">
+                        <div><h4>Pulling newest layers...</h4></div>
+                        <div class="row">
+                            <div class="col-md-4" ng-repeat="(imageId,details) in pullImageDetails">
+                                <div class="row">
+                                    <div class="col-md-4">{{imageId}}:</div>
+                                    <div class="col-md-8">
+                                        <uib-progressbar value="details.current"
+                                                         max="details.total">
+                                            {{details.status}}
+                                        </uib-progressbar>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div ng-repeat="msg in pullImageMessages track by $index">{{msg}}</div>
+                    </div>
+                    <div ng-switch-when="CREATE" class="h4">Creating...</div>
+                    <div ng-switch-when="START" class="h4">Starting...</div>
+                    <div ng-switch-when="READY" class="h4">Ready</div>
+                    <div ng-switch-when="ERROR">{{createStatus.details}}</div>
+                </div>
             </form>
         </div>
     </div>

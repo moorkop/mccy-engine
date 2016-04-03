@@ -2,6 +2,7 @@ package me.itzg.mccy.services;
 
 import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.DockerException;
+import com.spotify.docker.client.ProgressHandler;
 import com.spotify.docker.client.messages.ContainerConfig;
 import com.spotify.docker.client.messages.ContainerCreation;
 import com.spotify.docker.client.messages.ContainerInfo;
@@ -147,10 +148,13 @@ public class ContainersServiceTest {
         when(containerBuilderService.buildContainerConfig(any(), any(), any()))
                 .thenReturn(stubbedConfig);
 
-        final String id = containersService.create(request, "user1",
-                UriComponentsBuilder.fromUriString("http://localhost:8080"));
+        final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString("http://localhost:8080");
+        containersService.setProxyUriBuilder(uriComponentsBuilder);
 
-        verify(dockerClient).pull(anyString());
+        final String id = containersService.create(request, "user1",
+                containerCreateStatus -> {});
+
+        verify(dockerClient).pull(anyString(), any(ProgressHandler.class));
 
         final ArgumentCaptor<ContainerConfig> containerConfigCaptor =
                 ArgumentCaptor.forClass(ContainerConfig.class);

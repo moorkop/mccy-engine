@@ -9,8 +9,14 @@ angular.module('MccyApp', [
     'ngAnimate',
     'ui.bootstrap',
     'ui.bootstrap.tpls',
-    'ngTagsInput'
+    'ngTagsInput',
+    'AngularStompDK'
 ])
+    .config(function(ngstompProvider){
+        ngstompProvider
+            .url('/stomp')
+            .class(SockJS)
+    })
 
     .controller('MainCtrl', function ($scope, $timeout, $location, $log, $window,
                                       $uibModal,

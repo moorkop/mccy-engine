@@ -3,7 +3,9 @@ package me.itzg.mccy.services;
 import com.spotify.docker.client.DockerException;
 import com.spotify.docker.client.messages.ContainerConfig;
 import com.spotify.docker.client.messages.ContainerInfo;
+import com.spotify.docker.client.messages.ProgressDetail;
 import me.itzg.mccy.config.MccySettings;
+import me.itzg.mccy.model.ContainerCreateStatus;
 import me.itzg.mccy.model.ContainerDetails;
 import me.itzg.mccy.model.ContainerRequest;
 import me.itzg.mccy.model.ContainerSummary;
@@ -20,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.spotify.docker.client.DockerClient.ListContainersParam.allContainers;
@@ -49,25 +52,65 @@ public class ContainersService {
 
     @Autowired
     private MetadataConversionService metadataConversionService;
+    private UriComponentsBuilder proxyUriBuilder;
 
-    public String create(ContainerRequest request, String ownerUsername, UriComponentsBuilder requestUri)
+    public String create(ContainerRequest request, String ownerUsername, Consumer<ContainerCreateStatus> listener)
             throws MccyException, DockerException, InterruptedException {
 
-        final ContainerConfig containerConfig = containerBuilderService.buildContainerConfig(request, ownerUsername, requestUri);
+        final ContainerCreateStatus createStatus = new ContainerCreateStatus();
+        createStatus.setState(ContainerCreateStatus.State.INIT);
+        listener.accept(createStatus);
+
+        final ContainerConfig containerConfig =
+                containerBuilderService.buildContainerConfig(request, ownerUsername, proxyUriBuilder);
 
         LOG.debug("Creating the container: {}", containerConfig);
 
         return proxy.access(dockerClient -> {
             // Ensure latest image is always used
-            dockerClient.pull(mccySettings.getImage());
+            LOG.debug("Creating (pull) the container: {}", containerConfig);
+            createStatus.setState(ContainerCreateStatus.State.PULL);
+            listener.accept(createStatus);
+            final ContainerCreateStatus.PullDetails pullDetails = new ContainerCreateStatus.PullDetails();
+            createStatus.setPullDetails(pullDetails);
 
+            dockerClient.pull(mccySettings.getImage(), progressMessage -> {
+                pullDetails.setImageId(progressMessage.id());
+                final ProgressDetail progressDetail = progressMessage.progressDetail();
+                if (progressDetail != null) {
+                    pullDetails.setStart(progressDetail.start());
+                    pullDetails.setCurrent(progressDetail.current());
+                    pullDetails.setTotal(progressDetail.total());
+                }
+                else {
+                    pullDetails.setStart(0);
+                    pullDetails.setCurrent(0);
+                    pullDetails.setTotal(0);
+                }
+
+                createStatus.setDetails(progressMessage.status());
+                listener.accept(createStatus);
+            });
+
+            LOG.debug("Creating (create) the container: {}", containerConfig);
+            createStatus.setDetails(null);
+            createStatus.setPullDetails(null);
+            createStatus.setState(ContainerCreateStatus.State.CREATE);
+            listener.accept(createStatus);
             final String containerId = dockerClient
                     .createContainer(containerConfig, scrubContainerName(request.getName()))
                     .id();
 
             if (request.isStartOnCreate()) {
+                LOG.debug("Creating (start) the container: {}", containerConfig);
+                createStatus.setState(ContainerCreateStatus.State.START);
+                listener.accept(createStatus);
                 dockerClient.startContainer(containerId);
             }
+
+            createStatus.setState(ContainerCreateStatus.State.READY);
+            createStatus.setDetails(containerId);
+            listener.accept(createStatus);
 
             return containerId;
         });
@@ -118,6 +161,14 @@ public class ContainersService {
                             getDockerHostIp(), mccySettings.getConnectUsingHost()))
                     .collect(Collectors.toList());
         });
+    }
+
+    public void setProxyUriBuilder(UriComponentsBuilder proxyUriBuilder) {
+        this.proxyUriBuilder = proxyUriBuilder;
+    }
+
+    public UriComponentsBuilder getProxyUriBuilder() {
+        return proxyUriBuilder;
     }
 
     private String getDockerHostIp() {

@@ -15,7 +15,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.3.2.RELEASE</version>
+        <version>1.3.3.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -37,6 +37,9 @@
         <flow-nbt.version>1.0.0</flow-nbt.version>
         <lodash.version>4.6.1</lodash.version>
         <angular-clipboard.version>1.3.0</angular-clipboard.version>
+        <AngularStompDK.version>0.8.2</AngularStompDK.version>
+        <stomp.version>2.3.4</stomp.version>
+        <sockjs.version>1.0.3</sockjs.version>
     </properties>
 
 
@@ -214,6 +217,23 @@
             <artifactId>angular-ui-select</artifactId>
             <version>${ui-select.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>AngularStompDK</artifactId>
+            <version>${AngularStompDK.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>stomp-websocket</artifactId>
+            <version>${stomp.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>sockjs-client</artifactId>
+            <version>${sockjs.version}</version>
+        </dependency>
+
         <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

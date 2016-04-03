@@ -7,7 +7,7 @@ angular.module('Mccy.NewContainerCtrl', [
     .run(function(editableOptions) {
         editableOptions.theme = 'bs3';
     })
-    .controller('NewContainerCtrl', function ($scope, $log, Upload,
+    .controller('NewContainerCtrl', function ($scope, $log, Upload, ngstomp,
                                               Containers, Alerts, Versions, Mods, ModPacks, Assets,
                                               cServerTypes, cModdedTypes) {
 
@@ -63,12 +63,22 @@ angular.module('Mccy.NewContainerCtrl', [
         //    }
         //});
 
+        var requestHeaders = {request: Math.random()};
+        ngstomp.subscribeTo('/user/topic/containers/create-status')
+            .callback(handleCreateStatus)
+            .withBodyInJson()
+            .bindTo($scope)
+            .connect();
+
         $scope.submitNewContainer = function () {
             $log.debug('submitting', this);
             $scope.creating = true;
+            $scope.pullImageDetails = {};
+            $scope.pullImageMessages = [];
+            $scope.ackEula = true;  // form submission implies ack
 
             var request = {
-                ackEula: this.ackEula,
+                ackEula: $scope.ackEula,
                 name: this.name,
                 port: this.choosePort ? this.port : 0,
                 type: this.type,
@@ -111,7 +121,7 @@ angular.module('Mccy.NewContainerCtrl', [
         };
 
         function proceedAfterMods(request) {
-            Containers.save(request, handleSuccess, handleRequestError);
+            ngstomp.send('/app/containers/create', request, requestHeaders);
         }
 
         $scope.suggestMods = function(input) {
@@ -127,6 +137,15 @@ angular.module('Mccy.NewContainerCtrl', [
                 q: input,
                 category: 'WORLD'
             });
+        };
+
+        $scope.createButton = function() {
+            if ($scope.creating) {
+                return 'Creating...';
+            }
+            else {
+                return $scope.ackEula ? 'Create' : 'Accept Minecraft EULA and Create';
+            }
         };
 
         $scope.cancelNewContainer = function () {
@@ -146,6 +165,42 @@ angular.module('Mccy.NewContainerCtrl', [
         function handleRequestError(httpResponse) {
             Alerts.error(httpResponse.data.message, true);
             $scope.creating = false;
+        }
+
+        function handleCreateStatus(message) {
+            var createStatus = message.body;
+            $scope.createStatus = createStatus;
+
+            switch (createStatus.state) {
+                case 'ERROR':
+                    Alerts.error(createStatus.details, true);
+                    $scope.creating = false;
+                    break;
+
+                case 'READY':
+                    close();
+                    break;
+
+                case 'PULL':
+                    if (createStatus.pullDetails && createStatus.pullDetails.imageId) {
+                        if (createStatus.pullDetails.total == 0) {
+                            delete $scope.pullImageDetails[imageId];
+                        }
+                        else {
+                            var imageId = createStatus.pullDetails.imageId;
+                            var imageDetails = $scope.pullImageDetails[imageId];
+                            if (imageDetails == undefined) {
+                                imageDetails = {};
+                                $scope.pullImageDetails[imageId] = imageDetails;
+                            }
+
+                            imageDetails.status = createStatus.details;
+                            imageDetails.current = createStatus.pullDetails.current;
+                            imageDetails.total = createStatus.pullDetails.total;
+                        }
+                    }
+                    break;
+            }
         }
 
         function close() {

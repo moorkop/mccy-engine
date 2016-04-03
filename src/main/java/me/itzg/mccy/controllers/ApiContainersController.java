@@ -35,8 +35,11 @@ public class ApiContainersController {
     private ContainersService containers;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<ContainerSummary> getAllMccyContainers(Authentication auth)
+    public List<ContainerSummary> getAllMccyContainers(Authentication auth,
+                                                       UriComponentsBuilder uriComponentsBuilder)
             throws DockerException, InterruptedException {
+
+        containers.setProxyUriBuilder(uriComponentsBuilder);
 
         return containers.getAll(getAuthUsername(auth));
     }
@@ -44,15 +47,6 @@ public class ApiContainersController {
     @RequestMapping(value = "/_public", method = RequestMethod.GET)
     public List<ContainerSummary> getAllPublicMccyContainers() throws DockerException, InterruptedException {
         return containers.getAllPublic();
-    }
-
-    @RequestMapping(method = RequestMethod.POST)
-    public SingleValue<String> createContainer(@RequestBody @Valid ContainerRequest request,
-                                               Authentication auth, UriComponentsBuilder requestUri)
-            throws MccyException, DockerException, InterruptedException {
-
-        return SingleValue.of(containers.create(request, getAuthUsername(auth), requestUri));
-
     }
 
     @RequestMapping(value = "/{containerId}", method = RequestMethod.GET)

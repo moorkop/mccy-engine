@@ -18,5 +18,8 @@
 <script type="text/javascript" src="webjars/angular-xeditable/${versions['angular-xeditable']}/dist/js/xeditable.min.js"></script>
 <script type="text/javascript" src="webjars/angular-clipboard/${versions['angular-clipboard']}/angular-clipboard.js"></script>
 <script type="text/javascript" src="webjars/angular-ui-select/${versions['ui-select']}/dist/select.min.js"></script>
+<script type="text/javascript" src="webjars/sockjs-client/${versions.sockjs}/dist/sockjs.min.js"></script>
+<script type="text/javascript" src="webjars/stomp-websocket/${versions.stomp}/lib/stomp.min.js"></script>
+<script type="text/javascript" src="webjars/AngularStompDK/${versions.AngularStompDK}/dist/angular-stomp.min.js"></script>
 <!-- Additional non-webjar libraries -->
 <script type="text/javascript" src="js/ext/tui2tone/navbar.js"></script>
