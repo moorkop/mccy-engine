@@ -8,8 +8,6 @@ services:
     volumes_from:
       - mccy-data
       - mccy-docker-auth
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - mccy-backend
       - mccy-assets
