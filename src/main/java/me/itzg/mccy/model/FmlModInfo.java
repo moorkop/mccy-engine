@@ -8,7 +8,7 @@ import java.util.List;
  *
  * <p>
  *     NOTE: The metadata file has been relaxed to just
- *     {@value me.itzg.mccy.types.MccyConstants#FILE_MCMOD_INFO} since some mods form the name
+ *     {@value me.itzg.mccy.types.MccyConstants#FILE_MOD_INFO} since some mods form the name
  *     of that file entry like "cccmod.info" or "neimod.info" rather than the standard "mcmod.info"
  * </p>
  *

@@ -7,6 +7,7 @@ import me.itzg.mccy.config.GeneralConfig;
 import me.itzg.mccy.config.MccyFilesSettings;
 import me.itzg.mccy.config.MccyVersionSettings;
 import me.itzg.mccy.model.BukkitPluginInfo;
+import me.itzg.mccy.model.FmlModInfo;
 import me.itzg.mccy.model.RegisteredBukkitPlugin;
 import me.itzg.mccy.model.RegisteredMod;
 import me.itzg.mccy.repos.ModPackRepo;
@@ -34,6 +35,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -160,6 +162,19 @@ public class ModsServiceTest {
     }
 
     @Test
+    public void testUnquotedVersionStrInMcmodInfo() throws Exception {
+        final ClassPathResource resource = new ClassPathResource("fml/mcmod-unquoted-ver.info");
+
+        FmlModInfo fmlModInfo;
+        try (InputStream in = resource.getInputStream()) {
+            fmlModInfo = modsService.extractFmlModInfo(in);
+        }
+
+        assertNotNull(fmlModInfo);
+
+    }
+
+    @Test
     public void testProcessFmlManifest() throws Exception {
         Holder<RegisteredMod> holder = new Holder<>();
         final ByteArrayInputStream in = new ByteArrayInputStream(("Manifest-Version: 1.0\n" +
@@ -197,7 +212,7 @@ public class ModsServiceTest {
                             }
                         }
 
-                    } catch (MccyException | IOException e) {
+                    } catch (MccyException | Exception e) {
                         fail("Exception during processing of "+path+":"+e);
                     }
                 });

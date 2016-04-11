@@ -17,9 +17,10 @@ public class MccyFilesSettings {
     private String repoDir = "repo";
 
     /**
-     * The max expected size of a mcmod.info file.
+     * The character set to use when the universal detector doesn't identify one for a file
+     * such as <code>mcmod.info</code>.
      */
-    private int mcInfoReadLimit = 1024;
+    private String fallbackCharset = "US-ASCII";
 
     public String getRepoDir() {
         return repoDir;
@@ -29,11 +30,11 @@ public class MccyFilesSettings {
         this.repoDir = repoDir;
     }
 
-    public int getMcInfoReadLimit() {
-        return mcInfoReadLimit;
+    public String getFallbackCharset() {
+        return fallbackCharset;
     }
 
-    public void setMcInfoReadLimit(int mcInfoReadLimit) {
-        this.mcInfoReadLimit = mcInfoReadLimit;
+    public void setFallbackCharset(String fallbackCharset) {
+        this.fallbackCharset = fallbackCharset;
     }
 }

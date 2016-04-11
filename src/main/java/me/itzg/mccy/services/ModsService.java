@@ -28,6 +28,7 @@ import me.itzg.mccy.types.YamlMapper;
 import me.itzg.mccy.types.ZipMiningHandler;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.mozilla.universalchardet.UniversalDetector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +41,12 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -64,6 +68,7 @@ import static org.elasticsearch.index.query.QueryBuilders.prefixQuery;
 @Service
 public class ModsService {
     private static Logger LOG = LoggerFactory.getLogger(ModsService.class);
+    private final Pattern PATTERN_UNQUOTED_STR = Pattern.compile("\"(.+?)\"\\s*:\\s*([0-9.\\-_]+)(,?)");
 
     @Autowired
     private HashFunction fileIdHash;
@@ -138,7 +143,7 @@ public class ModsService {
             return registeredMod;
         }
         else {
-            throw new MccyException("Unsupported mod file format. Was looking for items like "+MccyConstants.FILE_MCMOD_INFO);
+            throw new MccyException("Unsupported mod file format. Was looking for items like "+MccyConstants.FILE_MOD_INFO);
         }
 
     }
@@ -161,7 +166,7 @@ public class ModsService {
                         .add("META-INF/MANIFEST.MF", (path, in) -> {
                             processManifest(registeredModHolder, in, fileIn.getOriginalFilename());
                         })
-                        .add(".*"+MccyConstants.FILE_MCMOD_INFO, (path, in) -> {
+                        .add(".*"+MccyConstants.FILE_MOD_INFO, (path, in) -> {
                             processFmlModInfo(registeredModHolder, in);
                         })
                         .add(".*"+MccyConstants.FILE_PLUGIN_META, (path, in) -> {
@@ -233,26 +238,41 @@ public class ModsService {
     }
 
     FmlModInfo extractFmlModInfo(InputStream in) throws IOException {
+        final Path tempModInfo = Files.createTempFile("fmlmodinfo", null);
+        Files.copy(in, tempModInfo, StandardCopyOption.REPLACE_EXISTING);
 
-        // We need to wrap it and mark it since
-        // a) not all input streams (i.e. ZipInputStream) are mark-able
-        // b) we'll need to rewind if the initial JSON parse fails
-        BufferedInputStream bufferedIn = new BufferedInputStream(in);
-        bufferedIn.mark(filesSettings.getMcInfoReadLimit());
+        String detectedCharset = UniversalDetector.detectCharset(tempModInfo.toFile());
+        if (detectedCharset == null) {
+            detectedCharset = filesSettings.getFallbackCharset();
+        }
+        final Charset cs = Charset.forName(detectedCharset);
+
+        final String modinfoJson = fixUnquotedVersionStrings(new String(Files.readAllBytes(tempModInfo), cs));
 
         try {
-            return objectMapper.readValue(StreamUtils.nonClosing(bufferedIn), FmlModInfo.class);
+            return objectMapper.readValue(modinfoJson, FmlModInfo.class);
         } catch (JsonParseException | JsonMappingException e) {
             LOG.debug("Failed to parse as full structure, will try list only", e);
 
-            bufferedIn.reset();
             CollectionType modListEntriesType =
                     objectMapper.getTypeFactory()
                             .constructCollectionType(ArrayList.class, FmlModListEntry.class);
             ArrayList<FmlModListEntry> entries =
-                    objectMapper.readValue(StreamUtils.nonClosing(bufferedIn), modListEntriesType);
+                    objectMapper.readValue(modinfoJson, modListEntriesType);
 
             return new FmlModInfo(entries);
+        } finally {
+            Files.delete(tempModInfo);
+        }
+    }
+
+    private String fixUnquotedVersionStrings(String s) {
+        final Matcher m = PATTERN_UNQUOTED_STR.matcher(s);
+        if (m.find()) {
+            return m.replaceAll("\"$1\":\"$2\"$3");
+        }
+        else {
+            return s;
         }
     }
 

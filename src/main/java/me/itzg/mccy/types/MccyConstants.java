@@ -22,7 +22,8 @@ public class MccyConstants {
 
     public static final String X_XSRF_TOKEN = "X-XSRF-TOKEN";
 
-    public static final String FILE_MCMOD_INFO = "mod.info";
+    public static final String FILE_MOD_INFO = "mod.info";
+    public static final String FILE_MCMOD_INFO = "mcmod.info";
     public static final String FILE_PLUGIN_META = "plugin.yml";
 
     public static final String TEMP_PREFIX = "temp-";
