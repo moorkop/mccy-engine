@@ -33,15 +33,17 @@ deployment:
   staging:
     branch: master
     commands:
+      - build-support/handle-mvn-release.sh
       - docker build -t mccy-engine .
       - build-support/push-image.sh
-      - ./deploy-carina.sh $TEST_CLUSTER $TEST_PINNED_NODE:
+      - ./deploy-carina.sh $TEST_CLUSTER:
          environment:
            LETSENCRYPT_DOMAIN: mccy-staging.itzg.me
   production:
-    branch: release/0.1
+    tag: /v[0-9]+(\.[0-9]+)*/
+    owner: moorkop
     commands:
-      - ./build-deploy-carina.sh $PRODUCTION_CLUSTER $PRODUCTION_PINNED_NODE:
+      - ./build-deploy-carina.sh $PRODUCTION_CLUSTER:
          environment:
            LETSENCRYPT_DOMAIN: mccy.itzg.me
 

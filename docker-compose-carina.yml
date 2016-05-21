@@ -24,7 +24,7 @@ services:
   mccy-data:
     image: alpine
     environment:
-      - "constraint:node==$PINNED_NODE"
+      - "constraint:node==*-n1"
     volumes:
       - /data
     command: /bin/true
@@ -36,7 +36,7 @@ services:
     environment:
       - CARINA_USERNAME
       - CARINA_APIKEY
-      - "constraint:node==$PINNED_NODE"
+      - "constraint:node==*-n1"
     command: credentials $DEPLOY_CLUSTER
 
   proxy:
@@ -57,7 +57,7 @@ services:
   proxy-data:
     image: alpine
     environment:
-      - "constraint:node==$PINNED_NODE"
+      - "constraint:node==*-n1"
     volumes:
       - /cache
       - /etc/letsencrypt

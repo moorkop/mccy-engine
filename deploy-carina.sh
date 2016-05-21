@@ -3,7 +3,7 @@
 . build-support/build-common.sh
 
 usage() {
-  echo "Usage: $0 DEPLOY_CLUSTER PINNED_NODE"
+  echo "Usage: $0 DEPLOY_CLUSTER"
 }
 
 check_volume() {
@@ -19,12 +19,11 @@ check_volume() {
   fi
 }
 
-if [[ $* < 2 ]]; then
+if [[ $# < 1 ]]; then
   usage
   exit 1
 fi
 export DEPLOY_CLUSTER=$1
-export PINNED_NODE=$2
 
 check_var CARINA_USERNAME
 check_var CARINA_APIKEY
