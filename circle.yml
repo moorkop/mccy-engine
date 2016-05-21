@@ -27,11 +27,11 @@ test:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/ $CIRCLE_TEST_REPORTS/jacoco/
     - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
     - cp -r target/site/jacoco/* $CIRCLE_TEST_REPORTS/jacoco/
-    - codecov
 
 deployment:
   staging:
     branch: master
+    owner: moorkop
     commands:
       - build-support/handle-mvn-release.sh
       - docker build -t mccy-engine .
