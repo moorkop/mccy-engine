@@ -6,7 +6,6 @@ services:
     image: moorkop/mccy-engine:$CIRCLE_BRANCH
     restart: always
     volumes_from:
-      - mccy-data
       - mccy-docker-auth
     networks:
       - mccy-backend
@@ -21,22 +20,11 @@ services:
       --mccy.assets.network=mastermccy_mccy-assets
       --mccy.assets.my-name-on-network=mccy
 
-  mccy-data:
-    image: alpine
-    environment:
-      - "constraint:node==*-n1"
-    volumes:
-      - /data
-    command: /bin/true
-
   mccy-docker-auth:
     image: itzg/carina-cli
-    links:
-      - mccy-data
     environment:
       - CARINA_USERNAME
       - CARINA_APIKEY
-      - "constraint:node==*-n1"
     command: credentials $DEPLOY_CLUSTER
 
   proxy:
@@ -48,21 +36,10 @@ services:
       - "80:80"
       - "443:443"
     environment:
+      - "constraint:node==*-n1"
       - "UPSTREAM=mccy:8080"
       - "EMAIL=$LETSENCRYPT_EMAIL"
       - "DOMAIN=$LETSENCRYPT_DOMAIN"
-    volumes_from:
-      - proxy-data
-
-  proxy-data:
-    image: alpine
-    environment:
-      - "constraint:node==*-n1"
-    volumes:
-      - /cache
-      - /etc/letsencrypt
-      - /var/lib/letsencrypt
-    command: /bin/true
 
 networks:
   mccy-backend:
