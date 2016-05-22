@@ -72,7 +72,7 @@
     <repository>
       <id>bintray</id>
       <name>bintray</name>
-      <url>https://api.bintray.com/maven/${env.BINTRAY_USER}/${env.BINTRAY_REPO}/${project.artifactId}/;publish=1
+      <url>https://api.bintray.com/maven/${env.BINTRAY_REPO_OWNER}/${env.BINTRAY_REPO}/${project.artifactId}/;publish=1
       </url>
     </repository>
   </distributionManagement>
