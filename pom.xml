@@ -4,7 +4,7 @@
 
   <groupId>me.itzg</groupId>
   <artifactId>mccy-engine</artifactId>
-  <version>0.3-SNAPSHOT</version>
+  <version>0.2.3</version>
 
   <packaging>jar</packaging>
 
@@ -66,7 +66,7 @@
     <url>https://github.com/moorkop/mccy-engine</url>
     <connection>scm:git:https://github.com/moorkop/mccy-engine.git</connection>
     <developerConnection>scm:git:https://github.com/moorkop/mccy-engine.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v0.2.3</tag>
   </scm>
 
   <distributionManagement>
