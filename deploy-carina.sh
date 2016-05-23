@@ -25,10 +25,11 @@ if [[ $# < 1 ]]; then
 fi
 export DEPLOY_CLUSTER=$1
 
+export CIRCLE_BRANCH=${CIRCLE_BRANCH:-tag}
+
 check_var CARINA_USERNAME
 check_var CARINA_APIKEY
 check_var MCCY_PASSWORD
-check_var CIRCLE_BRANCH
 check_var LETSENCRYPT_EMAIL
 check_var LETSENCRYPT_DOMAIN
 resolve_vars
