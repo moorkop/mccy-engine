@@ -3,7 +3,7 @@ version: '2'
 
 services:
   mccy:
-    image: moorkop/mccy-engine:$CIRCLE_BRANCH
+    image: moorkop/mccy-engine:$MCCY_TAG
     restart: always
     volumes_from:
       - mccy-docker-auth

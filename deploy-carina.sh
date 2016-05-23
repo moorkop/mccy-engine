@@ -25,13 +25,15 @@ if [[ $# < 1 ]]; then
 fi
 export DEPLOY_CLUSTER=$1
 
-export CIRCLE_BRANCH=${CIRCLE_BRANCH:-tag}
+export MCCY_TAG=${CIRCLE_BRANCH:-${CIRCLE_TAG}}
+export BRANCH=${CIRCLE_BRANCH:-tag}
 
 check_var CARINA_USERNAME
 check_var CARINA_APIKEY
 check_var MCCY_PASSWORD
 check_var LETSENCRYPT_EMAIL
 check_var LETSENCRYPT_DOMAIN
+check_var MCCY_TAG
 resolve_vars
 
 set -e
@@ -54,7 +56,7 @@ export DOCKER_HOST_URI=${DOCKER_HOST/tcp:/https:}
 
 COMPOSE_FILE=docker-compose-carina.yml
 
-export COMPOSE_PROJECT_NAME="${CIRCLE_BRANCH}_mccy"
+export COMPOSE_PROJECT_NAME="${BRANCH}_mccy"
 docker-compose -f $COMPOSE_FILE pull
 # TEMP: remove proxy container to avoid Compose/Swarm confusion:
 # Unable to find a node fulfilling all dependencies: --volumes-from=...
