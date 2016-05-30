@@ -1,6 +1,6 @@
 package me.itzg.mccy.controllers;
 
-import com.spotify.docker.client.DockerRequestException;
+import com.spotify.docker.client.exceptions.DockerRequestException;
 import me.itzg.mccy.model.FailedRequest;
 import me.itzg.mccy.types.MccyClientException;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,7 @@
 package me.itzg.mccy.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.common.base.MoreObjects;
 
 /**
  * Conveys the ongoing status of a container's creation.
@@ -15,6 +16,15 @@ public class ContainerCreateStatus {
     private String details;
 
     private PullDetails pullDetails;
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("state", state)
+                .add("details", details)
+                .add("pullDetails", pullDetails)
+                .toString();
+    }
 
     public State getState() {
         return state;
@@ -55,6 +65,16 @@ public class ContainerCreateStatus {
         private long start;
         private long current;
         private long total;
+
+        @Override
+        public String toString() {
+            return MoreObjects.toStringHelper(this)
+                    .add("imageId", imageId)
+                    .add("start", start)
+                    .add("current", current)
+                    .add("total", total)
+                    .toString();
+        }
 
         public String getImageId() {
             return imageId;

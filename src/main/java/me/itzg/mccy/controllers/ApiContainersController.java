@@ -1,6 +1,6 @@
 package me.itzg.mccy.controllers;
 
-import com.spotify.docker.client.DockerException;
+import com.spotify.docker.client.exceptions.DockerException;
 import me.itzg.mccy.model.ContainerDetails;
 import me.itzg.mccy.model.ContainerRequest;
 import me.itzg.mccy.model.ContainerSummary;

@@ -14,7 +14,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.3.3.RELEASE</version>
+    <version>1.3.5.RELEASE</version>
     <relativePath />
     <!-- lookup parent from repository -->
   </parent>
@@ -24,22 +24,25 @@
     <build.job />
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.8</java.version>
-    <jackson-dataformat-yaml.version>2.7.3</jackson-dataformat-yaml.version>
-    <spotify.docker-client.version>3.6.8</spotify.docker-client.version>
+    <jackson-dataformat-yaml.version>2.7.4</jackson-dataformat-yaml.version>
+    <spotify.docker-client.version>5.0.1</spotify.docker-client.version>
     <bootstrap.version>3.3.6</bootstrap.version>
-    <angularjs.version>1.5.3</angularjs.version>
-    <ui-select.version>0.16.1</ui-select.version>
+    <angularjs.version>1.5.5</angularjs.version>
+    <ui-select.version>0.17.1</ui-select.version>
     <angular-xeditable.version>0.1.11</angular-xeditable.version>
     <ng-file-upload.version>12.0.4</ng-file-upload.version>
     <enunciate.version>2.2.0</enunciate.version>
     <sass-maven-plugin.version>2.15</sass-maven-plugin.version>
     <netty.version>4.0.34.Final</netty.version>
     <flow-nbt.version>1.0.0</flow-nbt.version>
-    <lodash.version>4.6.1</lodash.version>
+    <lodash.version>4.13.1</lodash.version>
     <angular-clipboard.version>1.3.0</angular-clipboard.version>
     <AngularStompDK.version>0.8.2</AngularStompDK.version>
     <stomp.version>2.3.4</stomp.version>
-    <sockjs.version>1.0.3</sockjs.version>
+    <sockjs.version>1.1.1</sockjs.version>
+    <font-awesome.version>4.6.3</font-awesome.version>
+    <angularjs-toaster.version>1.2.0</angularjs-toaster.version>
+    <angular-ui-bootstrap.version>1.3.3</angular-ui-bootstrap.version>
   </properties>
 
   <licenses>
@@ -173,9 +176,10 @@
       <version>${angularjs.version}</version>
     </dependency>
     <dependency>
+      <!-- https://github.com/angular-ui/bootstrap-bower -->
       <groupId>org.webjars.bower</groupId>
       <artifactId>angular-ui-bootstrap-bower</artifactId>
-      <version>0.14.3</version>
+      <version>${angular-ui-bootstrap.version}</version>
     </dependency>
     <dependency>
       <!-- http://mbenford.github.io/ngTagsInput/ -->
@@ -184,9 +188,10 @@
       <version>3.0.0</version>
     </dependency>
     <dependency>
+      <!-- https://github.com/jirikavi/AngularJS-Toaster -->
       <groupId>org.webjars.bower</groupId>
       <artifactId>angularjs-toaster</artifactId>
-      <version>0.4.15</version>
+      <version>${angularjs-toaster.version}</version>
     </dependency>
     <dependency>
       <!-- https://github.com/danialfarid/ng-file-upload -->
@@ -210,7 +215,7 @@
       <!-- https://fortawesome.github.io/Font-Awesome/ -->
       <groupId>org.webjars.bower</groupId>
       <artifactId>font-awesome</artifactId>
-      <version>4.5.0</version>
+      <version>${font-awesome.version}</version>
     </dependency>
     <dependency>
       <!-- https://github.com/omichelsen/angular-clipboard -->
@@ -358,15 +363,15 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>properties-maven-plugin</artifactId>
         <version>1.0.0</version>
+        <configuration>
+          <outputFile>${project.build.outputDirectory}/build.properties</outputFile>
+        </configuration>
         <executions>
           <execution>
             <phase>process-resources</phase>
             <goals>
               <goal>write-project-properties</goal>
             </goals>
-            <configuration>
-              <outputFile>${project.build.outputDirectory}/build.properties</outputFile>
-            </configuration>
           </execution>
         </executions>
       </plugin>

@@ -1,9 +1,7 @@
 angular.module('Mccy.ViewContainersCtrl', [
         'Mccy.services',
         'ui.bootstrap',
-        'angular-clipboard',
-        'template/modal/backdrop.html',
-        'template/modal/window.html'
+        'angular-clipboard'
     ])
 
     .controller('ViewContainersCtrl', function ($scope, $timeout, $uibModal, Containers, Alerts) {

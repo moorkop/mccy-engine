@@ -1,6 +1,6 @@
 package me.itzg.mccy.services;
 
-import com.spotify.docker.client.DockerException;
+import com.spotify.docker.client.exceptions.DockerException;
 import com.spotify.docker.client.messages.Container;
 import me.itzg.mccy.types.MccyConstants;
 import org.slf4j.Logger;

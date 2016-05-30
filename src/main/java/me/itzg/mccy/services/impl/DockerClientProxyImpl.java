@@ -2,10 +2,10 @@ package me.itzg.mccy.services.impl;
 
 import com.google.common.base.Optional;
 import com.spotify.docker.client.DefaultDockerClient;
-import com.spotify.docker.client.DockerCertificateException;
 import com.spotify.docker.client.DockerCertificates;
 import com.spotify.docker.client.DockerClient;
-import com.spotify.docker.client.DockerException;
+import com.spotify.docker.client.exceptions.DockerCertificateException;
+import com.spotify.docker.client.exceptions.DockerException;
 import me.itzg.mccy.config.MccySettings;
 import me.itzg.mccy.services.DockerClientConsumer;
 import me.itzg.mccy.services.DockerClientProxy;

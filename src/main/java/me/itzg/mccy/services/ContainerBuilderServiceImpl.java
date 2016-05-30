@@ -2,7 +2,7 @@ package me.itzg.mccy.services;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
-import com.spotify.docker.client.DockerException;
+import com.spotify.docker.client.exceptions.DockerException;
 import com.spotify.docker.client.messages.ContainerConfig;
 import com.spotify.docker.client.messages.HostConfig;
 import com.spotify.docker.client.messages.PortBinding;
