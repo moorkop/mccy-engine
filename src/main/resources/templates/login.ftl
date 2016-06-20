@@ -30,8 +30,13 @@
     </a>
 </div>
 
-<#include "includes/ext-js.ftl">
-<#include "includes/app-js.ftl">
+
+<#include "frames/footer.ftl">
+
+<span>
+    <#include "includes/ext-js.ftl">
+    <#include "includes/app-js.ftl">
+</span>
 
 </body>
 </html>

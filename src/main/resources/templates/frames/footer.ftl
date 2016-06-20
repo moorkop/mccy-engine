@@ -11,7 +11,7 @@
                     <#if build.job?has_content>-${build.job}</#if>
                 </div>
                 <div class="col-xs-12 col-sm-4 text-center">
-                    <a target="_blank" href="https://github.com/itzg/minecraft-container-yard/issues">
+                    <a target="_blank" href="https://github.com/moorkop/mccy-engine/issues">
                         Support <i class="fa fa-question-circle"></i>
                     </a>
                 </div>
