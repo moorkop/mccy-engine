@@ -56,7 +56,7 @@ export DOCKER_HOST_URI=${DOCKER_HOST/tcp:/https:}
 
 COMPOSE_FILE=docker-compose-carina.yml
 
-export COMPOSE_PROJECT_NAME="${BRANCH}_mccy"
+export COMPOSE_PROJECT_NAME="${BRANCH}"
 docker-compose -f $COMPOSE_FILE pull
 # TEMP: remove proxy container to avoid Compose/Swarm confusion:
 # Unable to find a node fulfilling all dependencies: --volumes-from=...
