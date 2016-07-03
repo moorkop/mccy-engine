@@ -25,7 +25,16 @@ if [[ $# < 1 ]]; then
 fi
 export DEPLOY_CLUSTER=$1
 
-export MCCY_TAG=${CIRCLE_BRANCH:-${CIRCLE_TAG}}
+if [[ -z $CIRCLE_TAG ]]; then
+  if [[ $CIRCLE_BRANCH == "master" ]]; then
+    export MCCY_TAG=latest
+  else
+    export MCCY_TAG=$CIRCLE_BRANCH
+  fi
+else
+  export MCCY_TAG=$CIRCLE_TAG
+fi
+
 export BRANCH=${CIRCLE_BRANCH:-tag}
 
 check_var CARINA_USERNAME
@@ -58,9 +67,6 @@ COMPOSE_FILE=docker-compose-carina.yml
 
 export COMPOSE_PROJECT_NAME="${BRANCH}"
 docker-compose -f $COMPOSE_FILE pull
-# TEMP: remove proxy container to avoid Compose/Swarm confusion:
-# Unable to find a node fulfilling all dependencies: --volumes-from=...
-docker-compose -f $COMPOSE_FILE rm -f proxy
 docker-compose --verbose -f $COMPOSE_FILE up -d
 
 echo "

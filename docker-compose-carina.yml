@@ -2,7 +2,7 @@
 version: '2'
 
 services:
-  mccy:
+  engine:
     image: moorkop/mccy-engine:$MCCY_TAG
     restart: always
     volumes_from:
@@ -17,10 +17,10 @@ services:
       --mccy.deployment-powered-by.image-src=img/powered-by/powered-by-carina-wide.png
       --mccy.deployment-powered-by.href=https://getcarina.com/
       --mccy.assets.via=network
-      --mccy.assets.network=${BRANCH}mccy_mccy-assets
+      --mccy.assets.network=${BRANCH}_mccy-assets
       --mccy.assets.my-name-on-network=mccy
 
-  mccy-docker-auth:
+  docker-auth:
     image: itzg/carina-cli
     environment:
       - CARINA_USERNAME
