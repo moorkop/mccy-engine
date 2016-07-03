@@ -6,7 +6,7 @@ services:
     image: moorkop/mccy-engine:$MCCY_TAG
     restart: always
     volumes_from:
-      - mccy-docker-auth
+      - docker-auth
     networks:
       - mccy-backend
       - mccy-assets
