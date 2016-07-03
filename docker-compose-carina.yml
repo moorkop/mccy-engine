@@ -37,7 +37,7 @@ services:
       - "443:443"
     environment:
       - "constraint:node==*-n1"
-      - "UPSTREAM=mccy:8080"
+      - "UPSTREAM=engine:8080"
       - "EMAIL=$LETSENCRYPT_EMAIL"
       - "DOMAIN=$LETSENCRYPT_DOMAIN"
 
