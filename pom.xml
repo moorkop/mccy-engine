@@ -119,6 +119,7 @@
     </dependency>
 
     <dependency>
+      <!-- Docs @ https://github.com/spotify/docker-client -->
       <groupId>com.spotify</groupId>
       <artifactId>docker-client</artifactId>
       <version>${spotify.docker-client.version}</version>

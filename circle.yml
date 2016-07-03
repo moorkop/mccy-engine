@@ -34,7 +34,7 @@ deployment:
     owner: moorkop
     commands:
       - docker build -t mccy-engine .
-      - build-support/push-image.sh
+      - build-support/push-image.sh -b $CIRCLE_BRANCH -t $CIRCLE_TAG
       - ./deploy-carina.sh $PRODUCTION_CLUSTER:
          environment:
            LETSENCRYPT_DOMAIN: mccy.itzg.me
@@ -44,7 +44,7 @@ deployment:
     commands:
       - build-support/handle-mvn-release.sh
       - docker build -t mccy-engine .
-      - build-support/push-image.sh
+      - build-support/push-image.sh -b $CIRCLE_BRANCH -t $CIRCLE_TAG
       - ./deploy-carina.sh $TEST_CLUSTER:
          environment:
            LETSENCRYPT_DOMAIN: mccy-staging.itzg.me
