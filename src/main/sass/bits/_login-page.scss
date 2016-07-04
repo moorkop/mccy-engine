@@ -6,5 +6,9 @@ body.login-page {
     right: 0;
     bottom: 0;
     background-color: $color-login-footer-bg;
+
+    .wrapper {
+      padding: 5px;
+    }
   }
 }
