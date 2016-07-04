@@ -38,13 +38,19 @@ deployment:
       - ./deploy-carina.sh $PRODUCTION_CLUSTER:
          environment:
            LETSENCRYPT_DOMAIN: mccy.itzg.me
+
+  release:
+    tag: /do-release\/.*/
+    owner: moorkop
+    commands:
+      - build-support/handle-mvn-release.sh -t $CIRCLE_TAG
+
   staging:
     branch: master
     owner: moorkop
     commands:
-      - build-support/handle-mvn-release.sh
       - docker build -t mccy-engine .
-      - build-support/push-image.sh -b $CIRCLE_BRANCH -t $CIRCLE_TAG
+      - build-support/push-image.sh -b $CIRCLE_BRANCH
       - ./deploy-carina.sh $TEST_CLUSTER:
          environment:
            LETSENCRYPT_DOMAIN: mccy-staging.itzg.me
