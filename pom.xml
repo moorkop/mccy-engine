@@ -44,6 +44,8 @@
     <sockjs.version>1.1.1</sockjs.version>
     <spotify.docker-client.version>5.0.2</spotify.docker-client.version>
     <stomp.version>2.3.4</stomp.version>
+
+    <ga.tracking-id>UA-36572300-4</ga.tracking-id>
   </properties>
 
   <licenses>
