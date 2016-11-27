@@ -12,6 +12,12 @@ public class Holder<T> {
 
     private T value;
 
+    public static <T> Holder<T> of(T value) {
+        final Holder<T> h = new Holder<>();
+        h.value = value;
+        return h;
+    }
+
     public T get() {
         return value;
     }

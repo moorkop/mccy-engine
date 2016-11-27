@@ -40,4 +40,12 @@ public class HolderTest {
         assertFalse(h.isInstanceOf(Integer.class));
 
     }
+
+    @Test
+    public void testHolderOf() throws Exception {
+        Holder<Number> h = Holder.of(5);
+        assertTrue(h.isInstanceOf(Number.class));
+        assertTrue(h.isInstanceOf(Integer.class));
+        assertEquals(5, h.get());
+    }
 }
