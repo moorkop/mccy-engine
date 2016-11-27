@@ -1,0 +1,16 @@
+[
+{
+  "modid":"morecrops",
+  "name": "Ore Seeds",
+  "description": "Adds seeds to Minecraft to grow Diamonds, Emeralds, Gold and Iron. Oh and a Strawberry plant.",
+  "version": "1.4",
+  "mcversion": "1.8",
+  "url": "Send comments, questions, support or feedback to ZDoctorsMods@gmail.com"
+  "updateUrl": "",
+  "authorList": ["Z_Doctor"],
+  "credits": "",
+  "logoFile": "/Banner.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]
