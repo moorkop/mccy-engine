@@ -5,9 +5,11 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import me.itzg.mccy.services.WebServerPortProvider;
+import me.itzg.mccy.types.FreemarkerVariable;
 import me.itzg.mccy.types.UUIDGenerator;
 import me.itzg.mccy.types.YamlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.EmbeddedWebApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,13 +17,17 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.support.ConfigurableConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.Resource;
 import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 
@@ -91,5 +97,15 @@ public class GeneralConfig {
     @Bean
     public UUIDGenerator uuidGenerator() {
         return UUID::randomUUID;
+    }
+
+    @Bean
+    public FreemarkerVariable buildProperties(@Value("classpath:build.properties") Resource propsResource) throws IOException {
+        final Properties allProps = new Properties();
+        try (InputStream in = propsResource.getInputStream()) {
+            allProps.load(in);
+        }
+
+        return new FreemarkerVariable("project", allProps);
     }
 }
