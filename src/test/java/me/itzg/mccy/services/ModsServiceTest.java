@@ -16,6 +16,7 @@ import me.itzg.mccy.repos.RegisteredFmlModRepo;
 import me.itzg.mccy.services.impl.ZipMiningServiceImpl;
 import me.itzg.mccy.types.Holder;
 import me.itzg.mccy.types.MccyException;
+import org.hamcrest.Matchers;
 import org.junit.Assume;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,6 +41,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.*;
 
 /**
@@ -171,7 +173,23 @@ public class ModsServiceTest {
         }
 
         assertNotNull(fmlModInfo);
+        assertThat(fmlModInfo.getModList(), hasSize(1));
+        assertEquals("Parachute Mod", fmlModInfo.getModList().get(0).getName());
+        assertEquals("1.7.10-2.5.6", fmlModInfo.getModList().get(0).getVersion());
+    }
 
+    @Test
+    public void testMissingCommasBetweenFields() throws Exception {
+        final ClassPathResource resource = new ClassPathResource("fml/oreseeds-mcmod.info");
+
+        FmlModInfo fmlModInfo;
+        try (InputStream in = resource.getInputStream()) {
+            fmlModInfo = modsService.extractFmlModInfo(in);
+        }
+
+        assertNotNull(fmlModInfo);
+        assertThat(fmlModInfo.getModList(), hasSize(1));
+        assertEquals("Ore Seeds", fmlModInfo.getModList().get(0).getName());
     }
 
     @Test

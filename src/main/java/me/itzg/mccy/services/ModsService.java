@@ -69,6 +69,7 @@ import static org.elasticsearch.index.query.QueryBuilders.prefixQuery;
 public class ModsService {
     private static Logger LOG = LoggerFactory.getLogger(ModsService.class);
     private final Pattern PATTERN_UNQUOTED_STR = Pattern.compile("\"(.+?)\"\\s*:\\s*([0-9.\\-_]+)(,?)");
+    private final Pattern PATTERN_MISSING_COMMA = Pattern.compile("(\".+?\"\\s*:\\s*\".*?\")\\s*(\".+?\"\\s*:\\s*\".*?\")", Pattern.MULTILINE);
 
     @Autowired
     private HashFunction fileIdHash;
@@ -247,7 +248,9 @@ public class ModsService {
         }
         final Charset cs = Charset.forName(detectedCharset);
 
-        final String modinfoJson = fixUnquotedVersionStrings(new String(Files.readAllBytes(tempModInfo), cs));
+        String modinfoJson = fixUnquotedVersionStrings(new String(Files.readAllBytes(tempModInfo), cs));
+
+        modinfoJson = fixMissingCommas(modinfoJson);
 
         try {
             return objectMapper.readValue(modinfoJson, FmlModInfo.class);
@@ -264,6 +267,12 @@ public class ModsService {
         } finally {
             Files.delete(tempModInfo);
         }
+    }
+
+    private String fixMissingCommas(String modinfoJson) {
+        final Matcher m = PATTERN_MISSING_COMMA.matcher(modinfoJson);
+
+        return m.replaceAll("$1, $2");
     }
 
     private String fixUnquotedVersionStrings(String s) {
