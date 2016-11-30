@@ -14,10 +14,10 @@ public class BukkitPluginInfo {
     private String name;
     private String main;
     private Collection<String> authors;
-    private String author;
     private String version;
     private Collection<String> softdepend;
     private String description;
+    private String website;
 
     public String getName() {
         return name;
@@ -67,11 +67,19 @@ public class BukkitPluginInfo {
         this.main = main;
     }
 
-    public String getAuthor() {
-        return author;
+    public Collection<String> getAuthor() {
+        return authors;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setAuthor(Collection<String> author) {
+        this.authors = author;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
     }
 }

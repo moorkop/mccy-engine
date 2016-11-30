@@ -16,7 +16,6 @@ import me.itzg.mccy.repos.RegisteredFmlModRepo;
 import me.itzg.mccy.services.impl.ZipMiningServiceImpl;
 import me.itzg.mccy.types.Holder;
 import me.itzg.mccy.types.MccyException;
-import org.hamcrest.Matchers;
 import org.junit.Assume;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +34,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -136,7 +134,7 @@ public class ModsServiceTest {
 
     @Test
     public void testBukkitPluginInfoParsing() throws Exception {
-        final ClassPathResource resource = new ClassPathResource("plugin.yml");
+        final ClassPathResource resource = new ClassPathResource("bukkit/plugin.yml");
 
         Holder<RegisteredMod> holder = new Holder<>();
         modsService.processBukkitPluginMeta(
@@ -161,6 +159,30 @@ public class ModsServiceTest {
         assertEquals("ShowCaseStandalone allows you to create mini shops on top of blocks.  The item for\n" +
                 "sale or purchase is displayed on top of the block.\n", info.getDescription());
 
+    }
+
+    @Test
+    public void testBukkitPlugin_MissingMcVersion() throws Exception {
+        final ClassPathResource resource = new ClassPathResource("bukkit/missing-mcversion-plugin.yml");
+
+        Holder<RegisteredMod> holder = new Holder<>();
+        modsService.processBukkitPluginMeta(
+                holder, resource.getInputStream()
+        );
+
+        assertTrue(holder.isInstanceOf(RegisteredBukkitPlugin.class));
+
+        final RegisteredMod registeredMod = holder.get();
+        assertNotNull(registeredMod);
+        assertNotNull(registeredMod.getMinecraftVersion());
+        assertEquals("PermissionsEx", registeredMod.getName());
+        assertEquals("1.23.4", registeredMod.getVersion());
+
+        final BukkitPluginInfo info = ((RegisteredBukkitPlugin) holder.get()).getBukkitPluginInfo();
+
+        assertNotNull(info);
+        assertEquals("PermissionsEx", info.getName());
+        assertEquals("1.23.4", info.getVersion());
     }
 
     @Test

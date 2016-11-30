@@ -1,5 +1,6 @@
 package me.itzg.mccy.config;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.common.hash.HashFunction;
@@ -10,6 +11,7 @@ import me.itzg.mccy.types.UUIDGenerator;
 import me.itzg.mccy.types.YamlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.jackson.JacksonProperties;
 import org.springframework.boot.context.embedded.EmbeddedWebApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +20,7 @@ import org.springframework.core.convert.support.ConfigurableConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 
@@ -26,6 +29,7 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.UUID;
@@ -53,9 +57,21 @@ public class GeneralConfig {
     }
 
     @Bean
-    public YamlMapper yamlMapper() {
+    public YamlMapper yamlMapper(JacksonProperties jacksonProperties) {
         final YAMLFactory yamlFactory = new YAMLFactory();
-        return new YamlMapper(new ObjectMapper(yamlFactory));
+        final ObjectMapper objectMapper = new ObjectMapper(yamlFactory);
+
+        // leverage the deserialization settings used for JSON lenient processing
+        for (Map.Entry<DeserializationFeature, Boolean> entry : jacksonProperties.getDeserialization().entrySet()) {
+            if (entry.getValue()) {
+                objectMapper.enable(entry.getKey());
+            }
+            else {
+                objectMapper.disable(entry.getKey());
+            }
+        }
+
+        return new YamlMapper(objectMapper);
     }
 
     @Bean @Autowired
