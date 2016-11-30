@@ -8,6 +8,7 @@ import me.itzg.mccy.services.impl.MetadataConversionServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -15,7 +16,8 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Geoff Bourne
@@ -23,8 +25,9 @@ import static org.junit.Assert.*;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration({
-        GeneralConfig.class,
-        MetadataConversionServiceImpl.class
+    GeneralConfig.class,
+    MetadataConversionServiceImpl.class,
+    JacksonAutoConfiguration.class
 })
 public class MetadataConversionServiceTest {
 
@@ -35,22 +38,22 @@ public class MetadataConversionServiceTest {
     public void testFillFromEnv() throws Exception {
 
         final List<String> envList = Arrays.asList(
-                "VERSION=1.8.9",
-                "ICON=http://localhost/icon.png",
-                "WORLD=http://www.example.com/worlds/MySave.zip",
-                "MODPACK=http://www.example.com/mods/modpack.zip",
-                "OPS=itzg,enenbee",
-                "WHITELIST=user1,user2",
-                "FORGEVERSION=10.13.4.1448",
-                "TYPE=FORGE",
-                "DIFFICULTY=hard",
-                "SEED=1785852800490497919",
-                "MODE=creative",
-                "MOTD=My Server",
-                "LEVEL_TYPE=FLAT",
-                "GENERATOR_SETTINGS=3;minecraft:bedrock,3*minecraft:stone,52*minecraft:sandstone;2;",
-                "LEVEL=bonus",
-                "PVP=false"
+            "VERSION=1.8.9",
+            "ICON=http://localhost/icon.png",
+            "WORLD=http://www.example.com/worlds/MySave.zip",
+            "MODPACK=http://www.example.com/mods/modpack.zip",
+            "OPS=itzg,enenbee",
+            "WHITELIST=user1,user2",
+            "FORGEVERSION=10.13.4.1448",
+            "TYPE=FORGE",
+            "DIFFICULTY=hard",
+            "SEED=1785852800490497919",
+            "MODE=creative",
+            "MOTD=My Server",
+            "LEVEL_TYPE=FLAT",
+            "GENERATOR_SETTINGS=3;minecraft:bedrock,3*minecraft:stone,52*minecraft:sandstone;2;",
+            "LEVEL=bonus",
+            "PVP=false"
         );
         ContainerSummary containerSummary = new ContainerSummary();
 
@@ -60,8 +63,8 @@ public class MetadataConversionServiceTest {
         assertEquals(URI.create("http://localhost/icon.png"), containerSummary.getIcon());
         assertEquals(URI.create("http://www.example.com/worlds/MySave.zip"), containerSummary.getWorld());
         assertEquals(URI.create("http://www.example.com/mods/modpack.zip"), containerSummary.getModpack());
-        assertArrayEquals(new String[]{"itzg","enenbee"}, containerSummary.getOps());
-        assertArrayEquals(new String[]{"user1","user2"}, containerSummary.getWhitelist());
+        assertArrayEquals(new String[]{"itzg", "enenbee"}, containerSummary.getOps());
+        assertArrayEquals(new String[]{"user1", "user2"}, containerSummary.getWhitelist());
         assertEquals("10.13.4.1448", containerSummary.getForgeVersion());
         assertEquals(ServerType.FORGE, containerSummary.getType());
         assertEquals("hard", containerSummary.getDifficulty());
@@ -70,7 +73,7 @@ public class MetadataConversionServiceTest {
         assertEquals("My Server", containerSummary.getMotd());
         assertEquals(LevelType.FLAT, containerSummary.getLevelType());
         assertEquals("3;minecraft:bedrock,3*minecraft:stone,52*minecraft:sandstone;2;",
-                containerSummary.getGeneratorSettings());
+            containerSummary.getGeneratorSettings());
         assertEquals("bonus", containerSummary.getLevel());
         assertEquals(Boolean.FALSE, containerSummary.getPvp());
     }
